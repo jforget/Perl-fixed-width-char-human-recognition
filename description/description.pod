@@ -1,0 +1,575 @@
+-*- encoding: utf-8; indent-tabs-mode: nil -*-
+
+=head1 Introduction
+
+Pendant l'hiver 2016-2017, j'ai décidé de
+prendre un programme Pascal de
+calendrier républicain dont les
+racines remontent à plusieurs décennies
+et de l'améliorer. Je ne vais pas
+vous faire un exposé sur les
+développements en Pascal,
+je vais vous expliquer comment
+j'ai initialisé un dépôt Git
+avec des commits remontant à
+1983-1984.
+
+=head1 Circonstances
+
+En 2012, j'ai retrouvé trois listings
+de mes années étudiantes. Au lieu
+des feuilles A4 imprimés au laser
+que nous utilisons tous depuis
+la fin des années 1980, c'était
+des listings continus avec entraînement
+par bande Caroll et sortant d'une 
+imprimante à aiguilles.
+
+Au début de chacun de ces trois listings,
+j'ai écrit un commentaire pour préciser le
+copyright. À l'époque, j'ai commis une
+erreur en donnant la date précise au lieu
+de l'année. Néanmoins, cette erreur a été
+le point de départ de mon projet,
+récupérer les fichiers sources
+I<à l'identique> et les soumettre à
+Git avec cette date de commit.
+
+=head2 Première méthode
+
+Première méthode, tout recopier
+à la main. Le problème, c'est qu'entre
+1984 et 1990, j'ai affiné mon style
+de programmation. Exemples :
+
+INSÉRER DES EXEMPLES
+
+Et je ne pourrais pas
+m'empêcher de rectifier le
+programme pendant que je le recopie.
+Donc j'ai laissé tomber cette méthode
+I<a priori>.
+
+=head2 Deuxième méthode
+
+Deuxième méthode, scanner les listings
+puis les passer dans un
+programme de reconnaisance automatisée
+de caractères. J'ai scanné le premier
+listing puis je l'ai soumis à quelques
+programmes OCR. Comme je m'y attendais,
+le résultat a été catastrophique.
+
+=head2 Programmes de reconnaissance automatisée de caractères
+
+Avant de présenter la troisième méthode,
+voici un aperçu des programmes de
+reconnaissance de caractères.
+
+Les programmes de reconnaissance de
+caractères installés sur ma machine
+fonctionnent en ligne de commande.
+Il s'agit de :
+
+=over 4
+
+=item * gocr
+
+=item * ocrad
+
+=item * tesseract
+
+=item * cuneiform
+
+=back
+
+De ce que j'ai pu voir dans la logithèque
+Ubuntu, les autres programmes disponibles
+sont des habillages graphiques
+de ces programmes, ou bien des
+programmes très spécialisés.
+
+Notons également que cuneiform propose
+une option C<--dot-matrix> mais dans
+mon cas, cela n'a rien donné de mieux
+que la tentative sans cette option.
+
+=head2 Le meilleur moteur de reconnaissance
+
+Le meilleur moteur de reconnaissance de caractères
+est basé sur des réseaux neuronaux.
+Il a été publié pour la première fois
+par une start-up libanaise ou, plus précisément,
+phénicienne.
+
+Il admet plusieurs plug-ins, mais
+à chaque fois, cela nécessite un temps
+de paramétrage assez long.
+
+En revanche, les résultats sont
+largement meilleurs que pour les
+programmes ci-dessus
+
+EXEMPLES
+
+=head2 Programmes hybrides
+
+En 2000 ou 2001, j'avais installé 
+sur ma machine de l'époque un
+programme original dont je ne trouve
+plus aucune trace quinze ans
+plus tard~: Alice-OCR.
+Pour changer, c'était une application graphique,
+pas un utilitaire en ligne de commande.
+La moitié gauche de la fenêtre affichait
+le fichier graphique à analyser et la moitié droite
+affichait le texte résultat.
+Vous lanciez une analyse et un premier
+résultat s'affichait dans la partie droite.
+S'il y avait des erreurs, vous pouviez
+cliquer sur un glyphe de la partie graphique
+puis indiquer la véritable transcription.
+Ce n'était pas la peine de pointer
+toutes les erreurs, mais seulement
+un échantillon représentatif.
+Ensuite, vous relanciez une analyse
+et le résultat tenait compte
+des corrections que vous aviez données.
+Les associations glyphe -> caractère
+pouvaient même être stockées dans
+une base de données pour l'analyse
+d'un autre fichier.
+
+Il existe d'autres systèmes informatiques
+reposant au moins en partie  sur la reconnaissance humaine
+des caractères et qui gèrent leur
+infrastructure~:
+
+=over 4
+
+=item * recaptcha
+
+=item * Distributed Proofreaders (L<www.pgdp.net>) en amont du projet Gutenberg
+
+=item * Openfoodfacts.
+
+=back
+
+=head2 Troisième méthode
+
+La méthode que j'ai adoptée en fin de compte
+est inspirée d'Alice-OCR. Le programme assure
+l'aspect logistique de la conversion
+en gérant notamment une base de données
+et la reconnaissance à proprement parler
+est assurée par l'utilisateur humain.
+À l'inverse de Alice-OCR, il n'y a pas
+de première tentative avec un moteur de reconnaissance
+informatique. Une autre différence est que
+l'utilisateur a son mot à dire lors du
+découpage du fichier graphique en cellules contenant un glyphe.
+
+Note~: dans ce qui suit, je décris
+les programmes au présent ou au passé,
+mais j'ai écrit la première description
+du système
+I<avant> d'écrire la première ligne
+de code. Bien sûr, si je dois changer mon
+fusil d'épaule sur certains points,
+je mettrai à jour la présente description.
+
+=head1 Au travail
+
+=head2 Technologies utilisées
+
+Pour les fonctions graphiques, j'utilise C<GD.pm>. Je n'ai pas réussi
+à installer l'interface entre Perl et the Gimp sur ma machine, donc je n'ai 
+pas eu à choisir, j'ai pris C<GD.pm>.
+
+Pour les fonctions peu interactives, j'ai utilisé bien entendu une interface
+en ligne de commande.
+
+Pour les fonctions interactives, j'ai décidé d'utiliser Dancer2 et MongoDB.
+Dancer2 parce que cela fait longtemps
+que j'en entends parler par Alexis,
+Damien, Sawyer et d'autres. En plus, le module inclut
+un serveur web. Certes, ce serveur ne supporterait
+pas une charge de  plusieurs requêtes à la seconde,
+mais comme mon appli est prévue pour un
+seul utilisateur à la fois, c'est largement suffisant.
+MongoDB, parce que je connais déjà SQL et
+cette application ne m'aurait pas donné l'occasion
+d'apprendre des techniques avancées de SQL.
+Alors j'ai chaisi de faire mes premiers pas en MongoDB.
+Et peut-être PDL si cela permet des comparaisons faciles
+de matrices de booléens.
+
+Plan B~: pas de plan B pour C<GD.pm>, je sais que cela fonctionne et que je saurai
+me débrouiller avec. Si je n'arrive pas à m'en sortir avec MongoDB, tant pis, je
+ferai du SQL avec SQLite. Et pour Dancer2, je ferai du CGI à l'ancienne, comme lorsque
+j'ai commencé à utiliser Perl il y a 19 ans.
+
+Et bien sûr, j'utilise Perl. Perl 5 ou Perl 6~? Bonne question.
+Comme j'ai reçu mon premier livre sur Perl 6 juste avant d'initialiser
+mon dépôt Git et d'écrire la première ligne de code exécutable,
+j'ai eu le temps de constater qu'il existait une variante de Dancer
+pour Perl 6, Bailador. Ensuite, en consultant la liste des modules Perl 6
+sur L<http://modules.perl6.org/>, j'ai vu qu'il existait aussi un
+module GD et un module MongoDB. Si j'arrive à faire fonctionner tout cela,
+je développerai mes programmes en Perl 6. Sinon, j'utiliserai au moins en partie
+Perl 5. 
+
+
+=head1 Numérisation des listings
+
+Comme vous pouvez le constater sur les
+reproductions des listings, il y a plusieurs
+éléments perturbateurs pour numériser les
+fichiers.
+
+Tout d'abord, la largeur.
+
+En fait non, en pratique le problème
+est minime. Sur les trois listings,
+il y a un nombre très faible de lignes trop
+longues pour le format A4, une demi-douzaine en comptant celles où
+le dernier point-virgule ou la dernière accolade manque. Donc, je peux me
+permettre une reprise manuelle de ces
+lignes une fois le processus terminé.
+
+Les bandes Caroll ensuite, ou plus précisément
+la bande gauche. En plaçant correctement
+le papier au moment de la numérisation,
+la bande Caroll est éliminée sans coup férir.
+Et si elle apparaît quand même, une intervention
+élémentaire sous the Gimp la fait disparaître.
+
+Le troisième écueil, plus gênant,
+est que pour le deuxième listing, le ruban
+encreur était plutôt fatigué.
+Alors que j'ai pu numériser le premier listing
+en noir et blanc, en conservant les
+caractères et en éliminant les lignes
+pré-imprimées, cela n'a pas été
+possible avec le deuxième. Selon le
+réglage du scanner, soit les lignes étaient
+éliminées mais les caractères étaient
+mutilés, soit les caractères étaient complets,
+mais des morceaux de ligne persistaient.
+
+La solution a consisté à scanner ce listing
+en couleurs, de manière à pouvoir ensuite
+traiter chaque pixel en fonction de
+ses caractéristiques HSV (en anglais
+I<hue, saturation, value>
+et en français
+teinte, saturation, valeur).
+
+Un premier programme construit un histogramme
+des données H et V (je ne saisis pas très
+bien ce que représente la saturation,
+donc j'ai fait l'impasse).
+
+Un second programme passe en revue
+tous les pixels des fichiers graphiques.
+Pour chacun, s'il est plus clair qu'un
+certain seuil, le programme le remplace par un
+pixel blanc, s'il est plus foncé que
+ce seuil il le remplace par
+un pixel noir. Le point essentiel est
+que ce seuil dépend de la teinte H.
+Pour le bleu, ce seuil est plutôt clair,
+tandis que pour l'orange il est
+plutôt foncé. De la sorte, un
+pixel bleu moyen deviendra noir
+alors qu'un pixel orange moyen
+deviendra blanc.
+
+À noter un problème culturel.
+Né dans les années 1960, j'ai appris
+le dessin avec des crayons de couleurs,
+et du papier,
+pas avec the Gimp ou assimilé. Donc, pour
+moi, « rien », c'est une feuille blanche,
+et « plein de couleurs », cela tend à donner
+du noir. Or c'est l'inverse dans les
+logiciels graphiques avec les valeurs RGB
+ou avec le V des valeurs HSV~:
+plus c'est faible, plus c'est noir
+et de l'autre côté, plus c'est
+élevé, plus cela se rapproche du blanc.
+
+Un dernier écueil, le plus important, les irrégularités des glyphes.
+
+L'imprimante faisait du 10~CPI et du 6~LPI. Mon scanner
+fait du 400~DPI. Cela veut dire que chaque glyphe
+correspond à un rectangle de 40x66~pixels.
+Cela laisse le champ libre à une énorme variabilité
+dans les dessins bitmaps d'un caractère donné.
+Voir les exemples dans les copies d'écran.
+
+INSÉRER COPIE D'ÉCRAN
+
+D'où un traitement pour réduire cette variabilité.
+Je passe en revue tous les pixels d'un fichier graphique.
+Si un pixel est entouré d'une majorité de voisins de la couleur opposée,
+alors il change de couleur. Cela permet d'enlever les
+verrues et les gerçures sur les frontières entre
+le blanc et le noir et cela permet d'enlever la poussière
+(pixels noirs isolés).
+
+Le programme de nettoyage permet de faire au choix une seule
+ou plusieurs itérations en fonction d'un paramètre au lancement.
+Un autre paramètre permet de prendre en compte les
+diagonales (8~voisins par pixel) ou pas (4~voisins).
+Finalement, le programme génère deux fichiers
+graphiques~: le premier avec des pixels noirs et blancs
+pour la suite du projet, le deuxième avec des pixels de
+couleurs pour visualiser ceux qui ont été touchés
+par le nettoyage et les distinguer de ceux qui n'ont pas
+changé de couleur. Cela me permet de mieux apprécier
+le fonctionnement de l'algorihme de lissage et
+de nettoyage.
+
+INSERER DES EXEMPLES
+
+On peut considérer que c'est une variante
+du Jeu de la Vie de Conway (John, pas Damian),
+avec des règles de transition différentes.
+
+La variabilité des glyphes est réduite, mais elle existe encore.
+
+=head1 Reconnaissance à proprement parler
+
+Bien que j'utilise une base no-SQL, je continue, dans le cadre
+de ce texte descriptif, à définir un schéma de base de
+données et à parler de tables.
+
+=head2 Le schéma de base de données
+
+La première table est la table «~Document~».
+Cela correspond à un fichier numérisé et à ses
+avatars successifs. Chaque listing a été scanné en huit fichiers graphiques
+environ, donc donnera lieu à huit documents.
+
+La deuxième table est la table «~Cellule~».
+Elle représente les cellules obtenues en découpant le Document. Les informations de cette table
+sont, entre autres, les coordonnées de la Cellule
+dans le Document, aussi bien exprimées en
+ligne-colonne qu'en coordonnées pixel.
+Faut-il stocker dans cette table le dessin en pixels
+ou bien les différents programmes accèderont-ils
+systématiquement au fichier graphique pour obtenir ce dessin ?
+Je n'ai pas encore décidé.
+
+
+La troisième table est la table «~Caractère~».
+Elle comporte environ 96 enregistrements,
+pour les caractères «~!~» à «~}~». Je rappelle
+que j'ai utilisé de l'ASCII 7 bits.
+Comme il n'y a pas d'information à stocker, peut-être que
+cette table ne sera pas implémentée.
+
+La quatrième table est la table «~Glyphe~».
+Chaque enregistrement correspond à un tableau à deux dimensions
+de bits, représentant le dessin du caractère en pixels noirs et blancs.
+Le dessin du Glyphe est régulier, avec des
+cercles parfaits ou, à la rigueur, très légèrement
+ovales.
+Un Caractère est associé à 1 à n Glyphes,
+un Glyphe est associé à un caractère et un seul.
+
+=head2 Relation entre Cellules et Glyphes
+
+Compte tenu des irrégularités des gouttes d'encre, le dessin en pixels
+d'une Cellule
+ne correspond pas au dessin épuré d'un Glyphe. On associe
+une Cellule à un Glyphe en comparant les pixels et en minimisant
+le nombre de pixels différents. Ce nombre, le «~score~»,
+est stocké dans l'enregistrement Cellule. Tant que le programme de
+reconnaissance n'aura pas traité une Cellule, son score sera
+son nombre total de pixels. De la sorte, le programme de
+reconnaissance trouvera forcément mieux.
+
+Il y a un problème avec cette méthode, dans la mesure où une Cellule
+peut correspondre à plusieurs Glyphes différents. Si ces Glyphes
+dépendent du même Caractère, ce n'est pas grave. Mais si ces Glyphes
+représentent des Caractères différents... J'en tiendrai compte
+pour mes traitements.
+
+=head2 L'architecture des traitements
+
+Voici l'arborescence des pages et des
+traitements, dans un ordre  correspondant à peu
+près à la chronologie des opérations.
+
+=head3 Ajout de document
+
+La première fonction accessible à partir du menu principal
+permet uniquement d'ajouter des noms de document
+à la base de données.
+
+=head3 Liste des documents
+
+La deuxième fonction donne la liste des documents.
+De cette page, on enchaîne vers une page consacrée à un
+seul document.
+
+=head3 Document
+
+Dans cette page, on peut spécifier les paramètres
+permettant de découper le document en cellules. Cela genère un fichier
+graphique matérialisant ce découpage, mais sans
+pour autant créer les enregistrements dans la table
+«~Cellule~».
+
+Une deuxième fonction dans cette page permet
+de valider le découpage, avec création des
+«~Cellules~».
+
+Une troisième fonction permet de lancer l'analyse
+des Cellules du Document pour leur associer le
+ou les Glyphes les plus ressemblants.
+
+Une quatrième fonction permet de sélectionner
+des cellules dans le fichier graphique en fonction
+de certains critères (au moins le score, ou le nombre
+de Glyphes pour chaque Cellule, mais je n'ai pas
+encore choisi les autres critères) et de créer une I<imagemap>
+pour les cellules sélectionnées.
+
+La dernière fonction est celle qui permet de
+créer la version texte du Document, une fois
+que toutes les Cellules ont été reconnues.
+
+=head3 Cellule
+
+Revenons à l'I<imagemap> d'un Document. Elle permet d'accéder
+à la page associée à une Cellule. Sur cette page,
+on a le dessin en gros pixels de la Cellule et celui
+du ou des Glyphes associés à la Cellule. S'il y a beaucoup d'écarts
+entre ces deux dessins, l'utilisateur peut créer un nouveau
+Glyphe. Ce dessin se fait avec un mini-langage permettant
+de spécifier des cercles et des hippodromes en donnant
+les coordonnées nécessaires.
+
+
+=head2 Quadrillage
+
+Pour définir le quadrillage, il faut renseigner
+les coordonnées pixel de la Cellule (ou de l'espace)
+en ligne 0, colonne 0. Il faut également donner
+la taille en pixels (largeur et hauteur) pour les
+Cellules du quadrillage. Ces dimensions peuvent
+avoir une partie décimale. Ainsi, si on attribue
+la valeur 40,34 à la largeur, alors
+les abscisses-pixel des Cellules successives
+seront 0, 40, 80, 121, 151, 181, 212, etc.
+La largeur de chaque Cellule sera arrondie
+à 41~pixels, tant pis s'il y a un recouvrement
+entre deux Cellules voisines.
+À moins que j'arrondisse la largeur des Cellules à 40~pixels,
+ce qui engendrera d'éventuelles lacunes d'un pixel de large entre
+deux Cellules voisines.
+
+Il y a encore un écueil de la numérisation dont je n'ai pas parlé.
+Lorsque j'ai scanné les listings, le papier n'était pas
+toujours bien aligné sur la vitre du scanner.
+
+Comme l'angle de rotation est très faible malgré tout,
+je remplace la rotation par la combinaison
+d'un cisaillement horizontal et d'un cisaillement
+vertical. Le cisaillement horizontal s'exprime au choix ainsi~:
+
+Tous les N pixels (en hauteur), décaler d'un pixel vers la gauche / la droite.
+
+Toutes les N lignes, décaler d'un pixel vers la gauche / la droite.
+
+Et de même pour le cisaillement vertical.
+
+Comme pour la taille des cellules, on admet des valeurs
+avec partie décimale. D'autre part, comme ces deux cisaillements
+simulent une rotation, leurs paramètres sont liés.
+Si le cisaillement horizontal se fait vers la droite,
+le cisaillement vertical se fera vers le haut.
+Et les valeurs des paramètres N devront être identiques
+(pour la règle «~tous les N pixels~») ou proportionnelles
+(«~tous les N caractères~»). Cette cohérence est
+laissée à la charge de l'utilisateur.
+
+Cette opération de cisaillement, comme le calcul des abscisses-pixel et
+des ordonnées-pixel, ne concerne que le positionnement du coin
+en haut à gauche de la Cellule. Les côtés de la Cellule extraite
+sont purement verticaux ou horizontaux.
+
+Une fois le découpage effectué, on rogne la Cellule en calculant 
+l'«~enveloppe~» des pixels (I<bounding box> en anglais).
+Prenons l'exemple de deux Cellules contenant un signe plus.
+Les signes ne sont pas centrés de la même manière dans leur Cellule.
+
+  ----------------  ----------------
+  |              |  |              |
+  |        *     |  |              |
+  |        *     |  |              |
+  |        *     |  |      *       |
+  |     *******  |  |      *       |
+  |        *     |  |      *       |
+  |        *     |  |   *******    |
+  |        *     |  |      *       |
+  |              |  |      *       |
+  |              |  |      *       |
+  |              |  |              |
+  ----------------  ----------------
+
+La comparaison brute de ces deux Cellules donne de nombreuses différences.
+
+  ----------------  ----------------
+  |              |  |              |
+  |        #     |  |              |
+  |        #     |  |              |
+  |        #     |  |      #       |
+  |     #=#####  |  |      =       |
+  |        #     |  |      #       |
+  |        =     |  |   #####=#    |
+  |        #     |  |      #       |
+  |              |  |      #       |
+  |              |  |      #       |
+  |              |  |              |
+  ----------------  ----------------
+
+
+Il y a fort à parier
+que le Glyphe qui sera associé à la première donnera un mauvais score pour la seconde.
+C'est pour cela que l'on calcule l'enveloppe rectangulaire englobant les pixels noirs, pour obtenir des comparaisons
+plus significatives.
+
+  Cellule 1         Cellule 2         Glyphe
+  ----------------  ----------------  ---------
+  |    --------- |  |              |  |   *   |
+  |    |   *   | |  |              |  |   *   |
+  |    |   *   | |  |  ---------   |  |   *   |
+  |    |   *   | |  |  |   *   |   |  |*******|
+  |    |*******| |  |  |   *   |   |  |   *   |
+  |    |   *   | |  |  |   *   |   |  |   *   |
+  |    |   *   | |  |  |*******|   |  |   *   |
+  |    |   *   | |  |  |   *   |   |  ---------
+  |    --------- |  |  |   *   |   |
+  |              |  |  |   *   |   |
+  |              |  |  ---------   |
+  ----------------  ----------------
+
+=head2 Ce que je n'ai pas fait
+
+Je n'ai pas prêté attention aux problèmes de mise à jour concurrente.
+Comme je suis l'unique utilisateur, je me contente d'une session
+unique. Ou alors, si c'est très facile avec Dancer2 de gérer
+les sessions simultanées, je gèrerai moi-même la synchronisation
+entre les quelques sessions que je m'autoriserai à ouvrir.
+
+Le modèle de sécurité est très simple. C'est la même personne (moi)
+qui écrit les programmes, gère la base de données, utilise l'application
+et utilise le résultat. En d'autres termes, le malfaiteur potentiel
+et la victime potentielle sont la même personne.
+
+J'ai quand même activé l'authentification pour la base
+de données MongoDB.

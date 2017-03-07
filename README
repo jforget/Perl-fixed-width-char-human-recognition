@@ -1,0 +1,28 @@
+-*- encoding: utf-8; indent-tabs-mode: nil -*-
+
+=encoding utf8
+
+=head1 FIXED-WIDTH CHAR HUMAN RECOGNITION
+
+=head2 PURPOSE
+
+This repository gives you the tools to manage the conversion of some
+printed text into electronic form, provided the used font is a
+fixed-width font. The programs in this repository are the solution if
+the usual character recognition software engines fail at recognizing
+the chars, provided that your eyes and your brain can identify the
+chars. The programs execute the boring repetitive tasks, the human user
+is there to recognize the printed characters.
+
+I use it to analyse a source code printed by a dot-matrix printer.
+
+See a French-language detailed version in the F<descr> directory.
+
+=head2 LICENSE
+
+The programs in this repository are licensed under the same terms
+as Perl 5: GPL and Artistic License. For more details, please
+read the F<LICENSE> file in this repository.
+
+The various texts of this repository are licensed under the terms of
+Creative Commons, with attribution and share-alike (CC-BY-SA).

@@ -1,0 +1,25 @@
+-*- encoding: utf-8; indent-tabs-mode: nil -*-
+
+=head1 RECONNAISSANCE DE CARACTÈRES EN ESPACEMENT FIXE
+
+=head2 DESCRIPTION
+
+Les programmes de ce dépôt sont conçus pour faciliter
+le traitement de listings imprimés qu'il faut convertir
+en textes numérisés. Le point essentiel est que les caractères
+doivent être dans une police à espacement fixe. En dehors de cela,
+les caractères peuvent prendre une forme inhabituelle, du moment
+qu'un humain arrive à les identifier. Les programmes sont là
+pour les traitements répétitifs, l'humain pour la reconnaissance
+des caractères à proprement parler.
+
+J'utilise cette série de programmes pour convertir des listings
+imprimés sur une imprimante à aiguilles.
+
+Une description détaillée se trouve dans le répetoire F<description>.
+
+=head2 LICENCE
+
+Les programmes de ce dépôt sont sous la même licence que S<Perl :>
+GPL et licence artistique. Voir le texte (en anglais) dans le
+fichier F<LICENSE>.
