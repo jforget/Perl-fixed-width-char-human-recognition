@@ -23,7 +23,7 @@ for my $fichier (@ARGV) {
   my $image = GD::Image->newFromPng($fichier);
   my ($l, $h) = $image->getBounds();
   say "$fichier ${l}x$h";
-  my (%max, %min);
+  my (%max, %min, %cpt);
   for (@cle) {
     $min{$_} = +1e99;
     $max{$_} = -1e99;
@@ -37,11 +37,25 @@ for my $fichier (@ARGV) {
       for (@cle) {
         $max{$_} = $val{$_} if $max{$_} < $val{$_};
         $min{$_} = $val{$_} if $min{$_} > $val{$_};
+        $cpt{$_}[$val{$_}]++;
       }
     }
   }
-  for (@cle) {
-    say sprintf "%s   %6.2f   %6.2f", $_, $min{$_}, $max{$_};
+  for my $carac (@cle) {
+    my $compte = 0;
+    my $total  = 0;
+    my $mode   = 0;
+    my $mode_c = 0;
+    for (0..255) {
+      my $n = $cpt{$carac}[$_] // 0;
+      $compte += $n;
+      $total  += $_ * $n;
+      if ($n > $mode_c) {
+        $mode   = $_;
+        $mode_c = $n;
+      }
+    }
+    say sprintf "%s   %6.2f   %6.2f   %6.2f   %6.2f", $carac, $min{$carac}, $max{$carac}, $total / $compte, $mode;
   }
 }
 

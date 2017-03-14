@@ -273,6 +273,12 @@ de RGB vers HSV produisait des nombres négatifs, ce qui est contraire à la doc
 J'ai donc patché C<GD::Simple> et j'ai soumis un ticket 
 L<https://rt.cpan.org/Ticket/Display.html?id=120572>.
 
+J'ai complété ce premier programme pour calculer également la moyenne et le mode
+(la valeur qui apparaît le plus souvent) de chacune des caractéristiques RGB et HSV.
+Certes, comme la teinte H est de nature cyclique, le calcul de la moyenne n'a pas
+de signification réelle. Mais le mode, si. Et pour les cinq autres caractéristiques, 
+la moyenne et le mode ont une signification réelle.
+
 Un deuxième programme construit un histogramme
 des données H et V (je ne saisis pas très
 bien ce que représente la saturation,
