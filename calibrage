@@ -1,0 +1,89 @@
+#!/usr/bin/perl
+# -*- encoding: utf-8; indent-tabs-mode: nil -*-
+#
+#     Analyser les valeurs RGB et HSV d'une série de fichiers PNG
+#     Examine the RGB and HSV values for some PNG files
+#     Copyright (C) 2017 Jean Forget
+#
+#     Voir la licence dans la documentation incluse ci-dessous.
+#     See the license in the embedded documentation below.
+#
+
+use v5.10;
+use strict;
+use warnings;
+use GD;
+use GD::Simple;
+
+my @rgb = qw/R G B/;
+my @hsv = qw/H S V/;
+my @cle = (@rgb, @hsv);
+
+for my $fichier (@ARGV) {
+  my $image = GD::Image->newFromPng($fichier);
+  my ($l, $h) = $image->getBounds();
+  say "$fichier ${l}x$h";
+  my (%max, %min);
+  for (@cle) {
+    $min{$_} = +1e99;
+    $max{$_} = -1e99;
+  }
+  for my $l1 (0 .. $h - 1) {
+    for my $c1 (0 .. $l - 1) {
+      my %val;
+      my $index  = $image->getPixel($l1, $c1);
+      @val{@rgb} = $image->rgb($index);
+      @val{@hsv} = GD::Simple->RGBtoHSV(@val{@rgb});
+      for (@cle) {
+        $max{$_} = $val{$_} if $max{$_} < $val{$_};
+        $min{$_} = $val{$_} if $min{$_} > $val{$_};
+      }
+    }
+  }
+  for (@cle) {
+    say sprintf "%s   %6.2f   %6.2f", $_, $min{$_}, $max{$_};
+  }
+}
+
+__END__
+
+=encoding utf8
+
+=head1 NOM
+
+calibrage - Analyser les valeurs RGB et HSV d'une série de fichiers PNG
+
+=head1 DESCRIPTION
+
+Ce programme examine plusieurs fichiers PNG pour en extraire les plages de valeurs
+pour chacune des caractéristiques R, G, B, H, S et V des pixels des fichiers.
+
+=head1 COPYRIGHT et LICENCE
+
+Copyright 2017, Jean Forget
+
+Ce programme est diffusé avec les mêmes conditions que Perl 5.16.3 :
+la licence publique GPL version 1 ou ultérieure, ou bien la 
+licence artistique Perl.
+
+Vous pouvez trouver le texte en anglais de ces licences dans le
+fichier <LICENSE> joint ou bien aux adresses
+L<http://www.perlfoundation.org/artistic_license_1_0>
+et L<http://www.gnu.org/licenses/gpl-1.0.html>.
+
+Résumé en anglais de la GPL :
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 1, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software Foundation,
+Inc., L<http://www.fsf.org/>.
+

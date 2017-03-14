@@ -215,9 +215,9 @@ mon dépôt Git et d'écrire la première ligne de code exécutable,
 j'ai eu le temps de constater qu'il existait une variante de Dancer
 pour Perl 6, Bailador. Ensuite, en consultant la liste des modules Perl 6
 sur L<http://modules.perl6.org/>, j'ai vu qu'il existait aussi un
-module GD et un module MongoDB. Si j'arrive à faire fonctionner tout cela,
-je développerai mes programmes en Perl 6. Sinon, j'utiliserai au moins en partie
-Perl 5. 
+module GD et un module MongoDB. Hélas, je n'ai pas pu utiliser la méthode
+C<newFromPng> du module GD, la méthode cruciale qui me permet d'utiliser les
+listings numérisés. Donc, Perl 6, ce sera pour une autre fois.
 
 
 =head1 Numérisation des listings
@@ -265,12 +265,20 @@ I<hue, saturation, value>
 et en français
 teinte, saturation, valeur).
 
-Un premier programme construit un histogramme
+Un premier programme me permet de savoir quelle est la plage de valeurs
+des caractéristiques HSV. J'aurais pu fouiller la documentation, j'ai préféré
+écrire un programme qui a l'autre avantage de me servir de modèle pour les suivants.
+Et à la réflexion, j'ai bien fait, car j'ai découvert que la fonction de conversion
+de RGB vers HSV produisait des nombres négatifs, ce qui est contraire à la documentation.
+J'ai donc patché C<GD::Simple> et j'ai soumis un ticket 
+L<https://rt.cpan.org/Ticket/Display.html?id=120572>.
+
+Un deuxième programme construit un histogramme
 des données H et V (je ne saisis pas très
 bien ce que représente la saturation,
 donc j'ai fait l'impasse).
 
-Un second programme passe en revue
+Un troisième programme passe en revue
 tous les pixels des fichiers graphiques.
 Pour chacun, s'il est plus clair qu'un
 certain seuil, le programme le remplace par un
