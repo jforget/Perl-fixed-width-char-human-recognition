@@ -279,10 +279,15 @@ Certes, comme la teinte H est de nature cyclique, le calcul de la moyenne n'a pa
 de signification réelle. Mais le mode, si. Et pour les cinq autres caractéristiques, 
 la moyenne et le mode ont une signification réelle.
 
-Un deuxième programme construit un histogramme
+À l'origine, j'avais l'intention d'écrire
+un deuxième programme pour construire un histogramme
 des données H et V (je ne saisis pas très
 bien ce que représente la saturation,
-donc j'ai fait l'impasse).
+donc j'ai fait l'impasse). Mais je me suis renseigné sur
+les valeurs HSV et j'ai compris que la saturation avait
+son importance. D'autre part, avec les schémas en
+L<https://en.wikipedia.org/wiki/HSL_and_HSV#HSV>,
+je n'avais plus besoin d'un histogramme.
 
 Un troisième programme passe en revue
 tous les pixels des fichiers graphiques.
@@ -316,8 +321,8 @@ et de l'autre côté, plus c'est
 Un dernier écueil, le plus important, les irrégularités des glyphes.
 
 L'imprimante faisait du 10~CPI et du 6~LPI. Mon scanner
-fait du 400~DPI. Cela veut dire que chaque glyphe
-correspond à un rectangle de 40x66~pixels.
+fait du 300~DPI. Cela veut dire que chaque glyphe
+correspond à un rectangle de 30x50~pixels.
 Cela laisse le champ libre à une énorme variabilité
 dans les dessins bitmaps d'un caractère donné.
 Voir les exemples dans les copies d'écran.

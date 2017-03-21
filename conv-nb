@@ -1,0 +1,117 @@
+#!/usr/bin/perl
+# -*- encoding: utf-8; indent-tabs-mode: nil -*-
+#
+#     Convertir un listing scanné en éliminant les lignes préimprimées pour ne garder que les caractères
+#     Convert a scanned listing by eliminating preprinted lines and keeping characters.
+#     Copyright (C) 2017 Jean Forget
+#
+#     Voir la licence dans la documentation incluse ci-dessous.
+#     See the license in the embedded documentation below.
+#
+
+use v5.10;
+use strict;
+use warnings;
+use GD;
+use GD::Simple;
+use DateTime;
+
+say DateTime->now;
+my ($nom_coul, $nom_nb) = @ARGV;
+
+my $im_coul = GD::Image->newFromPng($nom_coul);
+my ($larg, $haut) = $im_coul->getBounds();   # largeur et hauteur
+my $im_nb   = GD::Image->new($larg, $haut);
+
+my $blanc = $im_nb->colorAllocate(255,255,255);
+my $noir  = $im_nb->colorAllocate(0,0,0); 
+
+say "$nom_coul $larg x $haut";
+
+for my $lig (0 .. $haut - 1) {
+  for my $col (0 .. $larg - 1) {
+    my ($h, $s, $v) = GD::Simple->RGBtoHSV($im_coul->rgb($im_coul->getPixel($col, $lig)));
+
+    # bleu correspond à 210° dans l'échelle à 360°, donc les limites sont 120° et 300°,
+    # ce qui fait 85 -> 212 dans l'échelle 0..255
+    if ($h > 85 && $h < 212) {
+      # Pixel plutôt bleu
+      # En fonction de https://en.wikipedia.org/wiki/HSL_and_HSV#HSV, on limite la valeur
+      # à 7/8, soit 224 et la saturation à 1/4, soit 64.
+      if ($s < 64 && $v > 224) {
+        $im_nb->setPixel($col, $lig, $blanc);
+      }
+      else {
+        $im_nb->setPixel($col, $lig, $noir);
+      }
+    }
+    else {
+      # Pixel plutôt orange
+      # En fonction de https://en.wikipedia.org/wiki/HSL_and_HSV#HSV, on limite la valeur
+      # à 1/2, soit 128 et on ne tient pas compte de la saturation
+      if ($v > 128) {
+        $im_nb->setPixel($col, $lig, $blanc);
+      }
+      else {
+        $im_nb->setPixel($col, $lig, $noir);
+      }
+    }
+  }
+}
+
+open my $h, '>', $nom_nb
+  or die "Ouverture $nom_nb $!";
+print $h $im_nb->png;
+close $h
+  or die "Fermeture $nom_nb $!";
+say DateTime->now;
+
+__END__
+
+=encoding utf8
+
+=head1 NOM
+
+conv-nb -- Convertir un listing scanné en noir et blanc, pour supprimer les lignes préimprimées
+
+=head1 DESCRIPTION
+
+Ce programme convertit un fichier PNG représentant un listing scanné, pour éliminer les lignes
+préimprimées à dominante orange et ne conserver que les caractères à dominante bleue, même si
+le ruban de l'imprimante était très fatigué et imprimait les caractères en bleu clair.
+
+=head1 UTILISATION
+
+Deux paramètres : le fichier couleurs en entrée et le fichier NB en sortie
+
+  conv-nb fich1-coul.png fich2-nb.png
+
+=head1 COPYRIGHT et LICENCE
+
+Copyright 2017, Jean Forget
+
+Ce programme est diffusé avec les mêmes conditions que Perl 5.16.3 :
+la licence publique GPL version 1 ou ultérieure, ou bien la 
+licence artistique Perl.
+
+Vous pouvez trouver le texte en anglais de ces licences dans le
+fichier <LICENSE> joint ou bien aux adresses
+L<http://www.perlfoundation.org/artistic_license_1_0>
+et L<http://www.gnu.org/licenses/gpl-1.0.html>.
+
+Résumé en anglais de la GPL :
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 1, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software Foundation,
+Inc., L<http://www.fsf.org/>.
+
