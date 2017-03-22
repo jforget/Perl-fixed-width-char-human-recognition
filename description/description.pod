@@ -281,9 +281,9 @@ la moyenne et le mode ont une signification réelle.
 
 À l'origine, j'avais l'intention d'écrire
 un deuxième programme pour construire un histogramme
-des données H et V (je ne saisis pas très
+des données H et V (je ne saisissais pas très
 bien ce que représente la saturation,
-donc j'ai fait l'impasse). Mais je me suis renseigné sur
+donc j'ai l'intention de faire l'impasse). Mais je me suis renseigné sur
 les valeurs HSV et j'ai compris que la saturation avait
 son importance. D'autre part, avec les schémas en
 L<https://en.wikipedia.org/wiki/HSL_and_HSV#HSV>,
@@ -337,7 +337,7 @@ verrues et les gerçures sur les frontières entre
 le blanc et le noir et cela permet d'enlever la poussière
 (pixels noirs isolés).
 
-Le programme de nettoyage permet de faire au choix une seule
+Le programme de lissage et de nettoyage permet de faire au choix une seule
 ou plusieurs itérations en fonction d'un paramètre au lancement.
 Un autre paramètre permet de prendre en compte les
 diagonales (8~voisins par pixel) ou pas (4~voisins).
@@ -347,7 +347,7 @@ pour la suite du projet, le deuxième avec des pixels de
 couleurs pour visualiser ceux qui ont été touchés
 par le nettoyage et les distinguer de ceux qui n'ont pas
 changé de couleur. Cela me permet de mieux apprécier
-le fonctionnement de l'algorihme de lissage et
+le fonctionnement de l'algorithme de lissage et
 de nettoyage.
 
 INSERER DES EXEMPLES
@@ -579,7 +579,7 @@ plus significatives.
 
 =head2 Ce que je n'ai pas fait
 
-Je n'ai pas prêté attention aux problèmes de mise à jour concurrente.
+Je n'ai pas prêté attention aux problèmes de mises à jour concurrentes.
 Comme je suis l'unique utilisateur, je me contente d'une session
 unique. Ou alors, si c'est très facile avec Dancer2 de gérer
 les sessions simultanées, je gèrerai moi-même la synchronisation
@@ -587,7 +587,7 @@ entre les quelques sessions que je m'autoriserai à ouvrir.
 
 Le modèle de sécurité est très simple. C'est la même personne (moi)
 qui écrit les programmes, gère la base de données, utilise l'application
-et utilise le résultat. En d'autres termes, le malfaiteur potentiel
+et exploite le résultat. En d'autres termes, le malfaiteur potentiel
 et la victime potentielle sont la même personne.
 
 J'ai quand même activé l'authentification pour la base

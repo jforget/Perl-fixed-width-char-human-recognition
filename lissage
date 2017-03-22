@@ -1,0 +1,227 @@
+#!/usr/bin/perl
+# -*- encoding: utf-8; indent-tabs-mode: nil -*-
+#
+#     Lisser les pixels d'un fichier noir et blanc, éliminer les "verrues" et les "gerçures"
+#     Slooth outh the pixels in a B&W file, eliminating bumps and gaps.
+#     Copyright (C) 2017 Jean Forget
+#
+#     Voir la licence dans la documentation incluse ci-dessous.
+#     See the license in the embedded documentation below.
+#
+
+use v5.10;
+use strict;
+use warnings;
+use GD;
+use GD::Simple;
+use Getopt::Long;
+#no warnings ('experimental');
+use feature 'switch';
+
+my $voisins = 4;
+my $generations = 1;
+
+GetOptions("voisins=i" => \$voisins, "generations=i" => \$generations)
+  or die "Problème avec les options";
+
+my $cpt_voisins;
+my $seuil;
+given ($voisins) {
+  when (4) { $seuil = 2; $cpt_voisins = \&voisins4; }
+  when (8) { $seuil = 4; $cpt_voisins = \&voisins8; }
+  default  { die "Le programme fonctionne avec 4 ou 8 voisins"; }
+}
+
+my @voisins = ( [-1, 0], [1, 0], [0, -1], [0, 1]);
+if ($voisins == 8) {
+  push @voisins, ( [-1, -1], [-1, 1], [1, -1], [1, 1]);
+}
+
+my $fic_ent = $ARGV[0];
+my $radical = $fic_ent;
+$radical =~ s/\.png//;
+my $fic_sor = sprintf "%s-v%d-g%d.png",      $radical, $voisins, $generations;
+my $fic_dif = sprintf "%s-v%d-g%d-diff.png", $radical, $voisins, $generations;
+say "$fic_ent -> $fic_sor";
+
+my $image = GD::Image->newFromPng($fic_ent);
+my ($larg, $haut) = $image->getBounds();
+say "$fic_ent ${larg}x$haut";
+
+my @ligne = (0) x $larg;
+my @image_d;
+my @changes;  # 0, 1 les pixels n'ont jamais changé, 2 le pixel a changé et est devenu blanc, 3 le pixel a changé et est devenu noir
+my $nb_pixels  = 0;
+my $nb_changes = 0;
+my ($l_mn, $l_mx, $c_mn, $c_mx) = ($haut, 0, $larg, 0);
+
+# Les indices varient de 1 à n-2 pour conserver une ligne blanche en 0 et en n-1
+for my $lig (1 .. $haut - 2) {
+  $image_d[$lig] = [ @ligne ];
+  $changes[$lig] = [ @ligne ];
+  for my $col (1 .. $larg - 2) {
+    my $index = $image->getPixel($col, $lig);
+    if ($index == 1) {
+      $image_d[$lig][$col] = 1;
+      $changes[$lig][$col] = 1;
+      $nb_pixels ++;
+      $l_mn = $lig if $lig < $l_mn;
+      $l_mx = $lig if $lig > $l_mx;
+      $c_mn = $col if $col < $c_mn;
+      $c_mx = $col if $col > $c_mx;
+    }
+  }
+}
+# Initialiser quand même la ligne blanche du haut et celle du bas
+$image_d[0]         = [ @ligne ];
+$changes[0]         = [ @ligne ];
+$image_d[$haut - 1] = [ @ligne ];
+$changes[$haut - 1] = [ @ligne ];
+
+say "$nb_pixels pixels noirs";
+say "$c_mn .. $c_mx x $l_mn .. $l_mx";
+
+for (1..$generations) {
+  my @image_a;
+  for (0 .. $haut - 1) {
+    $image_a[$_] = [ @ligne ];
+  }
+  $nb_pixels  = 0;
+  $nb_changes = 0;
+  for my $lig ($l_mn .. $l_mx) {
+    for my $col ($c_mn .. $c_mx) {
+      my $nbv = $cpt_voisins->($lig, $col);
+      if (($image_d[$lig][$col] == 0 && $nbv <= $seuil) || ($image_d[$lig][$col] == 1 && $nbv >= $seuil)) {
+        # Le pixel ne change pas
+        $image_a[$lig][$col] = $image_d[$lig][$col];
+        $nb_pixels ++ if $image_d[$lig][$col] == 1;
+      }
+      elsif ($image_d[$lig][$col] == 1 && $nbv < $seuil) {
+        # Le pixel devient blanc
+        $image_a[$lig][$col] = 0;
+        $changes[$lig][$col] = 2;
+        $nb_changes ++;
+      }
+      elsif ($image_d[$lig][$col] == 0 && $nbv > $seuil) {
+        # Le pixel devient noir
+        $image_a[$lig][$col] = 1;
+        $changes[$lig][$col] = 3;
+        $nb_pixels ++;
+        $nb_changes ++;
+      }
+    }
+  }
+  say "$nb_pixels pixels noirs, $nb_changes changement(s)";
+  for (0 .. $haut - 1) {
+    $image_d[$_] = $image_a[$_];
+  }
+}
+
+ecr_fic($fic_sor, 2, \@image_d);
+ecr_fic($fic_dif, 4, \@changes);
+
+sub voisins4 {
+  my ($lig, $col) = @_;
+  return $image_d[$lig - 1][$col] + $image_d[$lig][$col - 1] + $image_d[$lig][$col + 1] + $image_d[$lig + 1][$col];
+}
+
+sub voisins8 {
+  my ($lig, $col) = @_;
+  return $image_d[$lig - 1][$col - 1] + $image_d[$lig - 1][$col] + $image_d[$lig - 1][$col + 1]
+       + $image_d[$lig    ][$col - 1]                            + $image_d[$lig    ][$col + 1]
+       + $image_d[$lig + 1][$col - 1] + $image_d[$lig + 1][$col] + $image_d[$lig + 1][$col + 1];
+}
+
+sub ecr_fic {
+  my ($nom_fic, $nb_coul, $ref_pixel) = @_;
+
+  my $image   = GD::Image->new($larg, $haut);
+
+  my $blanc = $image->colorAllocate(255,255,255);
+  my $noir  = $image->colorAllocate(0,0,0); 
+  my @coul = ($blanc, $noir);
+  if ($nb_coul > 2) {
+    $coul[2] = $image->colorAllocate(255,127,0); # orange : pixels noir -> blancs
+    $coul[3] = $image->colorAllocate(0,0,255);   # bleu : pixels  blanc -> noir
+  }
+
+  for my $lig (0 .. $haut - 1) {
+    for my $col (0 .. $larg - 1) {
+      $image->setPixel($col, $lig, $coul[$ref_pixel->[$lig][$col]]);
+    }
+  }
+  open my $h, '>', $nom_fic
+    or die "Ouverture $nom_fic $!";
+  print $h $image->png;
+  close $h
+    or die "Fermeture $nom_fic $!";
+}
+
+__END__
+
+=encoding utf8
+
+=head1 NOM
+
+lissage - Lisser les pixels d'un fichier noir et blanc, éliminer les "verrues" et les "gerçures"
+
+=head1 DESCRIPTION
+
+Ce programme examine un fichier PNG pour éliminer les pixels isolés (poussière)
+et pour lisser les côtés des glyphes, en éliminant les "verrues" (pixels noirs entourés
+d'une majorité de pixels blancs) et les "gerçures" (l'inverse).
+
+=head1 PARAMÈTRES
+
+=over 4
+
+=item * C<--voisins>
+
+Nombre de voisins à prendre en compte~ : 4 (ne pas compter les diagonales) ou 8 (en comptant
+les voisins en diagonale).
+
+=item * C<--generation>
+
+Nombre de générations ou d'itérations à effectuer.
+
+=back
+
+Et le nom du fichier en entrée.
+
+Le nom du fichier en sortie reprend le nom du fichier en entrée ainsi que les deux
+paramètres. Par exemple,
+
+  lissage -v 4 -g 2 toto.png
+
+produira le fichier F<toto-v4-g2.png> en noir et blanc et le fichier 
+F<toto-v4-g2-diff.png> pour visualiser les pixels touchés.
+
+=head1 COPYRIGHT et LICENCE
+
+Copyright 2017, Jean Forget
+
+Ce programme est diffusé avec les mêmes conditions que Perl 5.16.3 :
+la licence publique GPL version 1 ou ultérieure, ou bien la 
+licence artistique Perl.
+
+Vous pouvez trouver le texte en anglais de ces licences dans le
+fichier <LICENSE> joint ou bien aux adresses
+L<http://www.perlfoundation.org/artistic_license_1_0>
+et L<http://www.gnu.org/licenses/gpl-1.0.html>.
+
+Résumé en anglais de la GPL :
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 1, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software Foundation,
+Inc., L<http://www.fsf.org/>.
+
