@@ -2,7 +2,7 @@
 # -*- encoding: utf-8; indent-tabs-mode: nil -*-
 #
 #     Lisser les pixels d'un fichier noir et blanc, éliminer les "verrues" et les "gerçures"
-#     Slooth outh the pixels in a B&W file, eliminating bumps and gaps.
+#     Smooth outh the pixels in a B&W file, eliminating bumps and gaps.
 #     Copyright (C) 2017 Jean Forget
 #
 #     Voir la licence dans la documentation incluse ci-dessous.
@@ -32,11 +32,6 @@ given ($voisins) {
   default  { die "Le programme fonctionne avec 4 ou 8 voisins"; }
 }
 
-my @voisins = ( [-1, 0], [1, 0], [0, -1], [0, 1]);
-if ($voisins == 8) {
-  push @voisins, ( [-1, -1], [-1, 1], [1, -1], [1, 1]);
-}
-
 my $fic_ent = $ARGV[0];
 my $radical = $fic_ent;
 $radical =~ s/\.png//;
@@ -60,8 +55,8 @@ for my $lig (1 .. $haut - 2) {
   $image_d[$lig] = [ @ligne ];
   $changes[$lig] = [ @ligne ];
   for my $col (1 .. $larg - 2) {
-    my $index = $image->getPixel($col, $lig);
-    if ($index == 1) {
+    my ($r, $g, $b) = $image->rgb($image->getPixel($col, $lig));
+    if ($r < 128) {  # j'aurai pu tester $g ou $b, mais cela serait revenu au même, il n'y a que du noir et du blanc
       $image_d[$lig][$col] = 1;
       $changes[$lig][$col] = 1;
       $nb_pixels ++;
@@ -90,7 +85,7 @@ for (1..$generations) {
   $nb_changes = 0;
   for my $lig ($l_mn .. $l_mx) {
     for my $col ($c_mn .. $c_mx) {
-      my $nbv = $cpt_voisins->($lig, $col);
+      my $nbv = $cpt_voisins->($lig, $col); # nombre de pixels noirs voisins du pixel traité
       if (($image_d[$lig][$col] == 0 && $nbv <= $seuil) || ($image_d[$lig][$col] == 1 && $nbv >= $seuil)) {
         # Le pixel ne change pas
         $image_a[$lig][$col] = $image_d[$lig][$col];
