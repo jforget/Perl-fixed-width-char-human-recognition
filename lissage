@@ -17,6 +17,9 @@ use GD::Simple;
 use Getopt::Long;
 #no warnings ('experimental');
 use feature 'switch';
+use DateTime;
+
+say DateTime->now;
 
 my $voisins = 4;
 my $generations = 1;
@@ -114,6 +117,7 @@ for (1..$generations) {
 
 ecr_fic($fic_sor, 2, \@image_d);
 ecr_fic($fic_dif, 4, \@changes);
+say DateTime->now;
 
 sub voisins4 {
   my ($lig, $col) = @_;

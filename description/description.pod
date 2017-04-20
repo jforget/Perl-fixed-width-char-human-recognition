@@ -289,7 +289,7 @@ son importance. D'autre part, avec les schémas en
 L<https://en.wikipedia.org/wiki/HSL_and_HSV#HSV>,
 je n'avais plus besoin d'un histogramme.
 
-Un troisième programme passe en revue
+Un troisième programme (devenu second programme) passe en revue
 tous les pixels des fichiers graphiques.
 Pour chacun, s'il est plus clair qu'un
 certain seuil, le programme le remplace par un
@@ -352,6 +352,18 @@ de nettoyage.
 
 INSERER DES EXEMPLES
 
+En réfléchissant un peu, je me suis aperçu que la variante
+avec 8 voisins aurait émoussé les coins à angle droit~:
+
+  ..***      ..***
+  ..***      ..***
+  ..***  ->  ...**
+  .....      .....
+  .....      .....
+
+J'ai donc pris la variante à 4 voisins. Et il suffit d'une génération
+pour avoir un bon nettoyage.
+
 On peut considérer que c'est une variante
 du Jeu de la Vie de Conway (John, pas Damian),
 avec des règles de transition différentes.
@@ -362,7 +374,8 @@ La variabilité des glyphes est réduite, mais elle existe encore.
 
 Bien que j'utilise une base no-SQL, je continue, dans le cadre
 de ce texte descriptif, à définir un schéma de base de
-données et à parler de tables.
+données et à parler de tables. Mais c'est plus une auto-discipline
+qu'une contrainte imposée par la base de données.
 
 =head2 Le schéma de base de données
 
@@ -380,7 +393,6 @@ Faut-il stocker dans cette table le dessin en pixels
 ou bien les différents programmes accèderont-ils
 systématiquement au fichier graphique pour obtenir ce dessin ?
 Je n'ai pas encore décidé.
-
 
 La troisième table est la table «~Caractère~».
 Elle comporte environ 96 enregistrements,
@@ -494,6 +506,10 @@ deux Cellules voisines.
 Il y a encore un écueil de la numérisation dont je n'ai pas parlé.
 Lorsque j'ai scanné les listings, le papier n'était pas
 toujours bien aligné sur la vitre du scanner.
+J'ai beau caler la feuille avec un gros livre,
+lorsque je rabat le couvercle du scanner la feuille subit
+une légère rotation qu'il faut compenser dans le
+découpage en Cellules.
 
 Comme l'angle de rotation est très faible malgré tout,
 je remplace la rotation par la combinaison
@@ -592,3 +608,105 @@ et la victime potentielle sont la même personne.
 
 J'ai quand même activé l'authentification pour la base
 de données MongoDB.
+
+=head1 Compléments
+
+=head2 Lissage des fichiers graphiques
+
+L'algorithme utilisé est du même type que celui du
+jeu de la vie de John Conway. Il y a quelques différences de
+comportement. Par exemple, dans le jeu de la vie, la population peut s'étendre.
+Dans le lissage, la population reste confinée dans son rectangle initial
+(ou enveloppe ou I<bounding box).
+C'est facile à comprendre. Prenons un pixel blanc juste à l'extérieur
+du rectangle initial, par exemple juste au-dessus.  Les seuls pixels
+voisins qui peuvent être occupés (noirs) sont les trois pixels du dessous
+(pour la variante à 8 voisins) ou le pixel du dessous (pour
+la variante à 4 voisins). Ce pixel ne peut donc pas devenir noir.
+À l'inverse, pour le jeu de la vie, nous avons les glisseurs, les
+vaisseaux, les canons à glisseurs, etc.
+
+Que peut-on dire à propos de l'itération du processus~? Puisque l'on ne peut
+pas s'étendre à l'extérieur du rectangle initial, le nombre de possibilités
+est fini (majoré par 2**N, N étant le nombre total de pixels noirs et blancs
+dans le rectangle initial). On arrivera nécessairement à une situation périodique
+au bout d'un temps plus ou moins long. Mathématiquement parlant, le nombre d'itérations
+est majoré par 2**N, mais dans la pratique je pense que cela sera beaucoup plus faible,
+à taille humaine. D'autre part, je pense que la situation finale sera une
+situation statique, c'est-à-dire avec une période 1. Pas de clignotants de
+période 2 comme avec le jeu de la vie.
+
+Si l'on admet une extension infinie dans les deux dimensions, il
+existe des clignotants. L'un des deux motifs ci-dessous est un clignotant
+pour la version à 4~voisins, l'autre pour la version à 8~voisins.
+
+  .x.x.x.x.x   .x.x.x.x.x
+  x.x.x.x.x.   .x.x.x.x.x
+  .x.x.x.x.x   .x.x.x.x.x
+  x.x.x.x.x.   .x.x.x.x.x
+  .x.x.x.x.x   .x.x.x.x.x
+  x.x.x.x.x.   .x.x.x.x.x
+
+Mais dans mon cas, chaque motif est entouré en haut, en bas,
+à gauche et à droite par des lignes blanches. Donc les motifs
+ci-dessous~:
+
+  ............   ...........
+  ..x.x.x.x.x.   .x.x.x.x.x.
+  .x.x.x.x.x..   .x.x.x.x.x.
+  ..x.x.x.x.x.   .x.x.x.x.x.
+  .x.x.x.x.x..   .x.x.x.x.x.
+  ..x.x.x.x.x.   .x.x.x.x.x.
+  .x.x.x.x.x..   .x.x.x.x.x.
+  ............   ...........
+
+se réduiront petit à petit.
+
+=head2 Rotation et cisaillements
+
+Une rotation dans le plan se traduit par l'équation
+suivante si les coordonnées sont exprimées dans un
+repère orthonormé~:
+
+  (x')   (cos a -sin a) (x)
+  (  ) = (            ) ( )
+  (y')   (sin a  cos a) (y)
+
+Si l'angle a est faible, on a :
+
+  sin a ~ a
+  cos a ~ 1
+
+ce qui donne
+
+  (x')   (1 -a) (x)
+  (  ) = (    ) ( )
+  (y')   (a  1) (y)
+
+L'équation d'un cisaillement horizontal est~:
+
+  (x')   (1 -a) (x)
+  (  ) = (    ) ( )
+  (y')   (0  1) (y)
+
+et celle d'un cisaillement vertical est~:
+
+  (x')   (1  0) (x)
+  (  ) = (    ) ( )
+  (y')   (a  1) (y)
+
+La composition de ces deux cisaillements («~f rond g~» ou «~g rond f~» en mathématiques)
+donne l'une de ces deux équations, selon le sens de la composition~:
+
+  (x')   (1     0) (x)
+  (  ) = (      2) ( )
+  (y')   (a  1-a ) (y)
+
+             2
+  (x')   (1-a   0) (x)
+  (  ) = (       ) ( )
+  (y')   (a     1) (y)
+
+La valeur de a étant faible, on néglige son carré et on retombe sur l'équation de la rotation.
+Mais j'ai préféré parlé de «~combinaison~» que de «~composition~», pour faire disparaître
+d'emblée le terme en a**2.
