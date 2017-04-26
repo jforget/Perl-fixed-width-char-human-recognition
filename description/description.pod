@@ -698,15 +698,12 @@ et celle d'un cisaillement vertical est~:
 La composition de ces deux cisaillements («~f rond g~» ou «~g rond f~» en mathématiques)
 donne l'une de ces deux équations, selon le sens de la composition~:
 
-  (x')   (1     0) (x)
-  (  ) = (      2) ( )
-  (y')   (a  1-a ) (y)
+  (x')   (1    -a) (x)          (x')   (   2   ) (x)
+  (  )   (       ) ( )          (  )   (1-a  -a) ( )
+  (  ) = (      2) ( )          (  ) = (       ) ( )
+  (y')   (a  1-a ) (y)          (y')   (a     1) (y)
 
-             2
-  (x')   (1-a   0) (x)
-  (  ) = (       ) ( )
-  (y')   (a     1) (y)
-
-La valeur de a étant faible, on néglige son carré et on retombe sur l'équation de la rotation.
+La valeur de a étant faible, on néglige son carré (on l'a déjà fait pour l'approximation
+du cosinus) et on retombe sur l'équation de la rotation.
 Mais j'ai préféré parlé de «~combinaison~» que de «~composition~», pour faire disparaître
 d'emblée le terme en a**2.
