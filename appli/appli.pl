@@ -66,35 +66,20 @@ get '/listedoc' => sub {
   for (@liste) {
     $liste .= "<li><a href='/doc/$_'>$_</a></li>\n";
   }
-  return <<"EOF"
-<html>
-<head>
-<title>Liste des documents</title>
-</head>
-<body>
-Appli&nbsp;: $appli
-<br />
-Mot de passe&nbsp;: $mdp
-<br /><a href='/'>Retour</a>
-<h1>Nouveau document</h1>
-<form action='/credoc' method='post'>
-Document&nbsp;: <input type='text' name='document' />
-Fichier&nbsp;: <input type='text' name='fichier' />
-<br /><input type='submit' value='ajouter' />
-</form>
-<hr />
-<h1>Documents existants</h1>
-<ul>
-$liste
-</ul>
-</body>
-</html>
-EOF
+  return aff_liste($appli, $mdp,'', '', '', $liste);
 };
 
 post '/credoc' => sub {
+  my $appli = setting('username');
+  my $mdp   = setting('password');
   my $doc = body_parameters->get('document');
   my $fic = body_parameters->get('fichier');
+  if ($doc !~ /^\w+$/) {
+    return aff_liste($appli, $mdp, $doc, $fic, "Mauvais format pour le nom du document", "");
+  }
+  if ($fic !~ /^\w+\.(?:png|gif)$/) {
+    return aff_liste($appli, $mdp, $doc, $fic, "Mauvais format pour le nom du fichier", "");
+  }
   say "création du docuemnt $doc, basé sur le fichier $fic";
   redirect '/listedoc';
 };
@@ -126,6 +111,49 @@ sub get_liste {
   return qw/doc1 doc2 doc3/;
 }
 
+sub aff_liste {
+  my ($appli, $mdp, $doc, $fic, $msg, $liste) = @_;
+
+  # Élimination des caractères dangereux
+  $doc =~ s/\W/?/g;
+  $fic =~ s/[^.\w]/?/g;
+
+  # Valeurs facultatives
+  if ($doc ne '') {
+    $doc = " value='$doc'";
+  }
+  if ($fic ne '') {
+    $fic = " value='$fic'";
+  }
+  if ($msg ne '') {
+    $msg = "<br />$msg";
+  }
+  return <<"EOF"
+<html>
+<head>
+<title>Liste des documents</title>
+</head>
+<body>
+Appli&nbsp;: $appli
+<br />
+<a href='/'>Retour</a>
+<br /><a href='/listedoc'>Liste</a>
+<h1>Nouveau document</h1>
+<form action='/credoc' method='post'>
+Document&nbsp;: <input type='text' name='document' $doc />
+Fichier&nbsp;: <input type='text' name='fichier' $fic />
+<br /><input type='submit' value='ajouter' />
+</form>
+$msg
+<hr />
+<h1>Documents existants</h1>
+<ul>
+$liste
+</ul>
+</body>
+</html>
+EOF
+}
 
 __END__
 
