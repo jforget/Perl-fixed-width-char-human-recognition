@@ -630,7 +630,7 @@ L'algorithme utilisé est du même type que celui du
 jeu de la vie de John Conway. Il y a quelques différences de
 comportement. Par exemple, dans le jeu de la vie, la population peut s'étendre.
 Dans le lissage, la population reste confinée dans son rectangle initial
-(ou enveloppe ou I<bounding box).
+(ou enveloppe ou I<bounding box>).
 C'est facile à comprendre. Prenons un pixel blanc juste à l'extérieur
 du rectangle initial, par exemple juste au-dessus.  Les seuls pixels
 voisins qui peuvent être occupés (noirs) sont les trois pixels du dessous
