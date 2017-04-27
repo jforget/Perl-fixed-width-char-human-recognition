@@ -1,5 +1,7 @@
 -*- encoding: utf-8; indent-tabs-mode: nil -*-
 
+=encoding utf8
+
 =head1 Introduction
 
 Pendant l'hiver 2016-2017, j'ai décidé de
@@ -609,6 +611,17 @@ et la victime potentielle sont la même personne.
 J'ai quand même activé l'authentification pour la base
 de données MongoDB.
 
+ORM~? D'une part, c'est bon pour des bases SQL où le schéma est stocké
+dans la base et accessible par une API. Donc, inutile d'y songer pour 
+MongoDB (encore que certains pourraient essayer). D'autre part, de ce que j'ai
+pu comprendre, c'est assez difficile de faire évoluer l'application basée
+sur un ORM si la structure de la base de données change. Finalement, masquer
+le SQL ou le langage d'accès à MongoDB, cela ne m'intéresse pas.
+
+MVC~? Je n'ai pas essayé. Peut-être que l'utilisation de Dancer2 impose
+au moins en partie une architecture MVC, mais en dehors de cela, je n'ai pas
+cherché à faire du MVC propre.
+
 =head1 Compléments
 
 =head2 Lissage des fichiers graphiques
@@ -631,8 +644,9 @@ pas s'étendre à l'extérieur du rectangle initial, le nombre de possibilités
 est fini (majoré par 2**N, N étant le nombre total de pixels noirs et blancs
 dans le rectangle initial). On arrivera nécessairement à une situation périodique
 au bout d'un temps plus ou moins long. Mathématiquement parlant, le nombre d'itérations
-est majoré par 2**N, mais dans la pratique je pense que cela sera beaucoup plus faible,
-à taille humaine. D'autre part, je pense que la situation finale sera une
+pour aborder la partie périodique et le nombre d'itérations dans une période
+sont majorés par 2**N, mais dans la pratique je pense que cela sera beaucoup plus faible,
+à taille humaine. Notamment, je pense que la situation finale sera une
 situation statique, c'est-à-dire avec une période 1. Pas de clignotants de
 période 2 comme avec le jeu de la vie.
 
