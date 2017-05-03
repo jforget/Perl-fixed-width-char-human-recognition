@@ -37,6 +37,14 @@ récupérer les fichiers sources
 I<à l'identique> et les soumettre à
 Git avec cette date de commit.
 
+=begin HTML
+
+<img src="entete1.png" alt="Les 10 premières lignes du listing du 8 décembre 1983" />
+<br /><img src="entete2.png" alt="Les 5 premières lignes du listing du 10 janvier 1984" />
+<br /><img src="entete3.png" alt="Les 5 premières lignes du listing du 19 janvier 1984" />
+
+=end HTML
+
 =head2 Première méthode
 
 Première méthode, tout recopier
