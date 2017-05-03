@@ -83,13 +83,13 @@ Il s'agit de :
 
 =over 4
 
-=item * gocr
+=item * gocr (L<http://jocr.sourceforge.net/>)
 
-=item * ocrad
+=item * ocrad (L<https://www.gnu.org/software/ocrad/>)
 
-=item * tesseract
+=item * tesseract (L<https://github.com/tesseract-ocr>)
 
-=item * cuneiform
+=item * cuneiform (L<https://en.wikipedia.org/wiki/CuneiForm_(software)>)
 
 =back
 
@@ -159,9 +159,9 @@ S<infrastructure :>
 
 =item * recaptcha
 
-=item * Distributed Proofreaders (L<www.pgdp.net>) en amont du projet Gutenberg
+=item * Distributed Proofreaders (L<https://www.pgdp.net>) en amont du projet Gutenberg
 
-=item * Openfoodfacts.
+=item * Openfoodfacts (L<https://fr.openfoodfacts.org/>).
 
 =back
 
