@@ -120,7 +120,7 @@ En 2000 ou 2001, j'avais installé
 sur ma machine de l'époque un
 programme original dont je ne trouve
 plus aucune trace quinze ans
-plus tard~: Alice-OCR.
+plus S<tard :> Alice-OCR.
 Pour changer, c'était une application graphique,
 pas un utilitaire en ligne de commande.
 La moitié gauche de la fenêtre affichait
@@ -145,7 +145,7 @@ d'un autre fichier.
 Il existe d'autres systèmes informatiques
 reposant au moins en partie  sur la reconnaissance humaine
 des caractères et qui gèrent leur
-infrastructure~:
+S<infrastructure :>
 
 =over 4
 
@@ -171,7 +171,7 @@ informatique. Une autre différence est que
 l'utilisateur a son mot à dire lors du
 découpage du fichier graphique en cellules contenant un glyphe.
 
-Note~: dans ce qui suit, je décris
+S<Note :> dans ce qui suit, je décris
 les programmes au présent ou au passé,
 mais j'ai écrit la première description
 du système
@@ -206,12 +206,12 @@ Alors j'ai chaisi de faire mes premiers pas en MongoDB.
 Et peut-être PDL si cela permet des comparaisons faciles
 de matrices de booléens.
 
-Plan B~: pas de plan B pour C<GD.pm>, je sais que cela fonctionne et que je saurai
+Plan S<B :> pas de plan B pour C<GD.pm>, je sais que cela fonctionne et que je saurai
 me débrouiller avec. Si je n'arrive pas à m'en sortir avec MongoDB, tant pis, je
 ferai du SQL avec SQLite. Et pour Dancer2, je ferai du CGI à l'ancienne, comme lorsque
 j'ai commencé à utiliser Perl il y a 19 ans.
 
-Et bien sûr, j'utilise Perl. Perl 5 ou Perl 6~? Bonne question.
+Et bien sûr, j'utilise Perl. S<Perl 5> ou S<Perl 6 ?> Bonne question.
 Comme j'ai reçu mon premier livre sur Perl 6 juste avant d'initialiser
 mon dépôt Git et d'écrire la première ligne de code exécutable,
 j'ai eu le temps de constater qu'il existait une variante de Dancer
@@ -311,20 +311,20 @@ Né dans les années 1960, j'ai appris
 le dessin avec des crayons de couleurs,
 et du papier,
 pas avec the Gimp ou assimilé. Donc, pour
-moi, « rien », c'est une feuille blanche,
-et « plein de couleurs », cela tend à donner
+moi, S<« rien »,> c'est une feuille blanche,
+et S<« plein> de S<couleurs »,> cela tend à donner
 du noir. Or c'est l'inverse dans les
 logiciels graphiques avec les valeurs RGB
-ou avec le V des valeurs HSV~:
+ou avec le V des valeurs S<HSV :>
 plus c'est faible, plus c'est noir
 et de l'autre côté, plus c'est
 élevé, plus cela se rapproche du blanc.
 
 Un dernier écueil, le plus important, les irrégularités des glyphes.
 
-L'imprimante faisait du 10~CPI et du 6~LPI. Mon scanner
-fait du 300~DPI. Cela veut dire que chaque glyphe
-correspond à un rectangle de 30x50~pixels.
+L'imprimante faisait du S<10 CPI> et du S<6 LPI.> Mon scanner
+fait du S<300 DPI.> Cela veut dire que chaque glyphe
+correspond à un rectangle de S<30x50 pixels.>
 Cela laisse le champ libre à une énorme variabilité
 dans les dessins bitmaps d'un caractère donné.
 Voir les exemples dans les copies d'écran.
@@ -342,9 +342,9 @@ le blanc et le noir et cela permet d'enlever la poussière
 Le programme de lissage et de nettoyage permet de faire au choix une seule
 ou plusieurs itérations en fonction d'un paramètre au lancement.
 Un autre paramètre permet de prendre en compte les
-diagonales (8~voisins par pixel) ou pas (4~voisins).
+diagonales S<(8 voisins> par pixel) ou pas S<(4 voisins).>
 Finalement, le programme génère deux fichiers
-graphiques~: le premier avec des pixels noirs et blancs
+S<graphiques :> le premier avec des pixels noirs et blancs
 pour la suite du projet, le deuxième avec des pixels de
 couleurs pour visualiser ceux qui ont été touchés
 par le nettoyage et les distinguer de ceux qui n'ont pas
@@ -355,7 +355,7 @@ de nettoyage.
 INSERER DES EXEMPLES
 
 En réfléchissant un peu, je me suis aperçu que la variante
-avec 8 voisins aurait émoussé les coins à angle droit~:
+avec 8 voisins aurait émoussé les coins à angle S<droit :>
 
   ..***      ..***
   ..***      ..***
@@ -381,12 +381,12 @@ qu'une contrainte imposée par la base de données.
 
 =head2 Le schéma de base de données
 
-La première table est la table «~Document~».
+La première table est la table S<« Document ».>
 Cela correspond à un fichier numérisé et à ses
 avatars successifs. Chaque listing a été scanné en huit fichiers graphiques
 environ, donc donnera lieu à huit documents.
 
-La deuxième table est la table «~Cellule~».
+La deuxième table est la table S<« Cellule ».>
 Elle représente les cellules obtenues en découpant le Document. Les informations de cette table
 sont, entre autres, les coordonnées de la Cellule
 dans le Document, aussi bien exprimées en
@@ -396,14 +396,14 @@ ou bien les différents programmes accèderont-ils
 systématiquement au fichier graphique pour obtenir ce dessin ?
 Je n'ai pas encore décidé.
 
-La troisième table est la table «~Caractère~».
+La troisième table est la table S<« Caractère ».>
 Elle comporte environ 96 enregistrements,
-pour les caractères «~!~» à «~}~». Je rappelle
+pour les caractères S<« ! »> à S<« } ».> Je rappelle
 que j'ai utilisé de l'ASCII 7 bits.
 Comme il n'y a pas d'information à stocker, peut-être que
 cette table ne sera pas implémentée.
 
-La quatrième table est la table «~Glyphe~».
+La quatrième table est la table S<« Glyphe ».>
 Chaque enregistrement correspond à un tableau à deux dimensions
 de bits, représentant le dessin du caractère en pixels noirs et blancs.
 Le dessin du Glyphe est régulier, avec des
@@ -418,7 +418,7 @@ Compte tenu des irrégularités des gouttes d'encre, le dessin en pixels
 d'une Cellule
 ne correspond pas au dessin épuré d'un Glyphe. On associe
 une Cellule à un Glyphe en comparant les pixels et en minimisant
-le nombre de pixels différents. Ce nombre, le «~score~»,
+le nombre de pixels différents. Ce nombre, le S<« score »,>
 est stocké dans l'enregistrement Cellule. Tant que le programme de
 reconnaissance n'aura pas traité une Cellule, son score sera
 son nombre total de pixels. De la sorte, le programme de
@@ -454,11 +454,11 @@ Dans cette page, on peut spécifier les paramètres
 permettant de découper le document en cellules. Cela genère un fichier
 graphique matérialisant ce découpage, mais sans
 pour autant créer les enregistrements dans la table
-«~Cellule~».
+S<« Cellule ».>
 
 Une deuxième fonction dans cette page permet
 de valider le découpage, avec création des
-«~Cellules~».
+S<« Cellules ».>
 
 Une troisième fonction permet de lancer l'analyse
 des Cellules du Document pour leur associer le
@@ -499,9 +499,9 @@ la valeur 40,34 à la largeur, alors
 les abscisses-pixel des Cellules successives
 seront 0, 40, 80, 121, 151, 181, 212, etc.
 La largeur de chaque Cellule sera arrondie
-à 41~pixels, tant pis s'il y a un recouvrement
+à S<41 pixels,> tant pis s'il y a un recouvrement
 entre deux Cellules voisines.
-À moins que j'arrondisse la largeur des Cellules à 40~pixels,
+À moins que j'arrondisse la largeur des Cellules à S<40 pixels,>
 ce qui engendrera d'éventuelles lacunes d'un pixel de large entre
 deux Cellules voisines.
 
@@ -516,7 +516,7 @@ découpage en Cellules.
 Comme l'angle de rotation est très faible malgré tout,
 je remplace la rotation par la combinaison
 d'un cisaillement horizontal et d'un cisaillement
-vertical. Le cisaillement horizontal s'exprime au choix ainsi~:
+vertical. Le cisaillement horizontal s'exprime au choix S<ainsi :>
 
 Tous les N pixels (en hauteur), décaler d'un pixel vers la gauche / la droite.
 
@@ -530,8 +530,8 @@ simulent une rotation, leurs paramètres sont liés.
 Si le cisaillement horizontal se fait vers la droite,
 le cisaillement vertical se fera vers le haut.
 Et les valeurs des paramètres N devront être identiques
-(pour la règle «~tous les N pixels~») ou proportionnelles
-(«~tous les N caractères~»). Cette cohérence est
+(pour la règle S<« tous> les N S<pixels »)> ou proportionnelles
+S<(« tous> les N S<caractères »).> Cette cohérence est
 laissée à la charge de l'utilisateur.
 
 Cette opération de cisaillement, comme le calcul des abscisses-pixel et
@@ -540,7 +540,7 @@ en haut à gauche de la Cellule. Les côtés de la Cellule extraite
 sont purement verticaux ou horizontaux.
 
 Une fois le découpage effectué, on rogne la Cellule en calculant 
-l'«~enveloppe~» des pixels (I<bounding box> en anglais).
+S<l'« enveloppe »> des pixels (I<bounding box> en anglais).
 Prenons l'exemple de deux Cellules contenant un signe plus.
 Les signes ne sont pas centrés de la même manière dans leur Cellule.
 
@@ -611,14 +611,14 @@ et la victime potentielle sont la même personne.
 J'ai quand même activé l'authentification pour la base
 de données MongoDB.
 
-ORM~? D'une part, c'est bon pour des bases SQL où le schéma est stocké
+S<ORM ?> D'une part, c'est bon pour des bases SQL où le schéma est stocké
 dans la base et accessible par une API. Donc, inutile d'y songer pour 
 MongoDB (encore que certains pourraient essayer). D'autre part, de ce que j'ai
 pu comprendre, c'est assez difficile de faire évoluer l'application basée
 sur un ORM si la structure de la base de données change. Finalement, masquer
 le SQL ou le langage d'accès à MongoDB, cela ne m'intéresse pas.
 
-MVC~? Je n'ai pas essayé. Peut-être que l'utilisation de Dancer2 impose
+S<MVC ?> Je n'ai pas essayé. Peut-être que l'utilisation de Dancer2 impose
 au moins en partie une architecture MVC, mais en dehors de cela, je n'ai pas
 cherché à faire du MVC propre.
 
@@ -639,7 +639,7 @@ la variante à 4 voisins). Ce pixel ne peut donc pas devenir noir.
 À l'inverse, pour le jeu de la vie, nous avons les glisseurs, les
 vaisseaux, les canons à glisseurs, etc.
 
-Que peut-on dire à propos de l'itération du processus~? Puisque l'on ne peut
+Que peut-on dire à propos de l'itération du S<processus ?> Puisque l'on ne peut
 pas s'étendre à l'extérieur du rectangle initial, le nombre de possibilités
 est fini (majoré par 2**N, N étant le nombre total de pixels noirs et blancs
 dans le rectangle initial). On arrivera nécessairement à une situation périodique
@@ -652,7 +652,7 @@ période 2 comme avec le jeu de la vie.
 
 Si l'on admet une extension infinie dans les deux dimensions, il
 existe des clignotants. L'un des deux motifs ci-dessous est un clignotant
-pour la version à 4~voisins, l'autre pour la version à 8~voisins.
+pour la version à S<4 voisins,> l'autre pour la version à S<8 voisins.>
 
   .x.x.x.x.x   .x.x.x.x.x
   x.x.x.x.x.   .x.x.x.x.x
@@ -663,7 +663,7 @@ pour la version à 4~voisins, l'autre pour la version à 8~voisins.
 
 Mais dans mon cas, chaque motif est entouré en haut, en bas,
 à gauche et à droite par des lignes blanches. Donc les motifs
-ci-dessous~:
+S<ci-dessous :>
 
   ............   ...........
   ..x.x.x.x.x.   .x.x.x.x.x.
@@ -680,7 +680,7 @@ se réduiront petit à petit.
 
 Une rotation dans le plan se traduit par l'équation
 suivante si les coordonnées sont exprimées dans un
-repère orthonormé~:
+repère S<orthonormé :>
 
   (x')   (cos a -sin a) (x)
   (  ) = (            ) ( )
@@ -688,8 +688,8 @@ repère orthonormé~:
 
 Si l'angle a est faible, on a :
 
-  sin a ~ a
-  cos a ~ 1
+  sin a ≅ a
+  cos a ≅ 1
 
 ce qui donne
 
@@ -697,20 +697,20 @@ ce qui donne
   (  ) = (    ) ( )
   (y')   (a  1) (y)
 
-L'équation d'un cisaillement horizontal est~:
+L'équation d'un cisaillement horizontal S<est :>
 
   (x')   (1 -a) (x)
   (  ) = (    ) ( )
   (y')   (0  1) (y)
 
-et celle d'un cisaillement vertical est~:
+et celle d'un cisaillement vertical S<est :>
 
   (x')   (1  0) (x)
   (  ) = (    ) ( )
   (y')   (a  1) (y)
 
-La composition de ces deux cisaillements («~f rond g~» ou «~g rond f~» en mathématiques)
-donne l'une de ces deux équations, selon le sens de la composition~:
+La composition de ces deux cisaillements S<(« f> rond S<g »> ou S<« g> rond S<f »> en mathématiques)
+donne l'une de ces deux équations, selon le sens de la S<composition :>
 
   (x')   (1    -a) (x)          (x')   (   2   ) (x)
   (  )   (       ) ( )          (  )   (1-a  -a) ( )
@@ -719,5 +719,5 @@ donne l'une de ces deux équations, selon le sens de la composition~:
 
 La valeur de a étant faible, on néglige son carré (on l'a déjà fait pour l'approximation
 du cosinus) et on retombe sur l'équation de la rotation.
-Mais j'ai préféré parlé de «~combinaison~» que de «~composition~», pour faire disparaître
+Mais j'ai préféré parlé de S<« combinaison »> que de S<« composition »,> pour faire disparaître
 d'emblée le terme en a**2.
