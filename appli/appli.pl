@@ -59,14 +59,10 @@ EOF
 
 
 get '/listedoc' => sub {
-  my $appli = setting('username');
-  my $mdp   = setting('password');
-  my @liste = get_liste($appli, $mdp);
-  my $liste = '';
-  for (@liste) {
-    $liste .= "<li><a href='/doc/$_'>$_</a></li>\n";
-  }
-  return aff_liste($appli, $mdp,'', '', '', $liste);
+  my $appli     = setting('username');
+  my $mdp       = setting('password');
+  my $liste_ref = get_liste($appli, $mdp);
+  return aff_liste($appli, $mdp,'', '', '', $liste_ref);
 };
 
 post '/credoc' => sub {
@@ -75,10 +71,10 @@ post '/credoc' => sub {
   my $doc = body_parameters->get('document');
   my $fic = body_parameters->get('fichier');
   if ($doc !~ /^\w+$/) {
-    return aff_liste($appli, $mdp, $doc, $fic, "Mauvais format pour le nom du document", "");
+    return aff_liste($appli, $mdp, $doc, $fic, "Mauvais format pour le nom du document", get_liste($appli, $mdp));
   }
   if ($fic !~ /^\w+\.(?:png|gif)$/) {
-    return aff_liste($appli, $mdp, $doc, $fic, "Mauvais format pour le nom du fichier", "");
+    return aff_liste($appli, $mdp, $doc, $fic, "Mauvais format pour le nom du fichier", get_liste($appli, $mdp));
   }
   say "création du docuemnt $doc, basé sur le fichier $fic";
   redirect '/listedoc';
@@ -88,31 +84,34 @@ get '/doc/:doc' => sub {
   my $appli = setting('username');
   my $mdp   = setting('password');
   my $doc   = route_parameters->get('doc');
-  return <<"EOF"
-<html>
-<head>
-<title>Document $doc</title>
-</head>
-<body>
-Appli&nbsp;: $appli
-<br />
-Mot de passe&nbsp;: $mdp
-<br />Document $doc
-<br /><a href='/'>Retour</a>
-<br /><a href='/listedoc'>Liste</a>
-</body>
-</html>
-EOF
+  say "get doc $doc (appli $appli, mdp $mdp)";
+  return aff_doc($appli, $mdp, $doc);
 };
 
 start;
 
 sub get_liste {
-  return qw/doc1 doc2 doc3/;
+  return [ qw/doc1 doc2 doc3/ ];
+}
+
+sub get_doc {
+  my ($appli, $mdp, $doc) = @_;
+  return { nom         => $doc,
+           fic         => "$doc.png",
+           taille_x    => 2000,
+           taille_y    => 500,
+           ind_blanc   => 0,
+           ind_noir    => 1,
+           nb_noirs    => 35000,
+           x0          => 15,
+           y0          => 10,
+           dx          => 30,
+           dy          => 50,
+  };
 }
 
 sub aff_liste {
-  my ($appli, $mdp, $doc, $fic, $msg, $liste) = @_;
+  my ($appli, $mdp, $doc, $fic, $msg, $liste_ref) = @_;
 
   # Élimination des caractères dangereux
   $doc =~ s/\W/?/g;
@@ -128,6 +127,12 @@ sub aff_liste {
   if ($msg ne '') {
     $msg = "<br />$msg";
   }
+
+  my $liste = '';
+  for (@{$liste_ref}) {
+    $liste .= "<li><a href='/doc/$_'>$_</a></li>\n";
+  }
+
   return <<"EOF"
 <html>
 <head>
@@ -154,6 +159,27 @@ $liste
 </html>
 EOF
 }
+
+sub aff_doc {
+  my ($appli, $mdp, $doc) = @_;
+  my $info = get_doc($appli, $mdp, $doc);
+  return <<"EOF"
+<html>
+<head>
+<title>Document $doc</title>
+</head>
+<body>
+Appli&nbsp;: $appli
+<br />
+Mot de passe&nbsp;: $mdp
+<br />Document $doc
+<br />$info->{taille_x} x $info->{taille_y} dont $info->{nb_noirs} pixels noirs.
+<br /><a href='/'>Retour</a>
+<br /><a href='/listedoc'>Liste</a>
+</body>
+</html>
+EOF
+};
 
 __END__
 
