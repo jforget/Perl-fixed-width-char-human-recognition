@@ -49,7 +49,6 @@ post '/accueil' => sub {
 <body>
 Appli&nbsp;: $appli
 <br />
-Mot de passe&nbsp;: $mdp
 <br /><a href='/listedoc'>Liste des documents</a>
 </body>
 </html>
@@ -61,6 +60,9 @@ EOF
 get '/listedoc' => sub {
   my $appli     = setting('username');
   my $mdp       = setting('password');
+  unless ($appli) {
+    redirect '/';
+  }
   my $liste_ref = get_liste($appli, $mdp);
   return aff_liste($appli, $mdp,'', '', '', $liste_ref);
 };
@@ -68,6 +70,9 @@ get '/listedoc' => sub {
 post '/credoc' => sub {
   my $appli = setting('username');
   my $mdp   = setting('password');
+  unless ($appli) {
+    redirect '/';
+  }
   my $doc = body_parameters->get('document');
   my $fic = body_parameters->get('fichier');
   if ($doc !~ /^\w+$/) {
@@ -83,6 +88,9 @@ post '/credoc' => sub {
 get '/doc/:doc' => sub {
   my $appli = setting('username');
   my $mdp   = setting('password');
+  unless ($appli) {
+    redirect '/';
+  }
   my $doc   = route_parameters->get('doc');
   say "get doc $doc (appli $appli, mdp $mdp)";
   return aff_doc($appli, $mdp, $doc);
@@ -107,6 +115,8 @@ sub get_doc {
            y0          => 10,
            dx          => 30,
            dy          => 50,
+           cish        => -20.5,
+           cisv        => +15.6,
   };
 }
 
@@ -163,6 +173,31 @@ EOF
 sub aff_doc {
   my ($appli, $mdp, $doc) = @_;
   my $info = get_doc($appli, $mdp, $doc);
+
+  # Mise en forme du cisaillement horizontal
+  my $cish = $info->{cish} // 0;
+  my $droite = '';
+  my $gauche = '';
+  if ($cish > 0) {
+    $droite = "checked='1'";
+  }
+  else {
+    $gauche = "checked='1'";
+    $cish = - $cish;
+  }
+  
+  # Mise en forme du cisaillement vertical
+  my $cisv = $info->{cisv} // 0;
+  my $haut = '';
+  my $bas  = '';
+  if ($cisv > 0) {
+    $haut = "checked='1'";
+  }
+  else {
+    $bas = "checked='1'";
+    $cisv = - $cisv;
+  }
+  
   return <<"EOF"
 <html>
 <head>
@@ -170,12 +205,26 @@ sub aff_doc {
 </head>
 <body>
 Appli&nbsp;: $appli
-<br />
-Mot de passe&nbsp;: $mdp
-<br />Document $doc
-<br />$info->{taille_x} x $info->{taille_y} dont $info->{nb_noirs} pixels noirs.
 <br /><a href='/'>Retour</a>
 <br /><a href='/listedoc'>Liste</a>
+
+<h1>Document $doc</h1>
+$info->{taille_x} x $info->{taille_y} dont $info->{nb_noirs} pixels noirs.
+
+<h2>Grille</h2>
+<form action='/grille' method='post'>
+Origine&nbsp;: <input type='text' name='x0' value='$info->{x0}' /> <input type='text' name='y0' value='$info->{y0}' />
+<br />Taille des cellules&nbsp;: largeur <input type='text' name='dx' value='$info->{dx}' /> hauteur <input type='text' name='dy' value='$info->{dy}' />
+<br />Cisaillement horizontal&nbsp: 1 pixel vers la <input type='radio' name='dirh' value='gauche' $gauche >gauche
+                                                    <input type='radio' name='dirh' value='droite' $droite >droite tous les <input type='text' name='lgh' value='$cish' /> caractères
+<br />Cisaillement vertical&nbsp: 1 pixel vers le <input type='radio' name='dirv' value='haut' $haut >haut
+                                                  <input type='radio' name='dirv' value='bas'  $bas  >bas toutes les <input type='text' name='lgh' value='$cisv' /> lignes
+<br /><input type='submit' value='grille' />
+</form>
+<h2>Validation de la grille</h2>
+<form action='/valid' method='post'>
+<br /><input type='submit' value='Validation' />
+</form>
 </body>
 </html>
 EOF
