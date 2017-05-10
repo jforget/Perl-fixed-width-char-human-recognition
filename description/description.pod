@@ -450,6 +450,9 @@ La première fonction accessible à partir du menu principal
 permet uniquement d'ajouter des noms de document
 à la base de données.
 
+Comme cette page est très peu remplie, j'ai décidé de la fusionner
+avec la suivante. La séparation logique reste visible cependant.
+
 =head3 Liste des documents
 
 La deuxième fonction donne la liste des documents.
@@ -616,8 +619,18 @@ qui écrit les programmes, gère la base de données, utilise l'application
 et exploite le résultat. En d'autres termes, le malfaiteur potentiel
 et la victime potentielle sont la même personne.
 
-J'ai quand même activé l'authentification pour la base
-de données MongoDB.
+Retour du S<balancier :>
+j'ai quand même activé l'authentification pour la base
+de données MongoDB. D'autre part, influencé sans doute par
+L<xkcd|https://xkcd.com/327/> et
+L<Bobby Tables|http://bobby-tables.com/>,
+j'ai imposé des restrictions drastiques à la saisie des noms de document
+et des noms de fichier. C'est plus une question de I<cross-site scripting>
+que de I<SQL injection> (ou plutôt I<no-SQL injection>).
+
+Troisième mouvement du S<balancier :> bien que j'utilise des expressions régulières
+pour vérifier ces noms de document et de fichier, je n'ai pas cherché à lancer
+mon application en I<taint mode>. Je ne me fais pas d'illusion, cela plantera.
 
 S<ORM ?> D'une part, c'est bon pour des bases SQL où le schéma est stocké
 dans la base et accessible par une API. Donc, inutile d'y songer pour 
@@ -628,7 +641,11 @@ le SQL ou le langage d'accès à MongoDB, cela ne m'intéresse pas.
 
 S<MVC ?> Je n'ai pas essayé. Peut-être que l'utilisation de Dancer2 impose
 au moins en partie une architecture MVC, mais en dehors de cela, je n'ai pas
-cherché à faire du MVC propre.
+cherché à faire du MVC propre. J'ai quand même cherché à séparer les fonctions
+qui produisent du HTML des fonctions qui accèdent à la base de données, mais
+c'est plutôt dans l'éventualité d'un plan B remplaçant MongoDB par SQLite
+et parce que j'ai commencé par coder des faux accès renvoyant des données S<« en dur »,>
+ce n'est pas l'application consciencieuse de l'architecture MVC.
 
 =head1 Compléments
 
