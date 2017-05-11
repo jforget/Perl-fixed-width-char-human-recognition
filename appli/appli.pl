@@ -14,6 +14,9 @@ use v5.10;
 use strict;
 use warnings;
 use Dancer2;
+use MongoDB;
+use YAML;
+use GD;
 
 set 'session' => 'Simple';
 
@@ -75,13 +78,12 @@ post '/credoc' => sub {
   }
   my $doc = body_parameters->get('document');
   my $fic = body_parameters->get('fichier');
-  if ($doc !~ /^\w+$/) {
-    return aff_liste($appli, $mdp, $doc, $fic, "Mauvais format pour le nom du document", get_liste($appli, $mdp));
+  my $msg = credoc($appli, $mdp, $doc, $fic);
+  if ($msg) {
+    return aff_liste($appli, $mdp, $doc, $fic, $msg, get_liste($appli, $mdp));
   }
-  if ($fic !~ /^\w+\.(?:png|gif)$/) {
-    return aff_liste($appli, $mdp, $doc, $fic, "Mauvais format pour le nom du fichier", get_liste($appli, $mdp));
-  }
-  say "création du docuemnt $doc, basé sur le fichier $fic";
+  say "création du document $doc, basé sur le fichier $fic";
+
   redirect '/listedoc';
 };
 
@@ -99,25 +101,68 @@ get '/doc/:doc' => sub {
 start;
 
 sub get_liste {
-  return [ qw/doc1 doc2 doc3/ ];
+  my ($appli, $mdp) = @_;
+  my $client = MongoDB->connect('mongodb://localhost');
+  my $coll   = $client->ns("$appli.Document");
+  my $doc    = $coll->find;
+  #say YAML::Dump($doc);
+  my @liste;
+  while(my $obj = $doc->next) {
+   push @liste, $obj;
+  }
+  return [ @liste ];
 }
 
 sub get_doc {
   my ($appli, $mdp, $doc) = @_;
-  return { nom         => $doc,
-           fic         => "$doc.png",
-           taille_x    => 2000,
-           taille_y    => 500,
-           ind_blanc   => 0,
-           ind_noir    => 1,
-           nb_noirs    => 35000,
-           x0          => 15,
-           y0          => 10,
-           dx          => 30,
-           dy          => 50,
-           cish        => -20.5,
-           cisv        => +15.6,
-  };
+  my $client = MongoDB->connect('mongodb://localhost');
+  my $coll   = $client->ns("$appli.Document");
+  my $obj    = $coll->find_one({ nom => $doc });
+  # say YAML::Dump($obj);
+  return $obj;
+}
+
+sub credoc {
+  my ($appli, $mdp, $doc, $fic) = @_;
+  if ($doc !~ /^\w+$/) {
+    return "Mauvais format pour le nom du document"
+  }
+  if ($fic !~ /^\w+\.png$/) {
+    return "Mauvais format pour le nom du fichier";
+  }
+  my %obj = ( nom => $doc, fic => $fic, dx => 30, dy => 50, cish => 0, cisv => 0 );
+
+  my $image = GD::Image->newFromPng($fic);
+  my ($l, $h) = $image->getBounds();
+  $obj{taille_x} = $l;
+  $obj{taille_y} = $h;
+  my @cpt = (0, 0);
+  my @xmin = (1e99, 1e99);
+  my @ymin = (1e99, 1e99);
+  for my $x (0 .. $h - 1) {
+    for my $y (0 .. $l - 1) {
+      my $index  = $image->getPixel($x, $y);
+      $cpt[$index]++;
+      $xmin[$index] = $x if $xmin[$index] > $x;
+      $ymin[$index] = $y if $ymin[$index] > $y;
+    }
+  }
+  if ($cpt[0] < $cpt[1]) {
+    $obj{ind_blanc} = 1;
+    $obj{ind_noir}  = 0;
+  }
+  else {
+    $obj{ind_blanc} = 0;
+    $obj{ind_noir}  = 1;
+  }
+  $obj{nb_noirs} = $cpt[$obj{ind_noir}];
+  $obj{x0} = $xmin[$obj{ind_noir}];
+  $obj{y0} = $ymin[$obj{ind_noir}];
+
+  my $client = MongoDB->connect('mongodb://localhost');
+  my $coll   = $client->ns("$appli.Document");
+  my $res    = $coll->insert_one({ %obj });  
+  return '';
 }
 
 sub aff_liste {
@@ -140,7 +185,7 @@ sub aff_liste {
 
   my $liste = '';
   for (@{$liste_ref}) {
-    $liste .= "<li><a href='/doc/$_'>$_</a></li>\n";
+    $liste .= "<li><a href='/doc/$_->{nom}'>$_->{nom}</a></li>\n";
   }
 
   return <<"EOF"
@@ -198,7 +243,7 @@ sub aff_doc {
     $cisv = - $cisv;
   }
   
-  return <<"EOF"
+  return <<"EOF";
 <html>
 <head>
 <title>Document $doc</title>
@@ -225,6 +270,7 @@ Origine&nbsp;: <input type='text' name='x0' value='$info->{x0}' /> <input type='
 <form action='/valid' method='post'>
 <br /><input type='submit' value='Validation' />
 </form>
+<img src='$info->{fic}' alt='document $doc' />
 </body>
 </html>
 EOF
