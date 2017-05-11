@@ -52,7 +52,26 @@ Première méthode, tout recopier
 1984 et 1990, j'ai affiné mon style
 de programmation. Exemples :
 
-INSÉRER DES EXEMPLES
+=for HTML
+<img src="exemple-code.png" alt="Exemple de code montrant l'absence d'alignement vertical" />
+
+  case date.mois of
+     1: gregnum := date.jour;
+     2: gregnum := date.jour +  31;
+     3: gregnum := date.jour +  59 + bissex(date.an);
+     4: gregnum := date.jour +  90 + bissex(date.an);
+     5: gregnum := date.jour + 120 + bissex(date.an);
+     6: gregnum := date.jour + 151 + bissex(date.an);
+     7: gregnum := date.jour + 181 + bissex(date.an);
+     8: gregnum := date.jour + 212 + bissex(date.an);
+     9: gregnum := date.jour + 243 + bissex(date.an);
+    10: gregnum := date.jour + 273 + bissex(date.an);
+    11: gregnum := date.jour + 304 + bissex(date.an);
+    12: gregnum := date.jour + 334 + bissex(date.an);
+  end;
+
+Ce qui ne se voit pas dans cet exemple, c'est qu'en 1984 j'utilisais des
+tabulations et que maintenant, je préfère des espaces (sauf pour les I<makefiles>).
 
 Et je ne pourrais pas
 m'empêcher de rectifier le
@@ -313,6 +332,20 @@ plutôt foncé. De la sorte, un
 pixel bleu moyen deviendra noir
 alors qu'un pixel orange moyen
 deviendra blanc.
+
+Dans ce diagramme, j'ai représenté la frontière entre la
+zone de conversion vers le blanc et la zone de conversion vers le noir.
+
+=begin HTML
+
+<img src="diagramme-HSV.png" alt="Diagramme HSV pour le bleu et l'orange" />
+
+<p size='2'>Copie d'écran personnelle d'une page Wikipedia avec des modifications mineures. Comme indiqué dans la page Wikipedia,
+<i lanfg='en'>Text is available under the Creative Commons Attribution-ShareAlike License; additional terms may apply.</i>
+</p>
+
+=end HTML
+
 
 À noter un problème culturel.
 Né dans les années 1960, j'ai appris
@@ -746,3 +779,9 @@ La valeur de a étant faible, on néglige son carré (on l'a déjà fait pour l'
 du cosinus) et on retombe sur l'équation de la rotation.
 Mais j'ai préféré parlé de S<« combinaison »> que de S<« composition »,> pour faire disparaître
 d'emblée le terme en a**2.
+
+=head1 LICENCE
+
+Texte diffusé sous la license CC-BY-NC-ND : Creative Commons avec clause de paternité, excluant l'utilisation commerciale et excluant la modification. 
+
+Certaines illustrations sont diffusées avec une licence libre différente. Celle-ci est mentionnée à la suite de l'illustration.
