@@ -17,6 +17,7 @@ use Dancer2;
 use MongoDB;
 use YAML;
 use GD;
+use MIME::Base64;
 
 set 'session' => 'Simple';
 
@@ -98,6 +99,34 @@ get '/doc/:doc' => sub {
   return aff_doc($appli, $mdp, $doc);
 };
 
+post '/majgrille' => sub {
+  my $appli = setting('username');
+  my $mdp   = setting('password');
+  my %param;
+  unless ($appli) {
+    redirect '/';
+  }
+  for my $par (qw/nom x0 y0 dx dy dirh lgh dirv lgv/) {
+    $param{$par} = body_parameters->get($par);
+  }
+  my $doc = $param{nom};
+  #say YAML::Dump({ %param });
+  my $msg = maj_grille($appli, $mdp, { %param });
+  say "Mise à jour de la grille pour $doc";
+  redirect "/doc/$doc";
+};
+
+post '/valgrille' => sub {
+  my $appli = setting('username');
+  my $mdp   = setting('password');
+  unless ($appli) {
+    redirect '/';
+  }
+  my $doc = body_parameters->get('nom');
+  say "Validation de la grille pour $doc";
+  redirect "/doc/$doc";
+};
+
 start;
 
 sub get_liste {
@@ -161,7 +190,39 @@ sub credoc {
 
   my $client = MongoDB->connect('mongodb://localhost');
   my $coll   = $client->ns("$appli.Document");
-  my $res    = $coll->insert_one({ %obj });  
+  my $res    = $coll->insert_one({ %obj });
+  return '';
+}
+
+sub maj_grille {
+  my ($appli, $mdp, $ref_param) = @_;
+  my $doc      = $ref_param->{nom};
+  my $info_doc = get_doc($appli, $mdp, $doc);
+
+  my ($cish, $cisv);
+  if ($ref_param->{dirh} eq 'gauche') {
+    $cish = - $ref_param->{lgh};
+  }
+  else {
+    $cish = $ref_param->{lgh};
+  }
+  if ($ref_param->{dirv} eq 'haut') {
+    $cisv = - $ref_param->{lgv};
+  }
+  else {
+    $cisv = $ref_param->{lgv};
+  }
+  for (qw/x0 y0 dx dy/) {
+    $info_doc->{$_} = $ref_param->{$_};
+  }
+  $info_doc->{cish} = $cish;
+  $info_doc->{cisv} = $cisv;
+
+  #say YAML::Dump( $info_doc );
+  my $client = MongoDB->connect('mongodb://localhost');
+  my $coll   = $client->ns("$appli.Document");
+  my $res    = $coll->update_many( { nom => $doc }, { '$set' => $info_doc } );
+
   return '';
 }
 
@@ -226,23 +287,26 @@ sub aff_doc {
   if ($cish > 0) {
     $droite = "checked='1'";
   }
-  else {
+  elsif ($cish < 0) {
     $gauche = "checked='1'";
-    $cish = - $cish;
+    $cish   = - $cish;
   }
-  
+
   # Mise en forme du cisaillement vertical
   my $cisv = $info->{cisv} // 0;
   my $haut = '';
   my $bas  = '';
   if ($cisv > 0) {
-    $haut = "checked='1'";
+    $bas  = "checked='1'";
   }
-  else {
-    $bas = "checked='1'";
+  elsif ($cisv < 0) {
+    $haut = "checked='1'";
     $cisv = - $cisv;
   }
-  
+
+  my $image = GD::Image->newFromPng($info->{fic});
+  my $data  = encode_base64($image->png);
+
   return <<"EOF";
 <html>
 <head>
@@ -257,20 +321,22 @@ Appli&nbsp;: $appli
 $info->{taille_x} x $info->{taille_y} dont $info->{nb_noirs} pixels noirs.
 
 <h2>Grille</h2>
-<form action='/grille' method='post'>
+<form action='/majgrille' method='post'>
+<input type='hidden' name='nom' value='$info->{nom}' />
 Origine&nbsp;: <input type='text' name='x0' value='$info->{x0}' /> <input type='text' name='y0' value='$info->{y0}' />
 <br />Taille des cellules&nbsp;: largeur <input type='text' name='dx' value='$info->{dx}' /> hauteur <input type='text' name='dy' value='$info->{dy}' />
 <br />Cisaillement horizontal&nbsp: 1 pixel vers la <input type='radio' name='dirh' value='gauche' $gauche >gauche
-                                                    <input type='radio' name='dirh' value='droite' $droite >droite tous les <input type='text' name='lgh' value='$cish' /> caractères
+                                                    <input type='radio' name='dirh' value='droite' $droite >droite toutes les <input type='text' name='lgh' value='$cish' /> lignes
 <br />Cisaillement vertical&nbsp: 1 pixel vers le <input type='radio' name='dirv' value='haut' $haut >haut
-                                                  <input type='radio' name='dirv' value='bas'  $bas  >bas toutes les <input type='text' name='lgh' value='$cisv' /> lignes
+                                                  <input type='radio' name='dirv' value='bas'  $bas  >bas tous les <input type='text' name='lgv' value='$cisv' /> caractères
 <br /><input type='submit' value='grille' />
 </form>
 <h2>Validation de la grille</h2>
-<form action='/valid' method='post'>
+<form action='/valgrille' method='post'>
+<input type='hidden' name='nom' value='$info->{nom}' />
 <br /><input type='submit' value='Validation' />
 </form>
-<img src='$info->{fic}' alt='document $doc' />
+<img src='data:image/png;base64,$data' alt='document $doc' />
 </body>
 </html>
 EOF
@@ -302,7 +368,7 @@ Se placer dans le répertoire contenant les fichiers graphiques. S<Puis :>
 Copyright 2017, Jean Forget
 
 Ce programme est diffusé avec les mêmes conditions que Perl 5.16.3 :
-la licence publique GPL version 1 ou ultérieure, ou bien la 
+la licence publique GPL version 1 ou ultérieure, ou bien la
 licence artistique Perl.
 
 Vous pouvez trouver le texte en anglais de ces licences dans le
