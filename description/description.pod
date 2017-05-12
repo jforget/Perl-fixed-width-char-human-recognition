@@ -70,6 +70,10 @@ de programmation. Exemples :
     12: gregnum := date.jour + 334 + bissex(date.an);
   end;
 
+Comme vous pouvez le voir, j'encadre les opérateurs tels que S<« C<:=> »> et S<« C<+> »>
+de blancs pour améliorer la lisibilité et j'aligne verticalement les éléments semblables
+dans les lignes successives, l'alignement se faisant sur la droite si les éléments alignés
+sont numériques.
 Ce qui ne se voit pas dans cet exemple, c'est qu'en 1984 j'utilisais des
 tabulations et que maintenant, je préfère des espaces (sauf pour les I<makefiles>).
 
@@ -340,8 +344,8 @@ zone de conversion vers le blanc et la zone de conversion vers le noir.
 
 <img src="diagramme-HSV.png" alt="Diagramme HSV pour le bleu et l'orange" />
 
-<p size='2'>Copie d'écran personnelle d'une page Wikipedia avec des modifications mineures. Comme indiqué dans la page Wikipedia,
-<i lanfg='en'>Text is available under the Creative Commons Attribution-ShareAlike License; additional terms may apply.</i>
+<p><font size='2'>Copie d'écran personnelle d'une page Wikipedia avec des modifications mineures. Comme indiqué dans la page Wikipedia,
+<i lang='en'>Text is available under the Creative Commons Attribution-ShareAlike License; additional terms may apply.</i></font>
 </p>
 
 =end HTML
@@ -603,6 +607,8 @@ Les signes ne sont pas centrés de la même manière dans leur Cellule.
   ----------------  ----------------
 
 La comparaison brute de ces deux Cellules donne de nombreuses différences.
+Les S<« C<=> »> montrent les pixels noirs communs (deux seulement), 
+les S<« C<#> »> montrent les pixels différents (22).
 
   ----------------  ----------------
   |              |  |              |
