@@ -218,6 +218,9 @@ sub maj_grille {
   my $fichier = $info_doc->{fic};
   my $image = GD::Image->newFromPng($fichier);
   $fichier =~ s/\.png$/-grille.png/;
+  my $rouge = $image->colorAllocate(255,   0,   0);
+  my $vert  = $image->colorAllocate(  0, 255,   0);
+  my $bleu  = $image->colorAllocate(  0,   0, 255);
 
   my $noir = $info_doc->{ind_noir};
   my $x0 = $ref_param->{x0};
@@ -249,9 +252,37 @@ sub maj_grille {
   my $c_max = int(($info_doc->{taille_x} - $x0) / $coef_cx);
   for my $l (0..$l_max) {
     for my $c (0..$c_max) {
-          my $x = int($x0 + $coef_cx * $c + $coef_lx * $l);
-          my $y = int($y0 + $coef_cy * $c + $coef_ly * $l);
-          $image->rectangle($x, $y, $x + $dx, $y + $dy, $noir);
+      my $x = int($x0 + $coef_cx * $c + $coef_lx * $l);
+      my $y = int($y0 + $coef_cy * $c + $coef_ly * $l);
+      my $couleur;
+      if (($l + $c) % 2) {
+        $couleur = $bleu;
+      }
+      else {
+        $couleur = $vert;
+      }
+      for my $x1 (0,   $dx) {
+        for my $y1 (0 .. $dy) {
+          my $pixel = $image->getPixel($x +$x1, $y + $y1);
+          if ($pixel == $noir) {
+            $image->setPixel($x + $x1, $y + $y1, $rouge);
+          }
+          else {
+            $image->setPixel($x + $x1, $y + $y1, $couleur);
+          }
+        }
+      }
+      for my $x1 (0 .. $dx) {
+        for my $y1 (0,   $dy) {
+          my $pixel = $image->getPixel($x +$x1, $y + $y1);
+          if ($pixel == $noir) {
+            $image->setPixel($x + $x1, $y + $y1, $rouge);
+          }
+          else {
+            $image->setPixel($x + $x1, $y + $y1, $couleur);
+          }
+        }
+      }
     }
   }
   open my $im, '>', $fichier
