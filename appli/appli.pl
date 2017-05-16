@@ -18,6 +18,8 @@ use MongoDB;
 use YAML;
 use GD;
 use MIME::Base64;
+use DateTime;
+use experimental qw/switch/;
 
 set 'session' => 'Simple';
 
@@ -96,7 +98,7 @@ get '/doc/:doc' => sub {
   }
   my $doc   = route_parameters->get('doc');
   say "get doc $doc (appli $appli, mdp $mdp)";
-  return aff_doc($appli, $mdp, $doc);
+  return aff_doc($appli, $mdp, $doc, 'base');
 };
 
 post '/majgrille' => sub {
@@ -106,7 +108,7 @@ post '/majgrille' => sub {
   unless ($appli) {
     redirect '/';
   }
-  for my $par (qw/nom x0 y0 dx dy dirh lgh dirv lgv/) {
+  for my $par (qw/nom x0 y0 dx dy dirh cish dirv cisv/) {
     $param{$par} = body_parameters->get($par);
   }
   my $doc = $param{nom};
@@ -185,8 +187,9 @@ sub credoc {
     $obj{ind_noir}  = 1;
   }
   $obj{nb_noirs} = $cpt[$obj{ind_noir}];
-  $obj{x0} = $xmin[$obj{ind_noir}];
-  $obj{y0} = $ymin[$obj{ind_noir}];
+  $obj{x0}       = $xmin[$obj{ind_noir}];
+  $obj{y0}       = $ymin[$obj{ind_noir}];
+  $obj{dh_cre}   = horodatage();
 
   my $client = MongoDB->connect('mongodb://localhost');
   my $coll   = $client->ns("$appli.Document");
@@ -197,31 +200,13 @@ sub credoc {
 sub maj_grille {
   my ($appli, $mdp, $ref_param) = @_;
   my $doc      = $ref_param->{nom};
-  my $info_doc = get_doc($appli, $mdp, $doc);
-
-  my ($cish, $cisv);
-  if ($ref_param->{dirh} eq 'gauche') {
-    $cish = - $ref_param->{lgh};
-  }
-  else {
-    $cish = $ref_param->{lgh};
-  }
-  if ($ref_param->{dirv} eq 'haut') {
-    $cisv = - $ref_param->{lgv};
-  }
-  else {
-    $cisv = $ref_param->{lgv};
-  }
-  for (qw/x0 y0 dx dy/) {
-    $info_doc->{$_} = $ref_param->{$_};
-  }
-  $info_doc->{cish} = $cish;
-  $info_doc->{cisv} = $cisv;
+  #my $info_doc = get_doc($appli, $mdp, $doc);
 
   #say YAML::Dump( $info_doc );
+  $ref_param->{dh_grille} = horodatage();
   my $client = MongoDB->connect('mongodb://localhost');
   my $coll   = $client->ns("$appli.Document");
-  my $res    = $coll->update_many( { nom => $doc }, { '$set' => $info_doc } );
+  my $res    = $coll->update_many( { nom => $doc }, { '$set' => $ref_param } );
 
   return '';
 }
@@ -277,34 +262,30 @@ EOF
 }
 
 sub aff_doc {
-  my ($appli, $mdp, $doc) = @_;
+  my ($appli, $mdp, $doc, $variante) = @_;
   my $info = get_doc($appli, $mdp, $doc);
 
   # Mise en forme du cisaillement horizontal
-  my $cish = $info->{cish} // 0;
   my $droite = '';
   my $gauche = '';
-  if ($cish > 0) {
-    $droite = "checked='1'";
-  }
-  elsif ($cish < 0) {
-    $gauche = "checked='1'";
-    $cish   = - $cish;
+  given ($info->{dirh}) {
+    when ('droite') { $droite = "checked='1'"; }
+    when ('gauche') { $gauche = "checked='1'"; }
   }
 
   # Mise en forme du cisaillement vertical
-  my $cisv = $info->{cisv} // 0;
   my $haut = '';
   my $bas  = '';
-  if ($cisv > 0) {
-    $bas  = "checked='1'";
-  }
-  elsif ($cisv < 0) {
-    $haut = "checked='1'";
-    $cisv = - $cisv;
+  given ($info->{dirv}) {
+    when ('haut'  ) { $haut   = "checked='1'"; }
+    when ('bas'   ) { $bas    = "checked='1'"; }
   }
 
-  my $image = GD::Image->newFromPng($info->{fic});
+  my $fichier;
+  given ($variante) {
+    when ('base') { $fichier = $info->{fic}; }
+  }
+  my $image = GD::Image->newFromPng($fichier);
   my $data  = encode_base64($image->png);
 
   return <<"EOF";
@@ -318,7 +299,8 @@ Appli&nbsp;: $appli
 <br /><a href='/listedoc'>Liste</a>
 
 <h1>Document $doc</h1>
-$info->{taille_x} x $info->{taille_y} dont $info->{nb_noirs} pixels noirs.
+<p>$info->{taille_x} x $info->{taille_y} dont $info->{nb_noirs} pixels noirs.</p>
+<p>Création $info->{dh_cre} (UTC)</p>
 
 <h2>Grille</h2>
 <form action='/majgrille' method='post'>
@@ -326,10 +308,11 @@ $info->{taille_x} x $info->{taille_y} dont $info->{nb_noirs} pixels noirs.
 Origine&nbsp;: <input type='text' name='x0' value='$info->{x0}' /> <input type='text' name='y0' value='$info->{y0}' />
 <br />Taille des cellules&nbsp;: largeur <input type='text' name='dx' value='$info->{dx}' /> hauteur <input type='text' name='dy' value='$info->{dy}' />
 <br />Cisaillement horizontal&nbsp: 1 pixel vers la <input type='radio' name='dirh' value='gauche' $gauche >gauche
-                                                    <input type='radio' name='dirh' value='droite' $droite >droite toutes les <input type='text' name='lgh' value='$cish' /> lignes
+                                                    <input type='radio' name='dirh' value='droite' $droite >droite toutes les <input type='text' name='cish' value='$info->{cish}' /> lignes
 <br />Cisaillement vertical&nbsp: 1 pixel vers le <input type='radio' name='dirv' value='haut' $haut >haut
-                                                  <input type='radio' name='dirv' value='bas'  $bas  >bas tous les <input type='text' name='lgv' value='$cisv' /> caractères
+                                                  <input type='radio' name='dirv' value='bas'  $bas  >bas tous les <input type='text' name='cisv' value='$info->{cisv}' /> caractères
 <br /><input type='submit' value='grille' />
+<p>Mise à jour de la grille $info->{dh_grille} (UTC)</p>
 </form>
 <h2>Validation de la grille</h2>
 <form action='/valgrille' method='post'>
@@ -341,6 +324,10 @@ Origine&nbsp;: <input type='text' name='x0' value='$info->{x0}' /> <input type='
 </html>
 EOF
 };
+
+sub horodatage {
+  return DateTime->now->strftime("%Y-%m-%d %H:%M:%S");
+}
 
 __END__
 
