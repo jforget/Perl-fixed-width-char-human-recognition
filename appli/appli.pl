@@ -101,6 +101,17 @@ get '/doc/:doc' => sub {
   return aff_doc($appli, $mdp, $doc, 'base');
 };
 
+get '/grille/:doc' => sub {
+  my $appli = setting('username');
+  my $mdp   = setting('password');
+  unless ($appli) {
+    redirect '/';
+  }
+  my $doc   = route_parameters->get('doc');
+  say "get doc $doc (appli $appli, mdp $mdp)";
+  return aff_doc($appli, $mdp, $doc, 'grille');
+};
+
 post '/majgrille' => sub {
   my $appli = setting('username');
   my $mdp   = setting('password');
@@ -115,7 +126,7 @@ post '/majgrille' => sub {
   #say YAML::Dump({ %param });
   my $msg = maj_grille($appli, $mdp, { %param });
   say "Mise à jour de la grille pour $doc";
-  redirect "/doc/$doc";
+  redirect "/grille/$doc";
 };
 
 post '/valgrille' => sub {
@@ -126,7 +137,7 @@ post '/valgrille' => sub {
   }
   my $doc = body_parameters->get('nom');
   say "Validation de la grille pour $doc";
-  redirect "/doc/$doc";
+  redirect "/grille/$doc";
 };
 
 start;
@@ -200,10 +211,57 @@ sub credoc {
 sub maj_grille {
   my ($appli, $mdp, $ref_param) = @_;
   my $doc      = $ref_param->{nom};
-  #my $info_doc = get_doc($appli, $mdp, $doc);
 
+  my $info_doc = get_doc($appli, $mdp, $doc);
   #say YAML::Dump( $info_doc );
+
+  my $fichier = $info_doc->{fic};
+  my $image = GD::Image->newFromPng($fichier);
+  $fichier =~ s/\.png$/-grille.png/;
+
+  my $noir = $info_doc->{ind_noir};
+  my $x0 = $ref_param->{x0};
+  my $y0 = $ref_param->{y0};
+  my $dx = $ref_param->{dx};
+  my $dy = $ref_param->{dy};
+  my $coef_cx = $ref_param->{dx};
+  my $coef_ly = $ref_param->{dy};
+  my $coef_lx = 0;
+  my $coef_cy = 0;
+  if ($ref_param->{csih}) {
+    if ($ref_param->{dirh} eq 'gauche') {
+      $coef_lx = -1 / $ref_param->{cish};
+    }
+    else {
+      $coef_lx = 1 / $ref_param->{cish};
+    }
+  }
+  if ($ref_param->{csiv}) {
+    if ($ref_param->{dirv} eq 'haut') {
+      $coef_cy = -1 / $ref_param->{cisv};
+    }
+    else {
+      $coef_cy = 1 / $ref_param->{cisv};
+    }
+  }
+
+  my $l_max = int(($info_doc->{taille_y} - $y0) / $coef_ly);
+  my $c_max = int(($info_doc->{taille_x} - $x0) / $coef_cx);
+  for my $l (0..$l_max) {
+    for my $c (0..$c_max) {
+          my $x = int($x0 + $coef_cx * $c + $coef_lx * $l);
+          my $y = int($y0 + $coef_cy * $c + $coef_ly * $l);
+          $image->rectangle($x, $y, $x + $dx, $y + $dy, $noir);
+    }
+  }
+  open my $im, '>', $fichier
+    or die "Ouverture $fichier $!";
+  print $im $image->png;
+  close $im
+    or die "Fermeture $fichier $!";
+
   $ref_param->{dh_grille} = horodatage();
+  $ref_param->{grille}    = $fichier;
   my $client = MongoDB->connect('mongodb://localhost');
   my $coll   = $client->ns("$appli.Document");
   my $res    = $coll->update_many( { nom => $doc }, { '$set' => $ref_param } );
@@ -283,7 +341,8 @@ sub aff_doc {
 
   my $fichier;
   given ($variante) {
-    when ('base') { $fichier = $info->{fic}; }
+    when ('base'  ) { $fichier = $info->{fic}   ; }
+    when ('grille') { $fichier = $info->{grille}; }
   }
   my $image = GD::Image->newFromPng($fichier);
   my $data  = encode_base64($image->png);
@@ -312,8 +371,8 @@ Origine&nbsp;: <input type='text' name='x0' value='$info->{x0}' /> <input type='
 <br />Cisaillement vertical&nbsp: 1 pixel vers le <input type='radio' name='dirv' value='haut' $haut >haut
                                                   <input type='radio' name='dirv' value='bas'  $bas  >bas tous les <input type='text' name='cisv' value='$info->{cisv}' /> caractères
 <br /><input type='submit' value='grille' />
-<p>Mise à jour de la grille $info->{dh_grille} (UTC)</p>
 </form>
+<p>Mise à jour de la grille $info->{dh_grille} (UTC)</p>
 <h2>Validation de la grille</h2>
 <form action='/valgrille' method='post'>
 <input type='hidden' name='nom' value='$info->{nom}' />
