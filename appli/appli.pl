@@ -85,7 +85,7 @@ post '/credoc' => sub {
   if ($msg) {
     return aff_liste($appli, $mdp, $doc, $fic, $msg, get_liste($appli, $mdp));
   }
-  say "création du document $doc, basé sur le fichier $fic";
+  #say "création du document $doc, basé sur le fichier $fic";
 
   redirect '/listedoc';
 };
@@ -97,7 +97,7 @@ get '/doc/:doc' => sub {
     redirect '/';
   }
   my $doc   = route_parameters->get('doc');
-  say "get doc $doc (appli $appli, mdp $mdp)";
+  #say "get doc $doc (appli $appli, mdp $mdp)";
   return aff_doc($appli, $mdp, $doc, 'base');
 };
 
@@ -108,7 +108,7 @@ get '/grille/:doc' => sub {
     redirect '/';
   }
   my $doc   = route_parameters->get('doc');
-  say "get doc $doc (appli $appli, mdp $mdp)";
+  #say "get doc $doc (appli $appli, mdp $mdp)";
   return aff_doc($appli, $mdp, $doc, 'grille');
 };
 
@@ -125,7 +125,7 @@ post '/majgrille' => sub {
   my $doc = $param{nom};
   #say YAML::Dump({ %param });
   my $msg = maj_grille($appli, $mdp, { %param });
-  say "Mise à jour de la grille pour $doc";
+  #say "Mise à jour de la grille pour $doc";
   redirect "/grille/$doc";
 };
 
@@ -172,7 +172,7 @@ sub credoc {
   if ($fic !~ /^\w+\.png$/) {
     return "Mauvais format pour le nom du fichier";
   }
-  my %obj = ( nom => $doc, fic => $fic, dx => 30, dy => 50, cish => 0, cisv => 0 );
+  my %obj = ( nom => $doc, fic => $fic, dx => 30, dy => 50, cish => 0, cisv => 0, etat => 1 );
 
   my $image = GD::Image->newFromPng($fic);
   my ($l, $h) = $image->getBounds();
@@ -231,7 +231,7 @@ sub maj_grille {
   my $coef_ly = $ref_param->{dy};
   my $coef_lx = 0;
   my $coef_cy = 0;
-  if ($ref_param->{csih}) {
+  if ($ref_param->{cish}) {
     if ($ref_param->{dirh} eq 'gauche') {
       $coef_lx = -1 / $ref_param->{cish};
     }
@@ -239,7 +239,7 @@ sub maj_grille {
       $coef_lx = 1 / $ref_param->{cish};
     }
   }
-  if ($ref_param->{csiv}) {
+  if ($ref_param->{cisv}) {
     if ($ref_param->{dirv} eq 'haut') {
       $coef_cy = -1 / $ref_param->{cisv};
     }
@@ -247,6 +247,8 @@ sub maj_grille {
       $coef_cy = 1 / $ref_param->{cisv};
     }
   }
+  #say "horizontal $ref_param->{cish}, vertical $ref_param->{cisv}";
+  #say "coef lx = $coef_lx, ly = $coef_ly, cx = $coef_cx, cy = $coef_cy";
 
   my $l_max = int(($info_doc->{taille_y} - $y0) / $coef_ly);
   my $c_max = int(($info_doc->{taille_x} - $x0) / $coef_cx);
@@ -293,6 +295,7 @@ sub maj_grille {
 
   $ref_param->{dh_grille} = horodatage();
   $ref_param->{grille}    = $fichier;
+  $ref_param->{etat}      = 2;
   my $client = MongoDB->connect('mongodb://localhost');
   my $coll   = $client->ns("$appli.Document");
   my $res    = $coll->update_many( { nom => $doc }, { '$set' => $ref_param } );
@@ -320,7 +323,11 @@ sub aff_liste {
 
   my $liste = '';
   for (@{$liste_ref}) {
-    $liste .= "<li><a href='/doc/$_->{nom}'>$_->{nom}</a></li>\n";
+    my $elem .= "<a href='/doc/$_->{nom}'>$_->{nom}</a>";
+    if ($_->{etat} >= 2) {
+      $elem .= " <a href='/grille/$_->{nom}'>grille</a>";
+    }
+    $liste .= "<li>$elem</li>\n";
   }
 
   return <<"EOF"
@@ -354,6 +361,9 @@ sub aff_doc {
   my ($appli, $mdp, $doc, $variante) = @_;
   my $info = get_doc($appli, $mdp, $doc);
 
+  # Libellé bidon car les états commencent en 1
+  my @etat = ('bidon', 'Créé', 'Grille définie', 'Grille validée', 'Conversion effectuée', 'Fichier texte généré');
+
   # Mise en forme du cisaillement horizontal
   my $droite = '';
   my $gauche = '';
@@ -370,6 +380,7 @@ sub aff_doc {
     when ('bas'   ) { $bas    = "checked='1'"; }
   }
 
+  # Quel fichier graphique faut-il afficher ?
   my $fichier;
   given ($variante) {
     when ('base'  ) { $fichier = $info->{fic}   ; }
@@ -377,6 +388,39 @@ sub aff_doc {
   }
   my $image = GD::Image->newFromPng($fichier);
   my $data  = encode_base64($image->png);
+
+  # Faut-il proposer la validation de la grille ?
+  my $validation = '';
+  if ($info->{etat} >= 2) {
+    $validation = <<"EOF";
+<h2>Validation de la grille</h2>
+<form action='/valgrille' method='post'>
+<input type='hidden' name='nom' value='$info->{nom}' />
+<br /><input type='submit' value='Validation' />
+</form>
+EOF
+  }
+  my $association = '';
+  if ($info->{etat} >= 3) {
+    $association  = <<"EOF";
+<h2>Association des Cellules avec des Glyphes</h2>
+<form action='/association' method='post'>
+<input type='hidden' name='nom' value='$info->{nom}' />
+<br /><input type='submit' value='Lancer l association' />
+</form>
+EOF
+  }
+  my $generation = '';
+  if ($info->{etat} >= 4) {
+    $generation  = <<"EOF";
+<h2>Generation du fichier texte</h2>
+<form action='/generation' method='post'>
+<input type='hidden' name='nom' value='$info->{nom}' />
+<br /><input type='submit' value='Lancer la generation' />
+</form>
+EOF
+  }
+  
 
   return <<"EOF";
 <html>
@@ -390,6 +434,7 @@ Appli&nbsp;: $appli
 
 <h1>Document $doc</h1>
 <p>$info->{taille_x} x $info->{taille_y} dont $info->{nb_noirs} pixels noirs.</p>
+<p>$etat[ $info->{etat} ]</p>
 <p>Création $info->{dh_cre} (UTC)</p>
 
 <h2>Grille</h2>
@@ -404,11 +449,9 @@ Origine&nbsp;: <input type='text' name='x0' value='$info->{x0}' /> <input type='
 <br /><input type='submit' value='grille' />
 </form>
 <p>Mise à jour de la grille $info->{dh_grille} (UTC)</p>
-<h2>Validation de la grille</h2>
-<form action='/valgrille' method='post'>
-<input type='hidden' name='nom' value='$info->{nom}' />
-<br /><input type='submit' value='Validation' />
-</form>
+$validation
+$association
+$generation
 <img src='data:image/png;base64,$data' alt='document $doc' />
 </body>
 </html>
