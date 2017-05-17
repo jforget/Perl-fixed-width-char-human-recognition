@@ -587,6 +587,24 @@ des ordonnées-pixel, ne concerne que le positionnement du coin
 en haut à gauche de la Cellule. Les côtés de la Cellule extraite
 sont purement verticaux ou horizontaux.
 
+Voici un exemple volontairement exagéré de cisaillement horizontal. Vous remarquez que les côtés
+verticaux des cellules restent verticaux, même si les cellules ne sont pas
+alignées verticalement entre elles.
+
+=for HTML
+<img src="ex-cisaillement-horizontal.png" alt="Exemple (exagéré) de cisaillement horizontal" />
+
+De même voici un cisaillement vertical tout aussi exagéré
+
+=for HTML
+<img src="ex-cisaillement-vertical.png" alt="Exemple (exagéré) de cisaillement vertical" />
+
+Et la combinaison d'un cisaillement vers la gauche et d'un cisaillement vers le bas
+donne une rotation.
+
+=for HTML
+<img src="ex-rotation.png" alt="Exemple de rotation (exagéré, mais un peu moins)" />
+
 Une fois le découpage effectué, on rogne la Cellule en calculant 
 S<l'« enveloppe »> des pixels (I<bounding box> en anglais).
 Prenons l'exemple de deux Cellules contenant un signe plus.
