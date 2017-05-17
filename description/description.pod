@@ -670,6 +670,10 @@ que de I<SQL injection> (ou plutôt I<no-SQL injection>).
 Troisième mouvement du S<balancier :> bien que j'utilise des expressions régulières
 pour vérifier ces noms de document et de fichier, je n'ai pas cherché à lancer
 mon application en I<taint mode>. Je ne me fais pas d'illusion, cela plantera.
+Quant à l'authentification dans MongoDB, elle m'empêchait d'accéder à la base
+alors que je renseignais correctement le mot de passe. Je l'ai donc désactivée.
+Si j'ai du temps disponible, j'essaierai de voir où la configuration cloche et
+je la réactiverai.
 
 S<ORM ?> D'une part, c'est bon pour des bases SQL où le schéma est stocké
 dans la base et accessible par une API. Donc, inutile d'y songer pour 
@@ -685,6 +689,39 @@ qui produisent du HTML des fonctions qui accèdent à la base de données, mais
 c'est plutôt dans l'éventualité d'un plan B remplaçant MongoDB par SQLite
 et parce que j'ai commencé par coder des faux accès renvoyant des données S<« en dur »,>
 ce n'est pas l'application consciencieuse de l'architecture MVC.
+
+=head2 Mauvaises surprises
+
+J'ai eu quelques mauvaises surprises lorsque j'ai voulu utiliser les différents modules
+dont j'ai besoin. Il s'agit peut-être de bugs, ou alors c'est du S<« PECEC »> (I<PEBKAC>
+en anglais). Je réétudierai chacun des problèmes lorsque j'aurai un peu plus de latitude
+dans mon emploi du temps.
+
+=head3 GD
+
+J'ai déjà mentionné le fait que la conversion RGB -> HSV pouvait donner des valeurs négatives
+pour la teinte H. J'ai soumis un ticket sur RT et il a été accepté. Cela devrait être corrigé.
+Mais j'ai constaté d'autres problèmes pour la conversion RGB -> HSV ou inverse. Quand j'aurai le
+temps, je soumettrai un nouveau ticket.
+
+=head2 Dancer2
+
+Lorsque j'ai voulu afficher un fichier graphique S<avec :>
+
+  <img src='toto.png' alt='titi' />
+
+cela a déclenché un sous-programme de traitement de route et le fichier ne s'est pas affiché.
+Heureusment, avec la balise
+
+  <img src='data:image/png;base64,xxx' alt='titi' />
+
+l'affichage se fait correctement. Le fichier HTML est beaucoup plus gros, mais au moins on
+voit le dessin. J'avais prévu d'utiliser ce système pour l'affichage des Cellules et des Glyphes,
+parce qu'ils sont petits, mais pas pour les gros fichiers correspondant à un Document. J'ai été
+obligé de le faire, mais ça fonctionne.
+
+=head2 MongoDB
+
 
 =head1 Compléments
 
