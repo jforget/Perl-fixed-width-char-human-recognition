@@ -137,6 +137,7 @@ post '/valgrille' => sub {
   }
   my $doc = body_parameters->get('nom');
   say "Validation de la grille pour $doc";
+  my $msg = val_grille($appli, $mdp, $doc);
   redirect "/grille/$doc";
 };
 
@@ -231,8 +232,26 @@ sub maj_grille {
   return '';
 }
 
+sub val_grille {
+  my ($appli, $mdp, $doc) = @_;
+  my $info_doc = get_doc($appli, $mdp, $doc);
+
+  my @cellule = construire_grille($appli, $mdp, $info_doc, $info_doc, 1);
+
+  my $ref_param;
+  $ref_param->{dh_valid}  = horodatage();
+  $ref_param->{etat}      = 3;
+  my $client   = MongoDB->connect('mongodb://localhost');
+  my $coll_doc = $client->ns("$appli.Document");
+  my $res      = $coll_doc->update_many( { nom => $doc }, { '$set' => $ref_param } );
+  my $coll_cel = $client->ns("$appli.Cellule");
+  my $res1     = $coll_cel->insert_many( [ @cellule ] );
+}
+
 sub construire_grille {
   my ($appli, $mdp, $info_doc, $ref_param, $flag) = @_;
+
+  my @cellule;
 
   my $image = GD::Image->newFromPng($info_doc->{fic});
   my $rouge = $image->colorAllocate(255,   0,   0);
@@ -274,42 +293,76 @@ sub construire_grille {
       my $x = int($x0 + $coef_cx * $c + $coef_lx * $l);
       my $y = int($y0 + $coef_cy * $c + $coef_ly * $l);
       my $couleur;
-      if (($l + $c) % 2) {
-        $couleur = $bleu;
-      }
-      else {
-        $couleur = $vert;
-      }
-      for my $x1 (0,   $dx) {
-        for my $y1 (0 .. $dy) {
-          my $pixel = $image->getPixel($x +$x1, $y + $y1);
-          if ($pixel == $noir) {
-            $image->setPixel($x + $x1, $y + $y1, $rouge);
+
+      # Dessin de la cellule dans la grille
+      if ($flag == 0) {
+        if (($l + $c) % 2) {
+          $couleur = $bleu;
+        }
+        else {
+          $couleur = $vert;
+        }
+        for my $x1 (0,   $dx) {
+          for my $y1 (0 .. $dy) {
+            my $pixel = $image->getPixel($x +$x1, $y + $y1);
+            if ($pixel == $noir) {
+              $image->setPixel($x + $x1, $y + $y1, $rouge);
+            }
+            else {
+              $image->setPixel($x + $x1, $y + $y1, $couleur);
+            }
           }
-          else {
-            $image->setPixel($x + $x1, $y + $y1, $couleur);
+        }
+        for my $x1 (0 .. $dx) {
+          for my $y1 (0,   $dy) {
+            my $pixel = $image->getPixel($x +$x1, $y + $y1);
+            if ($pixel == $noir) {
+              $image->setPixel($x + $x1, $y + $y1, $rouge);
+            }
+            else {
+              $image->setPixel($x + $x1, $y + $y1, $couleur);
+            }
           }
         }
       }
-      for my $x1 (0 .. $dx) {
-        for my $y1 (0,   $dy) {
-          my $pixel = $image->getPixel($x +$x1, $y + $y1);
-          if ($pixel == $noir) {
-            $image->setPixel($x + $x1, $y + $y1, $rouge);
-          }
-          else {
-            $image->setPixel($x + $x1, $y + $y1, $couleur);
+
+      # Extraction de la cellule
+      if ($flag == 1) {
+        # Compter les pixels noirs et repérer le plus haut, le plus bas,
+        # le plus à gauche et le plus à droite
+        my $nb_noir = 0;  
+        my ($xmin, $xmax, $ymin, $ymax) = ($dx, 0, $dy, 0);
+        for my $x1 (0 .. $dx) {
+          for my $y1 (0 .. $dy) {
+            my $pixel = $image->getPixel($x +$x1, $y + $y1);
+            if ($pixel == $noir) {
+              $nb_noir++;
+              $xmin = $x1 if $xmin > $x1;
+              $xmax = $x1 if $xmax < $x1;
+              $ymin = $y1 if $ymin > $y1;
+              $ymax = $y1 if $ymax < $y1;
+            }
           }
         }
+        # Ne pas extraire les cellules avec que du blanc
+        if ($nb_noir) {
+          #my $cellule = GD::Image->new($dx, $dy);
+          #$cellule->copy($image, 0, 0, $x, $y, $dx, $dy);
+          push @cellule, { doc => $info_doc->{nom}, nb_noir => $nb_noir, l => $l, c => $c, x => $x, y => $y, x_env => $xmin, y_env => $ymin, lg_env => $xmax - $xmin, ht_env => $ymax - $ymin };
+        }
+                
       }
     }
   }
-  my $fichier = $ref_param->{grille};
-  open my $im, '>', $fichier
-    or die "Ouverture $fichier $!";
-  print $im $image->png;
-  close $im
-    or die "Fermeture $fichier $!";
+  if ($flag == 0) {
+    my $fichier = $ref_param->{grille};
+    open my $im, '>', $fichier
+      or die "Ouverture $fichier $!";
+    print $im $image->png;
+    close $im
+      or die "Fermeture $fichier $!";
+  }
+  return @cellule;
 }
 
 sub aff_liste {
@@ -409,6 +462,10 @@ sub aff_doc {
 </form>
 EOF
   }
+  if ($info->{etat} >= 3) {
+    $validation .= "<p>Grille validée le $info->{dh_valid}</p>\n";
+  }
+
   my $association = '';
   if ($info->{etat} >= 3) {
     $association  = <<"EOF";
@@ -419,6 +476,7 @@ EOF
 </form>
 EOF
   }
+
   my $generation = '';
   if ($info->{etat} >= 4) {
     $generation  = <<"EOF";
