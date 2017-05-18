@@ -740,6 +740,28 @@ obligé de le faire, mais ça fonctionne.
 
 =head2 MongoDB
 
+Lorsque je lis le livre sur MongoDB chez O'Reilly, je lis que le shell MongoDB fournit
+une méthode C<find()> qui renvoie une liste de documents vérifiant les critères
+en paramètres et une méthode C<findOne> qui en renvoie un seul.
+Lorsque je consulte le L<synopsis|https://metacpan.org/pod/MongoDB#SYNOPSIS>
+du L<module Perl|https://metacpan.org/pod/MongoDB>, je vois la méthode C<find_one>
+qui renvoie le document cherché. Il va de soi qu'il doit exister dans ce module
+une méthode C<find> qui renverrait la liste des documents, S<hein ?> Éh bien non.
+Dans une autre documentation, le L<tutorial|https://metacpan.org/pod/distribution/MongoDB/lib/MongoDB/Tutorial.pod>,
+le paragraphe L<Cursors|https://metacpan.org/pod/distribution/MongoDB/lib/MongoDB/Tutorial.pod#Cursors>
+explique que la méthode C<find()> renvoie un curseur qu'il faut dérouler
+avec C<next()>. Quand j'ai commencé à écrire des accès à MongoDB en Perl, je n'avais
+pas encore lu cette documentation, donc il m'a fallu un peu de débugage
+(avec C<say> et C<YAML::Dump>) pour comprendre qu'il fallait utiliser C<next>.
+
+=head1 Bonnes Surprises
+
+Il y a eu quand même des bonnes surprises. Notamment, dans C<GD>, l'orientation par défaut
+des coordonnées. Les coordonnées X croissent de gauche à droite (comme habituellement), tandis
+que les coordonnées Y croissent du haut vers le bas, à l'inverse de l'habitude. Mais cela 
+coïncide avec le sens habituel de variation des coordonnées ligne-colonne dans un fichier texte en 
+police à espacement fixe. D'où une simplification significative des opérations de 
+conversion LC -> XY.
 
 =head1 Compléments
 
