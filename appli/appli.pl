@@ -216,17 +216,34 @@ sub maj_grille {
   #say YAML::Dump( $info_doc );
 
   my $fichier = $info_doc->{fic};
-  my $image = GD::Image->newFromPng($fichier);
   $fichier =~ s/\.png$/-grille.png/;
+  $ref_param->{grille} = $fichier;
+
+  construire_grille($appli, $mdp, $info_doc, $ref_param, 0);
+
+  $ref_param->{dh_grille} = horodatage();
+  $ref_param->{grille}    = $fichier;
+  $ref_param->{etat}      = 2;
+  my $client = MongoDB->connect('mongodb://localhost');
+  my $coll   = $client->ns("$appli.Document");
+  my $res    = $coll->update_many( { nom => $doc }, { '$set' => $ref_param } );
+
+  return '';
+}
+
+sub construire_grille {
+  my ($appli, $mdp, $info_doc, $ref_param, $flag) = @_;
+
+  my $image = GD::Image->newFromPng($info_doc->{fic});
   my $rouge = $image->colorAllocate(255,   0,   0);
   my $vert  = $image->colorAllocate(  0, 255,   0);
   my $bleu  = $image->colorAllocate(  0,   0, 255);
 
-  my $noir = $info_doc->{ind_noir};
-  my $x0 = $ref_param->{x0};
-  my $y0 = $ref_param->{y0};
-  my $dx = $ref_param->{dx};
-  my $dy = $ref_param->{dy};
+  my $noir    = $info_doc->{ind_noir};
+  my $x0      = $ref_param->{x0};
+  my $y0      = $ref_param->{y0};
+  my $dx      = $ref_param->{dx};
+  my $dy      = $ref_param->{dy};
   my $coef_cx = $ref_param->{dx};
   my $coef_ly = $ref_param->{dy};
   my $coef_lx = 0;
@@ -287,20 +304,12 @@ sub maj_grille {
       }
     }
   }
+  my $fichier = $ref_param->{grille};
   open my $im, '>', $fichier
     or die "Ouverture $fichier $!";
   print $im $image->png;
   close $im
     or die "Fermeture $fichier $!";
-
-  $ref_param->{dh_grille} = horodatage();
-  $ref_param->{grille}    = $fichier;
-  $ref_param->{etat}      = 2;
-  my $client = MongoDB->connect('mongodb://localhost');
-  my $coll   = $client->ns("$appli.Document");
-  my $res    = $coll->update_many( { nom => $doc }, { '$set' => $ref_param } );
-
-  return '';
 }
 
 sub aff_liste {
