@@ -765,6 +765,13 @@ coïncide avec le sens habituel de variation des coordonnées ligne-colonne dans
 police à espacement fixe. D'où une simplification significative des opérations de 
 conversion LC -> XY.
 
+Une autre bonne surprise, c'est avec GitHub. J'ai écrit le présent texte en POD,
+parce que c'est le système le plus simple pour écrire des documents et parce qu'il existe
+de nombreux outils de conversion en HTML, en LATEX, etc. J'avais prévu de consacrer un peu
+de temps à écrire un tel convertisseur (en me basant bien sûr sur les modules de la distribution
+standard et de CPAN). Éh bien cela n'a pas été nécessaire. Rien que le fait d'envoyer un fichier
+POD sur GitHub fait qu'il est automatiquement traduit en HTML.
+
 =head1 Compléments
 
 =head2 Lissage des fichiers graphiques
