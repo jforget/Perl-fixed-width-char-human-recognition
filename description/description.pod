@@ -398,6 +398,8 @@ le fonctionnement de l'algorithme de lissage et
 de nettoyage.
 
 INSERER DES EXEMPLES
+=for HTML
+<img src="resultat-lissage.png" alt="Extrait d'un listing avant et après lissage, avec au milieu la visualisation des différences" />
 
 En réfléchissant un peu, je me suis aperçu que la variante
 avec 8 voisins aurait émoussé les coins à angle S<droit :>
