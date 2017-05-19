@@ -397,7 +397,6 @@ changé de couleur. Cela me permet de mieux apprécier
 le fonctionnement de l'algorithme de lissage et
 de nettoyage.
 
-INSERER DES EXEMPLES
 =for HTML
 <img src="resultat-lissage.png" alt="Extrait d'un listing avant et après lissage, avec au milieu la visualisation des différences" />
 
