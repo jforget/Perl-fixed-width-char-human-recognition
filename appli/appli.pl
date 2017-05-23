@@ -47,6 +47,7 @@ post '/accueil' => sub {
   #say "appli= $appli";
   set 'username' => $appli;
   set 'password' => $mdp;
+  verif_glyphe_espace($appli, $mdp);
   return <<"EOF";
 <html>
 <head>
@@ -136,7 +137,7 @@ post '/valgrille' => sub {
     redirect '/';
   }
   my $doc = body_parameters->get('nom');
-  say "Validation de la grille pour $doc";
+  #say "Validation de la grille pour $doc";
   my $msg = val_grille($appli, $mdp, $doc);
   redirect "/grille/$doc";
 };
@@ -183,6 +184,35 @@ sub get_cellule {
   #my $obj    = $coll->find_one({ doc => $doc});
   #say "recherche $doc $l $c";
   #say YAML::Dump($obj);
+  return $obj;
+}
+
+sub get_glyphe {
+  my ($appli, $mdp, $car, $num) = @_;
+  #say "recherche du glyphe $num pour le caractère $car";
+  my $client = MongoDB->connect('mongodb://localhost');
+  my $coll   = $client->ns("$appli.Glyphe");
+  my $obj    = $coll->find_one({ car1 => $car, num => 0 + $num });
+  #say YAML::Dump($obj);
+  return $obj;
+}
+
+sub ins_glyphe {
+  my ($appli, $mdp, $obj) = @_;
+  my $client = MongoDB->connect('mongodb://localhost');
+  my $coll   = $client->ns("$appli.Glyphe");
+  $coll->insert_one($obj);
+  #say YAML::Dump($obj);
+  return $obj;
+}
+
+sub verif_glyphe_espace {
+  my ($appli, $mdp) = @_;
+  my $obj = get_glyphe($appli, $mdp, 'SP', 1);
+  unless ($obj) {
+    #$obj = { car => ' ', car1 => 'SP', num => 1, dh_cre = horodatage() };
+    ins_glyphe($appli, $mdp, { car => ' ', car1 => 'SP', num => 1, dh_cre => horodatage() } );
+  }
   return $obj;
 }
 
@@ -372,10 +402,11 @@ sub construire_grille {
           my $ht_env = $ymax - $ymin + 1;
           my $cellule = GD::Image->new($lg_env, $ht_env);
           $cellule->copy($image, 0, 0, $x + $xmin, $y + $ymin, $lg_env, $ht_env);
-          push @cellule, { doc => $info_doc->{nom}, nb_noir => $nb_noir,
-                           l   => $l, c => $c, x => $x, y => $y,
-                           x_env => $xmin, y_env => $ymin, lg_env => $lg_env, ht_env => $ht_env,
-                           data  => encode_base64($cellule->png) };
+          push @cellule, { doc    => $info_doc->{nom},      nb_noir => $nb_noir, dh_cre => horodatage(),
+                           l      => $l,    c     => $c,    x       => $x,       y      => $y,
+                           x_env  => $xmin, y_env => $ymin, lg_env  => $lg_env,  ht_env => $ht_env,
+                           data   => encode_base64($cellule->png),
+                             };
         }
                 
       }
