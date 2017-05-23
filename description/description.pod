@@ -413,7 +413,10 @@ avec 8 voisins aurait émoussé les coins à angle S<droit :>
   .....      .....
 
 J'ai donc pris la variante à 4 voisins. Et il suffit d'une génération
-pour avoir un bon nettoyage.
+pour avoir un bon nettoyage. D'un autre côté, comme on peut le deviner dans
+le schéma ci-dessus, certains S<« fossés »> comme dans le trait horizontal supérieur
+du S<« p »> auraient été comblés avec la version à 8 voisins, alors qu'ils ne le seront
+pas avec la version à 4 voisins.
 
 On peut considérer que c'est une variante
 du Jeu de la Vie de Conway (John, pas Damian),
@@ -763,13 +766,14 @@ en paramètres et une méthode C<findOne> qui en renvoie un seul.
 Lorsque je consulte le L<synopsis|https://metacpan.org/pod/MongoDB#SYNOPSIS>
 du L<module Perl|https://metacpan.org/pod/MongoDB>, je vois la méthode C<find_one>
 qui renvoie le document cherché. Il va de soi qu'il doit exister dans ce module
-une méthode C<find> qui renverrait la liste des documents, S<hein ?> Éh bien non.
+une méthode C<find> qui renverrait la liste des documents, n'est-ce S<pas ?> Éh bien non.
 Dans une autre documentation, le L<tutorial|https://metacpan.org/pod/distribution/MongoDB/lib/MongoDB/Tutorial.pod>,
 le paragraphe L<Cursors|https://metacpan.org/pod/distribution/MongoDB/lib/MongoDB/Tutorial.pod#Cursors>
 explique que la méthode C<find()> renvoie un curseur qu'il faut dérouler
 avec C<next()>. Quand j'ai commencé à écrire des accès à MongoDB en Perl, je n'avais
 pas encore lu cette documentation, donc il m'a fallu un peu de débugage
-(avec C<say> et C<YAML::Dump>) pour comprendre qu'il fallait utiliser C<next>.
+(avec C<say> et C<YAML::Dump>) pour comprendre qu'il fallait utiliser C<next>
+ou mieux, C<all>.
 
 Un point qui aurait pu me faire perdre beaucoup de S<temps :> MongoDB fait une différence 
 entre un nombre et une chaîne de caractères constituée de caractères tous numériques. C'est marqué 
@@ -905,10 +909,10 @@ donne l'une de ces deux équations, selon le sens de la S<composition :>
 La valeur de a étant faible, on néglige son carré (on l'a déjà fait pour l'approximation
 du cosinus) et on retombe sur l'équation de la rotation.
 Mais j'ai préféré parlé de S<« combinaison »> que de S<« composition »,> pour faire disparaître
-d'emblée le terme en a**2.
+d'emblée le terme en a².
 
 =head1 LICENCE
 
-Texte diffusé sous la license CC-BY-NC-ND : Creative Commons avec clause de paternité, excluant l'utilisation commerciale et excluant la modification. 
+Texte diffusé sous la licence CC-BY-NC-ND : Creative Commons avec clause de paternité, excluant l'utilisation commerciale et excluant la modification. 
 
 Certaines illustrations sont diffusées avec une licence libre différente. Celle-ci est mentionnée à la suite de l'illustration.
