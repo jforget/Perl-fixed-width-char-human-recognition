@@ -181,8 +181,8 @@ sub get_cellule {
   my $coll   = $client->ns("$appli.Cellule");
   my $obj    = $coll->find_one({ doc => $doc, l => 0 + $l, c => 0 + $c });
   #my $obj    = $coll->find_one({ doc => $doc});
-  say "recherche $doc $l $c";
-  say YAML::Dump($obj);
+  #say "recherche $doc $l $c";
+  #say YAML::Dump($obj);
   return $obj;
 }
 
@@ -368,11 +368,13 @@ sub construire_grille {
         }
         # Ne pas extraire les cellules avec que du blanc
         if ($nb_noir) {
-          my $cellule = GD::Image->new($dx, $dy);
-          $cellule->copy($image, 0, 0, $x, $y, $dx, $dy);
+          my $lg_env = $xmax - $xmin + 1;
+          my $ht_env = $ymax - $ymin + 1;
+          my $cellule = GD::Image->new($lg_env, $ht_env);
+          $cellule->copy($image, 0, 0, $x + $xmin, $y + $ymin, $lg_env, $ht_env);
           push @cellule, { doc => $info_doc->{nom}, nb_noir => $nb_noir,
                            l   => $l, c => $c, x => $x, y => $y,
-                           x_env => $xmin, y_env => $ymin, lg_env => $xmax - $xmin, ht_env => $ymax - $ymin,
+                           x_env => $xmin, y_env => $ymin, lg_env => $lg_env, ht_env => $ht_env,
                            data  => encode_base64($cellule->png) };
         }
                 
@@ -555,7 +557,21 @@ sub aff_cellule {
   my $info_doc = get_doc($appli, $mdp, $doc);
   my $info_cellule = get_cellule($appli, $mdp, $doc, $l, $c);
 
-  my $data = $info_cellule->{data};
+  my $html;
+  if ($info_cellule) {
+    my $data = $info_cellule->{data};
+    $html = <<"EOF";
+<h1>Cellule</h1>
+<p>Ligne $l, colonne $c -&gt; x = $info_cellule->{x}, y = $info_cellule->{y}</p>
+<p>Pixels noirs : $info_cellule->{nb_noir}, enveloppe $info_cellule->{lg_env} x $info_cellule->{ht_env} en $info_cellule->{x_env}, $info_cellule->{y_env}</p>
+<img src='data:image/png;base64,$data' alt='cellule $doc en ligne $l et en colonne $c' />
+EOF
+  }
+  else {
+    $html = <<"EOF";
+<p>Pas de cellule dans le document $doc en ligne $l et en colonne $c</p>
+EOF
+  }
 
   return <<"EOF";
 <html>
@@ -566,11 +582,7 @@ sub aff_cellule {
 Appli&nbsp;: $appli
 <br /><a href='/'>Retour</a>
 <br /><a href='/listedoc'>Liste</a>
-
-<h1>Cellule</h1>
-<p>Ligne $l, colonne $c -&gt; x = $info_cellule->{x}, y = $info_cellule->{y}</p>
-<p>Pixels noirs : $info_cellule->{nb_noir}</p>
-<img src='data:image/png;base64,$data' alt='cellule $doc en ligne $l et en colonne $c' />
+$html
 </body>
 </html>
 EOF
