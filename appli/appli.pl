@@ -44,7 +44,7 @@ EOF
 post '/accueil' => sub {
   my $appli = body_parameters->get('appli');
   my $mdp   = body_parameters->get('password');
-  say "appli= $appli";
+  #say "appli= $appli";
   set 'username' => $appli;
   set 'password' => $mdp;
   return <<"EOF";
@@ -141,6 +141,19 @@ post '/valgrille' => sub {
   redirect "/grille/$doc";
 };
 
+get '/cellule/:doc/:l/:c' => sub {
+  my $appli = setting('username');
+  my $mdp   = setting('password');
+  unless ($appli) {
+    redirect '/';
+  }
+  my $doc   = route_parameters->get('doc');
+  my $l     = route_parameters->get('l');
+  my $c     = route_parameters->get('c');
+  #say "get doc $doc (appli $appli, mdp $mdp)";
+  return aff_cellule($appli, $mdp, $doc, $l, $c);
+};
+
 start;
 
 sub get_liste {
@@ -149,10 +162,7 @@ sub get_liste {
   my $coll   = $client->ns("$appli.Document");
   my $doc    = $coll->find;
   #say YAML::Dump($doc);
-  my @liste;
-  while(my $obj = $doc->next) {
-   push @liste, $obj;
-  }
+  my @liste = $doc->all;
   return [ @liste ];
 }
 
@@ -162,6 +172,17 @@ sub get_doc {
   my $coll   = $client->ns("$appli.Document");
   my $obj    = $coll->find_one({ nom => $doc });
   # say YAML::Dump($obj);
+  return $obj;
+}
+
+sub get_cellule {
+  my ($appli, $mdp, $doc, $l, $c) = @_;
+  my $client = MongoDB->connect('mongodb://localhost');
+  my $coll   = $client->ns("$appli.Cellule");
+  my $obj    = $coll->find_one({ doc => $doc, l => 0 + $l, c => 0 + $c });
+  #my $obj    = $coll->find_one({ doc => $doc});
+  say "recherche $doc $l $c";
+  say YAML::Dump($obj);
   return $obj;
 }
 
@@ -245,6 +266,7 @@ sub val_grille {
   my $coll_doc = $client->ns("$appli.Document");
   my $res      = $coll_doc->update_many( { nom => $doc }, { '$set' => $ref_param } );
   my $coll_cel = $client->ns("$appli.Cellule");
+  my $res0     = $coll_cel->remove( { doc => $doc } );
   my $res1     = $coll_cel->insert_many( [ @cellule ] );
 }
 
@@ -346,9 +368,12 @@ sub construire_grille {
         }
         # Ne pas extraire les cellules avec que du blanc
         if ($nb_noir) {
-          #my $cellule = GD::Image->new($dx, $dy);
-          #$cellule->copy($image, 0, 0, $x, $y, $dx, $dy);
-          push @cellule, { doc => $info_doc->{nom}, nb_noir => $nb_noir, l => $l, c => $c, x => $x, y => $y, x_env => $xmin, y_env => $ymin, lg_env => $xmax - $xmin, ht_env => $ymax - $ymin };
+          my $cellule = GD::Image->new($dx, $dy);
+          $cellule->copy($image, 0, 0, $x, $y, $dx, $dy);
+          push @cellule, { doc => $info_doc->{nom}, nb_noir => $nb_noir,
+                           l   => $l, c => $c, x => $x, y => $y,
+                           x_env => $xmin, y_env => $ymin, lg_env => $xmax - $xmin, ht_env => $ymax - $ymin,
+                           data  => encode_base64($cellule->png) };
         }
                 
       }
@@ -520,6 +545,32 @@ $validation
 $association
 $generation
 <img src='data:image/png;base64,$data' alt='document $doc' />
+</body>
+</html>
+EOF
+};
+
+sub aff_cellule {
+  my ($appli, $mdp, $doc, $l, $c) = @_;
+  my $info_doc = get_doc($appli, $mdp, $doc);
+  my $info_cellule = get_cellule($appli, $mdp, $doc, $l, $c);
+
+  my $data = $info_cellule->{data};
+
+  return <<"EOF";
+<html>
+<head>
+<title>Cellule $doc $l $c</title>
+</head>
+<body>
+Appli&nbsp;: $appli
+<br /><a href='/'>Retour</a>
+<br /><a href='/listedoc'>Liste</a>
+
+<h1>Cellule</h1>
+<p>Ligne $l, colonne $c -&gt; x = $info_cellule->{x}, y = $info_cellule->{y}</p>
+<p>Pixels noirs : $info_cellule->{nb_noir}</p>
+<img src='data:image/png;base64,$data' alt='cellule $doc en ligne $l et en colonne $c' />
 </body>
 </html>
 EOF

@@ -440,10 +440,8 @@ Elle représente les cellules obtenues en découpant le Document. Les informatio
 sont, entre autres, les coordonnées de la Cellule
 dans le Document, aussi bien exprimées en
 ligne-colonne qu'en coordonnées pixel.
-Faut-il stocker dans cette table le dessin en pixels
-ou bien les différents programmes accèderont-ils
-systématiquement au fichier graphique pour obtenir ce dessin ?
-Je n'ai pas encore décidé.
+La table contient également le dessin en pixels encodé
+en MIME/base64.
 
 La troisième table est la table S<« Caractère ».>
 Elle comporte environ 96 enregistrements,
@@ -542,9 +540,12 @@ Revenons à l'I<imagemap> d'un Document. Elle permet d'accéder
 on a le dessin en gros pixels de la Cellule et celui
 du ou des Glyphes associés à la Cellule. S'il y a beaucoup d'écarts
 entre ces deux dessins, l'utilisateur peut créer un nouveau
-Glyphe. Ce dessin se fait avec un mini-langage permettant
-de spécifier des cercles et des hippodromes en donnant
-les coordonnées nécessaires.
+Glyphe. A priori, le Glyphe créé sera identique à la Cellule
+dont il est issu. Si besoin est, je prévoirai une façon de créer
+un Glyphe à partir d'un autre Glyphe en effectuant des retouches
+(gommer certains pixels, ajouter une goutte d'encre se traduisant 
+par un cercle de pixels, etc), mais dans un premier temps, je me contente
+de copier le dessin d'une Cellule dans le Glyphe.
 
 
 =head2 Quadrillage
@@ -582,7 +583,8 @@ Tous les N pixels (en hauteur), décaler d'un pixel vers la gauche / la droite.
 
 Toutes les N lignes, décaler d'un pixel vers la gauche / la droite.
 
-Et de même pour le cisaillement vertical.
+Et de même pour le cisaillement vertical. Dans le cas présent, j'ai
+opté pour "toutes les N lignes" et "tous les N caractères".
 
 Comme pour la taille des cellules, on admet des valeurs
 avec partie décimale. D'autre part, comme ces deux cisaillements
@@ -719,6 +721,9 @@ qui produisent du HTML des fonctions qui accèdent à la base de données, mais
 c'est plutôt dans l'éventualité d'un plan B remplaçant MongoDB par SQLite
 et parce que j'ai commencé par coder des faux accès renvoyant des données S<« en dur »,>
 ce n'est pas l'application consciencieuse de l'architecture MVC.
+
+S<AJAX ?> Il faut commencer par apprendre JavaScript. Et ensuite, apprendre AJAX.
+Ce n'est pas pour tout de suite.
 
 =head2 Mauvaises surprises
 
@@ -893,10 +898,9 @@ et celle d'un cisaillement vertical S<est :>
 La composition de ces deux cisaillements S<(« f> rond S<g »> ou S<« g> rond S<f »> en mathématiques)
 donne l'une de ces deux équations, selon le sens de la S<composition :>
 
-  (x')   (1    -a) (x)          (x')   (   2   ) (x)
-  (  )   (       ) ( )          (  )   (1-a  -a) ( )
-  (  ) = (      2) ( )          (  ) = (       ) ( )
-  (y')   (a  1-a ) (y)          (y')   (a     1) (y)
+  (x')   (1    -a) (x)          (x')   (1-a² -a) (x)
+  (  ) = (       ) ( )          (  ) = (       ) ( )
+  (y')   (a  1-a²) (y)          (y')   (a     1) (y)
 
 La valeur de a étant faible, on néglige son carré (on l'a déjà fait pour l'approximation
 du cosinus) et on retombe sur l'équation de la rotation.
