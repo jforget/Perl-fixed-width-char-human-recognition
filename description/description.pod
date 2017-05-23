@@ -50,10 +50,12 @@ Git avec cette date de commit.
 Première méthode, tout recopier
 à la main. Le problème, c'est qu'entre
 1984 et 1990, j'ai affiné mon style
-de programmation. Exemples :
+de programmation. Voici par exemple comment je codais en S<1984 :>
 
 =for HTML
 <img src="exemple-code.png" alt="Exemple de code montrant l'absence d'alignement vertical" />
+
+Et voici le même extrait, mis en forme ainsi que je le fais depuis 1990 (au moins)
 
   case date.mois of
      1: gregnum := date.jour;
@@ -222,7 +224,8 @@ pas eu à choisir, j'ai pris C<GD.pm>.
 Pour les fonctions peu interactives, j'ai utilisé bien entendu une interface
 en ligne de commande.
 
-Pour les fonctions interactives, j'ai décidé d'utiliser Dancer2 et MongoDB.
+Pour les fonctions interactives, j'ai décidé d'utiliser L<Dancer2|http://perldancer.org/>
+et L<MongoDB|https://www.mongodb.com/what-is-mongodb>.
 Dancer2 parce que cela fait longtemps
 que j'en entends parler par Alexis,
 Damien, Sawyer et d'autres. En plus, le module inclut
@@ -452,29 +455,37 @@ cette table ne sera pas implémentée.
 La quatrième table est la table S<« Glyphe ».>
 Chaque enregistrement correspond à un tableau à deux dimensions
 de bits, représentant le dessin du caractère en pixels noirs et blancs.
-Le dessin du Glyphe est régulier, avec des
-cercles parfaits ou, à la rigueur, très légèrement
-ovales.
 Un Caractère est associé à 1 à n Glyphes,
 un Glyphe est associé à un caractère et un seul.
 
-=head2 Relation entre Cellules et Glyphes
+=head3 Table des Glyphes
+
+Dans la table des Glyphes, le tout premier enregistrement est généré 
+automatiquement. Il s'agit du Glyphe Espace. Lorsque l'utilisateur
+saisit le paramètre C<appli> et le mot de passe, le programme vérifie que le
+Glyphe Espace existe et, si nécessaire, le crée.
+
+Les autres Glyphes sont créés par copie d'une Cellule.
+
+=head3 Relation entre Cellules et Glyphes
 
 Compte tenu des irrégularités des gouttes d'encre, le dessin en pixels
 d'une Cellule
 ne correspond pas au dessin épuré d'un Glyphe. On associe
 une Cellule à un Glyphe en comparant les pixels et en minimisant
 le nombre de pixels différents. Ce nombre, le S<« score »,>
-est stocké dans l'enregistrement Cellule. Tant que le programme de
-reconnaissance n'aura pas traité une Cellule, son score sera
-son nombre total de pixels. De la sorte, le programme de
-reconnaissance trouvera forcément mieux.
+est stocké dans l'enregistrement Cellule.
 
 Il y a un problème avec cette méthode, dans la mesure où une Cellule
 peut correspondre à plusieurs Glyphes différents. Si ces Glyphes
 dépendent du même Caractère, ce n'est pas grave. Mais si ces Glyphes
 représentent des Caractères différents... J'en tiendrai compte
 pour mes traitements.
+
+En raison de l'existence systématique d'au moins un Glyphe dans la base de
+données (le Glyphe Espace), chaque Cellule aura, dès sa création, un score
+et sera associée à au moins un Glyphe. Cela permet de simplifier d'autres
+portion des traitements du programme.
 
 =head2 L'architecture des traitements
 
@@ -754,6 +765,27 @@ explique que la méthode C<find()> renvoie un curseur qu'il faut dérouler
 avec C<next()>. Quand j'ai commencé à écrire des accès à MongoDB en Perl, je n'avais
 pas encore lu cette documentation, donc il m'a fallu un peu de débugage
 (avec C<say> et C<YAML::Dump>) pour comprendre qu'il fallait utiliser C<next>.
+
+Un point qui aurait pu me faire perdre beaucoup de S<temps :> MongoDB fait une différence 
+entre un nombre et une chaîne de caractères constituée de caractères tous numériques. C'est marqué 
+à la page 8 du livre chez O'Reilly. Les deux documents ci-dessous sont S<différents :>
+
+  { "foo" : 3 }
+  { "foo" : "3" }
+
+Mes premières tentatives pour accéder à l'enregistrement d'une cellule en fonction de sa ligne
+et de sa colonne ont échoué, car la ligne et la colonne étaient extraits de l'URL traité par Dancer,
+donc c'était des caractères. En d'autres termes, les critères de sélection étaient
+
+  { "doc" : "ex1", "l" : "0", "c" : "0" }
+
+alors que la Cellule contenait (entre autres) :
+
+  { "doc" : "ex1", "l" : 0, "c" : 0 }
+
+Heureusement d'une part que j'ai feuilleté le livre à la bonne page et d'autre part que je me
+souvenais d'un problème évoqué par Sébastien lors d'une L<réunion de Paris.PM|http://paris.mongueurs.net/meetings/2013/0515.html#t>.
+
 
 =head1 Bonnes Surprises
 
