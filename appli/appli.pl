@@ -211,7 +211,16 @@ sub verif_glyphe_espace {
   my $obj = get_glyphe($appli, $mdp, 'SP', 1);
   unless ($obj) {
     #$obj = { car => ' ', car1 => 'SP', num => 1, dh_cre = horodatage() };
-    ins_glyphe($appli, $mdp, { car => ' ', car1 => 'SP', num => 1, dh_cre => horodatage() } );
+    my $image = GD::Image->new(2,2);
+    my $blanc = $image->colorAllocate(255, 255, 255);
+    ins_glyphe($appli, $mdp, { car     => ' ',
+                               car1    => 'SP',
+                               num     => 1,
+                               dh_cre  => horodatage(),
+                               lge     => 2,
+                               hte     => 2,
+                               nb_noir => 0,
+                               data    => encode_base64($image->png) } );
   }
   return $obj;
 }
@@ -402,11 +411,21 @@ sub construire_grille {
           my $ht_env = $ymax - $ymin + 1;
           my $cellule = GD::Image->new($lg_env, $ht_env);
           $cellule->copy($image, 0, 0, $x + $xmin, $y + $ymin, $lg_env, $ht_env);
-          push @cellule, { doc    => $info_doc->{nom},      nb_noir => $nb_noir, dh_cre => horodatage(),
-                           l      => $l,    c     => $c,    x       => $x,       y      => $y,
-                           x_env  => $xmin, y_env => $ymin, lg_env  => $lg_env,  ht_env => $ht_env,
-                           data   => encode_base64($cellule->png),
-                             };
+          push @cellule, { doc     => $info_doc->{nom},
+                           dh_cre  => horodatage(),
+                           # coordonnées de la cellule
+                           l       => $l,
+                           c       => $c,
+                           xc      => $x,
+                           yc      => $y,
+                           # enveloppe des pixels noirs (coordonnées, taille, nombre, dessin)
+                           xe      => $xmin,
+                           ye      => $ymin,
+                           lge     => $lg_env,
+                           hte     => $ht_env,
+                           nb_noir => $nb_noir,
+                           data    => encode_base64($cellule->png),
+                         };
         }
                 
       }
@@ -593,8 +612,8 @@ sub aff_cellule {
     my $data = $info_cellule->{data};
     $html = <<"EOF";
 <h1>Cellule</h1>
-<p>Ligne $l, colonne $c -&gt; x = $info_cellule->{x}, y = $info_cellule->{y}</p>
-<p>Pixels noirs : $info_cellule->{nb_noir}, enveloppe $info_cellule->{lg_env} x $info_cellule->{ht_env} en $info_cellule->{x_env}, $info_cellule->{y_env}</p>
+<p>Ligne $l, colonne $c -&gt; x = $info_cellule->{xc}, y = $info_cellule->{yc}</p>
+<p>Pixels noirs : $info_cellule->{nb_noir}, enveloppe $info_cellule->{lge} x $info_cellule->{hte} en $info_cellule->{xe}, $info_cellule->{ye}</p>
 <img src='data:image/png;base64,$data' alt='cellule $doc en ligne $l et en colonne $c' />
 EOF
   }
