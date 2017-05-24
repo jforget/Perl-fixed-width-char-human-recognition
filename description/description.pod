@@ -728,6 +728,16 @@ ce n'est pas l'application consciencieuse de l'architecture MVC.
 S<AJAX ?> Il faut commencer par apprendre JavaScript. Et ensuite, apprendre AJAX.
 Ce n'est pas pour tout de suite.
 
+Dans la même ligne, S<HTML 5 ?> Au début des réunions de Paris.PM, quelqu'un avait
+mentionné un article de L<Jamie Zawinski|https://www.jwz.org/> expliquant que son
+navigateur Netscape 2 ne lui permettait pas d'afficher certaines pages web avec
+des tas de gadgets HTML partout, mais qu'il s'en fichait parce que ces pages ne l'intéressaient
+pas. Il souhaitait des pages pour apprendre quelque chose, pas pour s'en prendre plein
+les mirettes. Dans cet esprit, j'ai adopté un style minimaliste pour les pages web
+de cette application, ce qui m'évite d'avoir à apprendre un système de I<templating>.
+De même, pour les explications que vous êtes en train de lire, je les écris en POD
+et elles sont traduites en HTML par un convertisseur sans fioritures superflues.
+
 =head2 Mauvaises surprises
 
 J'ai eu quelques mauvaises surprises lorsque j'ai voulu utiliser les différents modules
