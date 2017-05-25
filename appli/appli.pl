@@ -213,14 +213,16 @@ sub verif_glyphe_espace {
     #$obj = { car => ' ', car1 => 'SP', num => 1, dh_cre = horodatage() };
     my $image = GD::Image->new(2,2);
     my $blanc = $image->colorAllocate(255, 255, 255);
-    ins_glyphe($appli, $mdp, { car     => ' ',
-                               car1    => 'SP',
-                               num     => 1,
-                               dh_cre  => horodatage(),
-                               lge     => 2,
-                               hte     => 2,
-                               nb_noir => 0,
-                               data    => encode_base64($image->png) } );
+    ins_glyphe($appli, $mdp, { car       => ' ',
+                               car1      => 'SP',
+                               num       =>  1,
+                               dh_cre    => horodatage(),
+                               lge       =>  2,
+                               hte       =>  2,
+                               nb_noir   =>  0,
+                               ind_noir  => -1, # -1 parce qu'il n'y a pas de noir et que colorExact renvoie -1
+                               ind_blanc =>  0,
+                               data      => encode_base64($image->png) } );
   }
   return $obj;
 }
@@ -418,18 +420,23 @@ sub construire_grille {
                                c       => $c,
                                xc      => $x,
                                yc      => $y,
-                               # enveloppe des pixels noirs (coordonnées, taille, nombre, dessin)
-                               xe      => $xmin,
-                               ye      => $ymin,
-                               lge     => $lg_env,
-                               hte     => $ht_env,
-                               nb_noir => $nb_noir,
-                               data    => encode_base64($cellule->png),
+                               # enveloppe des pixels noirs
+                               xe        => $xmin,
+                               ye        => $ymin,
+                               lge       => $lg_env,
+                               hte       => $ht_env,
+                               # graphisme
+                               ind_noir  => $cellule->colorExact(  0,   0,   0),
+                               ind_blanc => $cellule->colorExact(255, 255, 255),
+                               nb_noir   => $nb_noir,
+                               data      => encode_base64($cellule->png),
                              };
-          my ($score, $liste_glyphes, $cpt_car) = score_cel($appli, $mdp, $info_doc->{nom}, $l, $c);
+          # calcul du score
+          my ($score, $liste_glyphes, $cpt_car) = score_cel($appli, $mdp, $info_doc->{nom}, $info_cellule);
           $info_cellule->{score}   = $score;
           $info_cellule->{glyphes} = $liste_glyphes;
-          $info_cellule->{car}     = $cpt_car;
+          $info_cellule->{cpt_car} = $cpt_car;
+          $info_cellule->{nb_car}  = 0 + keys %$cpt_car;
           push @cellule, $info_cellule;
         }
                 
@@ -644,14 +651,14 @@ EOF
 };
 
 sub score_cel {
-  my ($appli, $mdp, $doc, $l, $c) = @_;
+  my ($appli, $mdp, $doc, $info_cellule) = @_;
   my $info_doc = get_doc($appli, $mdp, $doc);
-  my $info_cellule = get_cellule($appli, $mdp, $doc, $l, $c);
 
   my $score_min  = 99999;
   my @glyphes    = ();
   my %car_cpt    = ();
 
+  #say YAML::Dump($info_cellule);
   my $client = MongoDB->connect('mongodb://localhost');
   my $coll   = $client->ns("$appli.Glyphe");
   my $iter   = $coll->find();
@@ -680,17 +687,17 @@ sub comp_images {
   my $lg = $lgc > $lgg ? $lgc : $lgg;
   my $ht = $htc > $htg ? $htc : $htg;
   my $score = 0;
-  for my $y (0..$ht) {
-    for my $x (0..$lg) {
-      my ($pix_c, $pix_g);
+  for my $y (0..$ht - 1) {
+    for my $x (0..$lg - 1) {
+      my ($pix_c, $pix_g); # 0 si blanc, 1 si noir
       if ($x <= $lgc && $y <= $htc) {
-        $pix_c = $im_cel->getPixel($x, $y);
+        $pix_c = ($cel->{ind_noir} == $im_cel->getPixel($x, $y));
       }
       else {
         $pix_c = 0;
       }
       if ($x <= $lgg && $y <= $htg) {
-        $pix_g = $im_gly->getPixel($x, $y);
+        $pix_g = ($gly->{ind_noir} == $im_gly->getPixel($x, $y));
       }
       else {
         $pix_g = 0;
