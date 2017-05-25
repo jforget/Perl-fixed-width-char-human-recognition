@@ -411,21 +411,26 @@ sub construire_grille {
           my $ht_env = $ymax - $ymin + 1;
           my $cellule = GD::Image->new($lg_env, $ht_env);
           $cellule->copy($image, 0, 0, $x + $xmin, $y + $ymin, $lg_env, $ht_env);
-          push @cellule, { doc     => $info_doc->{nom},
-                           dh_cre  => horodatage(),
-                           # coordonnées de la cellule
-                           l       => $l,
-                           c       => $c,
-                           xc      => $x,
-                           yc      => $y,
-                           # enveloppe des pixels noirs (coordonnées, taille, nombre, dessin)
-                           xe      => $xmin,
-                           ye      => $ymin,
-                           lge     => $lg_env,
-                           hte     => $ht_env,
-                           nb_noir => $nb_noir,
-                           data    => encode_base64($cellule->png),
-                         };
+          my $info_cellule = { doc     => $info_doc->{nom},
+                               dh_cre  => horodatage(),
+                               # coordonnées de la cellule
+                               l       => $l,
+                               c       => $c,
+                               xc      => $x,
+                               yc      => $y,
+                               # enveloppe des pixels noirs (coordonnées, taille, nombre, dessin)
+                               xe      => $xmin,
+                               ye      => $ymin,
+                               lge     => $lg_env,
+                               hte     => $ht_env,
+                               nb_noir => $nb_noir,
+                               data    => encode_base64($cellule->png),
+                             };
+          my ($score, $liste_glyphes, $cpt_car) = score_cel($appli, $mdp, $info_doc->{nom}, $l, $c);
+          $info_cellule->{score}   = $score;
+          $info_cellule->{glyphes} = $liste_glyphes;
+          $info_cellule->{car}     = $cpt_car;
+          push @cellule, $info_cellule;
         }
                 
       }
@@ -637,6 +642,66 @@ $html
 </html>
 EOF
 };
+
+sub score_cel {
+  my ($appli, $mdp, $doc, $l, $c) = @_;
+  my $info_doc = get_doc($appli, $mdp, $doc);
+  my $info_cellule = get_cellule($appli, $mdp, $doc, $l, $c);
+
+  my $score_min  = 99999;
+  my @glyphes    = ();
+  my %car_cpt    = ();
+
+  my $client = MongoDB->connect('mongodb://localhost');
+  my $coll   = $client->ns("$appli.Glyphe");
+  my $iter   = $coll->find();
+  while (my $info_glyphe = $iter->next) {
+    my $sc1 = comp_images($info_cellule, $info_glyphe);
+    if ($sc1 < $score_min) {
+      @glyphes = ( { car => $info_glyphe->{car}, num => $info_glyphe->{num} } );
+      %car_cpt = ( $info_glyphe->{car1} => 1 );
+      $score_min = $sc1;
+    }
+    elsif ($sc1 == $score_min) {
+      push @glyphes, { car => $info_glyphe->{car}, num => $info_glyphe->{num} };
+      $car_cpt{ $info_glyphe->{car1} } ++;
+    }
+  }
+  return ($score_min, [ @glyphes ], { %car_cpt });
+}
+sub comp_images {
+  my ($cel, $gly) = @_;
+  my $im_cel = GD::Image->newFromPngData(decode_base64($cel->{data}));
+  my $im_gly = GD::Image->newFromPngData(decode_base64($gly->{data}));
+  my $lgc = $cel->{lge};
+  my $htc = $cel->{hte};
+  my $lgg = $gly->{lge};
+  my $htg = $gly->{hte};
+  my $lg = $lgc > $lgg ? $lgc : $lgg;
+  my $ht = $htc > $htg ? $htc : $htg;
+  my $score = 0;
+  for my $y (0..$ht) {
+    for my $x (0..$lg) {
+      my ($pix_c, $pix_g);
+      if ($x <= $lgc && $y <= $htc) {
+        $pix_c = $im_cel->getPixel($x, $y);
+      }
+      else {
+        $pix_c = 0;
+      }
+      if ($x <= $lgg && $y <= $htg) {
+        $pix_g = $im_gly->getPixel($x, $y);
+      }
+      else {
+        $pix_g = 0;
+      }
+      if ($pix_c != $pix_g) {
+        $score ++;
+      }
+    }
+  }
+  return $score;
+}
 
 sub horodatage {
   return DateTime->now->strftime("%Y-%m-%d %H:%M:%S");
