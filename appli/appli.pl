@@ -192,8 +192,16 @@ sub get_glyphe {
   #say "recherche du glyphe $num pour le caractère $car";
   my $client = MongoDB->connect('mongodb://localhost');
   my $coll   = $client->ns("$appli.Glyphe");
-  my $obj    = $coll->find_one({ car1 => $car, num => 0 + $num });
+  my $obj    = $coll->find_one({ car => $car, num => 0 + $num });
   #say YAML::Dump($obj);
+  return $obj;
+}
+
+sub get_glyphe_1 {
+  my ($appli, $mdp, $car1, $num) = @_;
+  my $client = MongoDB->connect('mongodb://localhost');
+  my $coll   = $client->ns("$appli.Glyphe");
+  my $obj    = $coll->find_one({ car1 => $car1, num => 0 + $num });
   return $obj;
 }
 
@@ -208,7 +216,7 @@ sub ins_glyphe {
 
 sub verif_glyphe_espace {
   my ($appli, $mdp) = @_;
-  my $obj = get_glyphe($appli, $mdp, 'SP', 1);
+  my $obj = get_glyphe_1($appli, $mdp, 'SP', 1);
   unless ($obj) {
     #$obj = { car => ' ', car1 => 'SP', num => 1, dh_cre = horodatage() };
     my $image = GD::Image->new(2,2);
@@ -622,11 +630,19 @@ sub aff_cellule {
   my $html;
   if ($info_cellule) {
     my $data = $info_cellule->{data};
+    my $dessins = '';
+    for my $gly (@{$info_cellule->{glyphes}}) {
+      my $info_glyphe = get_glyphe($appli, $mdp, $gly->{car}, $gly->{num});
+      my $img = img_cel_gly($appli, $mdp, $info_doc, $info_cellule, $info_glyphe);
+      $dessins .= "<br /><img src='data:image/png;base64," . encode_base64($img->png) . "' alt='comparaison cellule glyphe'/>\n";
+    }
     $html = <<"EOF";
 <h1>Cellule</h1>
 <p>Ligne $l, colonne $c -&gt; x = $info_cellule->{xc}, y = $info_cellule->{yc}</p>
-<p>Pixels noirs : $info_cellule->{nb_noir}, enveloppe $info_cellule->{lge} x $info_cellule->{hte} en $info_cellule->{xe}, $info_cellule->{ye}</p>
+<p>Enveloppe des pixels noirs : $info_cellule->{nb_noir}, enveloppe $info_cellule->{lge} x $info_cellule->{hte} en ($info_cellule->{xe}, $info_cellule->{ye})</p>
+<p>Score : $info_cellule->{score}, nombre de caractères associés $info_cellule->{nb_car}</p>
 <img src='data:image/png;base64,$data' alt='cellule $doc en ligne $l et en colonne $c' />
+$dessins
 EOF
   }
   else {
@@ -708,6 +724,78 @@ sub comp_images {
     }
   }
   return $score;
+}
+
+sub img_cel_gly {
+  my ($appli, $mdp, $info_doc, $info_cellule, $info_glyphe)= @_;
+  my $echelle =  5;
+  my $ecart   = 10;
+  my $dx      = int($info_doc->{dx});
+  my $dy      = int($info_doc->{dy});
+  my $largeur = 3 * $echelle * $dx + 2 * $ecart;
+  my $hauteur = 3 * $echelle * $dy;
+  my $image   = GD::Image->new($largeur, $hauteur);
+  my $blanc   = $image->colorAllocate(255, 255, 255);
+  my $noir    = $image->colorAllocate(  0,   0,   0);
+  my $vert    = $image->colorAllocate(  0, 255,   0);
+  my $bleu    = $image->colorAllocate(  0,   0, 255);
+  my $xe      = $info_cellule->{xe};
+  my $ye      = $info_cellule->{ye};
+  my $lge     = $info_cellule->{lge};
+  my $hte     = $info_cellule->{hte};
+  my $im_cel = GD::Image->newFromPngData(decode_base64($info_cellule->{data}));
+  my $im_gly = GD::Image->newFromPngData(decode_base64($info_glyphe->{data}));
+
+  my $deltax = 0;
+  $image->rectangle(0, 0, $echelle * $dx - 1, $echelle * $dy - 1, $bleu);
+  $image->rectangle($echelle * $xe, $echelle * $ye,  $echelle * ($xe + $lge) - 1, $echelle * ($ye + $hte) - 1, $vert);
+  for my $y (0 .. $hte - 1) {
+    for my $x (0 .. $lge - 1) {
+      if ($info_cellule->{ind_noir} == $im_cel->getPixel($x, $y)) {
+        $image->filledRectangle($deltax + $echelle * ($xe + $x), $echelle * ($ye + $y), $deltax + $echelle * ($xe + $x + 1) - 2, $echelle * ($ye + $y + 1) - 2, $noir);
+      }
+    }
+  }
+
+  my $lgg     = $info_glyphe->{lge};
+  my $htg     = $info_glyphe->{hte};
+  $deltax     = 2 * ($ecart + $echelle * $dx);
+  $image->rectangle($deltax + $echelle * $xe, $echelle * $ye, $deltax + $echelle * ($xe + $lgg) - 1, $echelle * ($ye + $htg) - 1, $vert);
+  for my $y (0 .. $htg - 1) {
+    for my $x (0 .. $lgg - 1) {
+      if ($info_glyphe->{ind_noir} == $im_gly->getPixel($x, $y)) {
+        $image->filledRectangle($deltax + $echelle * ($xe + $x), $echelle * ($ye + $y), $deltax + $echelle * ($xe + $x + 1) - 2, $echelle * ($ye + $y + 1) - 2, $noir);
+      }
+    }
+  }
+
+  my $lg = $lge > $lgg ? $lge : $lgg;
+  my $ht = $hte > $htg ? $hte : $htg;
+  $deltax  =  ($ecart + $echelle * $dx);
+  for my $y (0 .. $ht - 1) {
+    for my $x (0 .. $lg - 1) {
+      my ($pix_c, $pix_g); # 0 si blanc, 1 si noir
+      if ($x <= $lge && $y <= $hte) {
+        $pix_c = ($info_cellule->{ind_noir} == $im_cel->getPixel($x, $y));
+      }
+      else {
+        $pix_c = 0;
+      }
+      if ($x <= $lgg && $y <= $htg) {
+        $pix_g = ($info_glyphe->{ind_noir} == $im_gly->getPixel($x, $y));
+      }
+      else {
+        $pix_g = 0;
+      }
+        
+      if ($pix_c != 0 || $pix_g != 0) {
+        my @couleur = (0, $bleu, $vert, $noir);
+        $image->filledRectangle($deltax + $echelle * ($xe + $x), $echelle * ($ye + $y), $deltax + $echelle * ($xe + $x + 1) - 2, $echelle * ($ye + $y + 1) - 2, $couleur[ 2 * $pix_c + $pix_g ]);
+      }
+    }
+  }
+             
+  return $image;
 }
 
 sub horodatage {
