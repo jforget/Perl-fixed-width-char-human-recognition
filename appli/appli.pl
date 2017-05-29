@@ -155,6 +155,21 @@ get '/cellule/:doc/:l/:c' => sub {
   return aff_cellule($appli, $mdp, $doc, $l, $c);
 };
 
+post '/creglyphe/:doc/:l/:c' => sub {
+  my $appli = setting('username');
+  my $mdp   = setting('password');
+  unless ($appli) {
+    redirect '/';
+  }
+  my $car = body_parameters->get('caractere');
+  my $doc   = route_parameters->get('doc');
+  my $l     = route_parameters->get('l');
+  my $c     = route_parameters->get('c');
+  #say "Création d'un glyphe pour $car à l'image de la cellule $doc $l $c";
+  my $msg = copie_cel_gly($appli, $mdp, $doc, $l, $c, $car);
+  redirect "/cellule/$doc/$l/$c";
+};
+
 start;
 
 sub get_liste {
@@ -214,6 +229,17 @@ sub ins_glyphe {
   return $obj;
 }
 
+sub glyphe_max {
+  my ($appli, $mdp, $car1) = @_;
+  my $client = MongoDB->connect('mongodb://localhost');
+  my $coll   = $client->ns("$appli.Glyphe");
+  my $result = $coll->aggregate( [ { '$match' => { 'car1' => $car1 }},
+                                   { '$group' => { '_id' => '$car1', 'hnum' => { '$max' => '$num' }}} ] );
+  my $num= $result->{_docs}[0]{hnum} // 0;
+  #say YAML::Dump($result);
+  return $num;
+}
+
 sub verif_glyphe_espace {
   my ($appli, $mdp) = @_;
   my $obj = get_glyphe_1($appli, $mdp, 'SP', 1);
@@ -233,6 +259,33 @@ sub verif_glyphe_espace {
                                data      => encode_base64($image->png) } );
   }
   return $obj;
+}
+
+sub copie_cel_gly {
+  my ($appli, $mdp, $doc, $l, $c, $car1) = @_;
+  my $info_doc = get_doc($appli, $mdp, $doc);
+
+  my $car;
+  if ($car1 eq 'SP') {
+    $car = ' ';
+  }
+  else {
+    $car = $car1;
+  }
+
+  my $info_cellule = get_cellule($appli, $mdp, $doc, $l, $c);
+
+  my $num = glyphe_max($appli, $mdp, $car1);
+  ins_glyphe($appli, $mdp, { car       => $car,
+                             car1      => $car1,
+                             num       => $num + 1,
+                             dh_cre    => horodatage(),
+                             lge       => $info_cellule->{lge},
+                             hte       => $info_cellule->{hte},
+                             nb_noir   => $info_cellule->{nb_noir},
+                             ind_noir  => $info_cellule->{ind_noir},
+                             ind_blanc => $info_cellule->{ind_blanc},
+                             data      => $info_cellule->{data}, } );
 }
 
 sub credoc {
@@ -630,6 +683,18 @@ sub aff_cellule {
   my $html;
   if ($info_cellule) {
     my $data = $info_cellule->{data};
+
+    my $cre_glyphe = '';
+    if ($info_cellule->{score} != 0) {
+      $cre_glyphe = <<"EOF";
+<h2>Création de glyphe</h2>
+<form action='/creglyphe/$doc/$l/$c' method='post'>
+Caractère&nbsp; <input type='text' name='caractere' />
+<input type='submit' value='Créer glyphe' />
+</form>
+EOF
+    }
+
     my $dessins = '';
     for my $gly (@{$info_cellule->{glyphes}}) {
       my $info_glyphe = get_glyphe($appli, $mdp, $gly->{car}, $gly->{num});
@@ -641,6 +706,7 @@ sub aff_cellule {
 <p>Ligne $l, colonne $c -&gt; x = $info_cellule->{xc}, y = $info_cellule->{yc}</p>
 <p>Enveloppe des pixels noirs : $info_cellule->{nb_noir}, enveloppe $info_cellule->{lge} x $info_cellule->{hte} en ($info_cellule->{xe}, $info_cellule->{ye})</p>
 <p>Score : $info_cellule->{score}, nombre de caractères associés $info_cellule->{nb_car}</p>
+$cre_glyphe
 <img src='data:image/png;base64,$data' alt='cellule $doc en ligne $l et en colonne $c' />
 $dessins
 EOF
