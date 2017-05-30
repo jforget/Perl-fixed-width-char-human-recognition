@@ -678,6 +678,14 @@ plus significatives.
   |              |  |  ---------   |
   ----------------  ----------------
 
+Exemple réel de comparaison entre une Cellule et un Glyphe. La Cellule est à gauche
+et on peut remarquer le rectangle bleu délimitant la Cellule et le rectangle vert délimitant
+l'enveloppe des pixels noirs. Le Glyphe est à droite. Et au milieu, comme dans le programme de lissage,
+la représentation en orange des pixels effacés et la représentation en cyan des pixels noircis.
+
+=for HTML
+<img src="comparaison-cellule-glyphe.png" alt="Représentation de la comparaison entre une Cellule et un Glyphe" />
+
 =head2 Ce que je n'ai pas fait
 
 Je n'ai pas prêté attention aux problèmes de mises à jour concurrentes.
