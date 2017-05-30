@@ -113,30 +113,31 @@ get '/grille/:doc' => sub {
   return aff_doc($appli, $mdp, $doc, 'grille');
 };
 
-post '/majgrille' => sub {
+post '/majgrille/:doc' => sub {
   my $appli = setting('username');
   my $mdp   = setting('password');
   my %param;
   unless ($appli) {
     redirect '/';
   }
-  for my $par (qw/nom x0 y0 dx dy dirh cish dirv cisv/) {
+  for my $par (qw/x0 y0 dx dy dirh cish dirv cisv/) {
     $param{$par} = body_parameters->get($par);
   }
-  my $doc = $param{nom};
+  my $doc   = route_parameters->get('doc');
+  $param{doc} = $doc;
   #say YAML::Dump({ %param });
   my $msg = maj_grille($appli, $mdp, { %param });
   #say "Mise à jour de la grille pour $doc";
   redirect "/grille/$doc";
 };
 
-post '/valgrille' => sub {
+post '/valgrille/:doc' => sub {
   my $appli = setting('username');
   my $mdp   = setting('password');
   unless ($appli) {
     redirect '/';
   }
-  my $doc = body_parameters->get('nom');
+  my $doc   = route_parameters->get('doc');
   #say "Validation de la grille pour $doc";
   my $msg = val_grille($appli, $mdp, $doc);
   redirect "/grille/$doc";
@@ -186,7 +187,7 @@ sub get_doc {
   my ($appli, $mdp, $doc) = @_;
   my $client = MongoDB->connect('mongodb://localhost');
   my $coll   = $client->ns("$appli.Document");
-  my $obj    = $coll->find_one({ nom => $doc });
+  my $obj    = $coll->find_one({ doc => $doc });
   # say YAML::Dump($obj);
   return $obj;
 }
@@ -312,7 +313,7 @@ sub credoc {
   if ($fic !~ /^\w+\.png$/) {
     return "Mauvais format pour le nom du fichier";
   }
-  my %obj = ( nom => $doc, fic => $fic, dx => 30, dy => 50, cish => 0, cisv => 0, etat => 1 );
+  my %obj = ( doc => $doc, fic => $fic, dx => 30, dy => 50, cish => 0, cisv => 0, etat => 1 );
 
   my $image = GD::Image->newFromPng($fic);
   my ($l, $h) = $image->getBounds();
@@ -350,7 +351,7 @@ sub credoc {
 
 sub maj_grille {
   my ($appli, $mdp, $ref_param) = @_;
-  my $doc      = $ref_param->{nom};
+  my $doc      = $ref_param->{doc};
 
   my $info_doc = get_doc($appli, $mdp, $doc);
   #say YAML::Dump( $info_doc );
@@ -366,7 +367,7 @@ sub maj_grille {
   $ref_param->{etat}      = 2;
   my $client = MongoDB->connect('mongodb://localhost');
   my $coll   = $client->ns("$appli.Document");
-  my $res    = $coll->update_many( { nom => $doc }, { '$set' => $ref_param } );
+  my $res    = $coll->update_many( { doc => $doc }, { '$set' => $ref_param } );
 
   return '';
 }
@@ -382,7 +383,7 @@ sub val_grille {
   $ref_param->{etat}      = 3;
   my $client   = MongoDB->connect('mongodb://localhost');
   my $coll_doc = $client->ns("$appli.Document");
-  my $res      = $coll_doc->update_many( { nom => $doc }, { '$set' => $ref_param } );
+  my $res      = $coll_doc->update_many( { doc => $doc }, { '$set' => $ref_param } );
   my $coll_cel = $client->ns("$appli.Cellule");
   my $res0     = $coll_cel->remove( { doc => $doc } );
   my $res1     = $coll_cel->insert_many( [ @cellule ] );
@@ -490,7 +491,7 @@ sub construire_grille {
           my $ht_env = $ymax - $ymin + 1;
           my $cellule = GD::Image->new($lg_env, $ht_env);
           $cellule->copy($image, 0, 0, $x + $xmin, $y + $ymin, $lg_env, $ht_env);
-          my $info_cellule = { doc     => $info_doc->{nom},
+          my $info_cellule = { doc     => $info_doc->{doc},
                                dh_cre  => horodatage(),
                                # coordonnées de la cellule
                                l       => $l,
@@ -509,7 +510,7 @@ sub construire_grille {
                                data      => encode_base64($cellule->png),
                              };
           # calcul du score
-          my ($score, $liste_glyphes, $cpt_car) = score_cel($appli, $mdp, $info_doc->{nom}, $info_cellule);
+          my ($score, $liste_glyphes, $cpt_car) = score_cel($appli, $mdp, $info_doc->{doc}, $info_cellule);
           $info_cellule->{score}   = $score;
           $info_cellule->{glyphes} = $liste_glyphes;
           $info_cellule->{cpt_car} = $cpt_car;
@@ -551,9 +552,9 @@ sub aff_liste {
 
   my $liste = '';
   for (@{$liste_ref}) {
-    my $elem .= "<a href='/doc/$_->{nom}'>$_->{nom}</a>";
+    my $elem .= "<a href='/doc/$_->{doc}'>$_->{doc}</a>";
     if ($_->{etat} >= 2) {
-      $elem .= " <a href='/grille/$_->{nom}'>grille</a>";
+      $elem .= " <a href='/grille/$_->{doc}'>grille</a>";
     }
     $liste .= "<li>$elem</li>\n";
   }
@@ -622,8 +623,7 @@ sub aff_doc {
   if ($info->{etat} >= 2) {
     $validation = <<"EOF";
 <h2>Validation de la grille</h2>
-<form action='/valgrille' method='post'>
-<input type='hidden' name='nom' value='$info->{nom}' />
+<form action='/valgrille/$info->{doc}' method='post'>
 <br /><input type='submit' value='Validation' />
 </form>
 EOF
@@ -637,7 +637,7 @@ EOF
     $association  = <<"EOF";
 <h2>Association des Cellules avec des Glyphes</h2>
 <form action='/association' method='post'>
-<input type='hidden' name='nom' value='$info->{nom}' />
+<input type='hidden' name='doc' value='$info->{doc}' />
 <br /><input type='submit' value='Lancer l association' />
 </form>
 EOF
@@ -648,7 +648,7 @@ EOF
     $generation  = <<"EOF";
 <h2>Generation du fichier texte</h2>
 <form action='/generation' method='post'>
-<input type='hidden' name='nom' value='$info->{nom}' />
+<input type='hidden' name='doc' value='$info->{doc}' />
 <br /><input type='submit' value='Lancer la generation' />
 </form>
 EOF
@@ -671,8 +671,7 @@ Appli&nbsp;: $appli
 <p>Création $info->{dh_cre} (UTC)</p>
 
 <h2>Grille</h2>
-<form action='/majgrille' method='post'>
-<input type='hidden' name='nom' value='$info->{nom}' />
+<form action='/majgrille/$info->{doc}' method='post'>
 Origine&nbsp;: <input type='text' name='x0' value='$info->{x0}' /> <input type='text' name='y0' value='$info->{y0}' />
 <br />Taille des cellules&nbsp;: largeur <input type='text' name='dx' value='$info->{dx}' /> hauteur <input type='text' name='dy' value='$info->{dy}' />
 <br />Cisaillement horizontal&nbsp: 1 pixel vers la <input type='radio' name='dirh' value='gauche' $gauche >gauche
