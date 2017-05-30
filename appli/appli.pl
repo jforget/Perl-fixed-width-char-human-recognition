@@ -202,6 +202,14 @@ sub get_cellule {
   return $obj;
 }
 
+sub maj_cellule {
+  my ($appli, $mdp, $doc, $l, $c, $val) = @_;
+  my $client = MongoDB->connect('mongodb://localhost');
+  my $coll   = $client->ns("$appli.Cellule");
+  my $result = $coll->update({ doc => $doc, l => 0 + $l, c => 0 + $c }, { '$set' => $val });
+  return $result;
+}
+
 sub get_glyphe {
   my ($appli, $mdp, $car, $num) = @_;
   #say "recherche du glyphe $num pour le caractère $car";
@@ -229,7 +237,7 @@ sub ins_glyphe {
   return $obj;
 }
 
-sub glyphe_max {
+sub glyphe_max_1 {
   my ($appli, $mdp, $car1) = @_;
   my $client = MongoDB->connect('mongodb://localhost');
   my $coll   = $client->ns("$appli.Glyphe");
@@ -275,17 +283,25 @@ sub copie_cel_gly {
 
   my $info_cellule = get_cellule($appli, $mdp, $doc, $l, $c);
 
-  my $num = glyphe_max($appli, $mdp, $car1);
+  my $num = 1 + glyphe_max_1($appli, $mdp, $car1);
   ins_glyphe($appli, $mdp, { car       => $car,
                              car1      => $car1,
-                             num       => $num + 1,
+                             num       => $num,
                              dh_cre    => horodatage(),
                              lge       => $info_cellule->{lge},
                              hte       => $info_cellule->{hte},
                              nb_noir   => $info_cellule->{nb_noir},
                              ind_noir  => $info_cellule->{ind_noir},
                              ind_blanc => $info_cellule->{ind_blanc},
-                             data      => $info_cellule->{data}, } );
+                             data      => $info_cellule->{data},
+                             dh_cre    => horodatage(),
+                           } );
+  my $result = maj_cellule($appli, $mdp, $doc, $l, $c, { score    => 0,
+                                                         nb_car   => 1,
+                                                         glyphes  => [ { car => $car, num => $num } ],
+                                                         cpt_car  => { $car1 => 1 },
+                                                         dh_assoc => horodatage(),
+                                                       });
 }
 
 sub credoc {
@@ -687,12 +703,17 @@ sub aff_cellule {
     my $cre_glyphe = '';
     if ($info_cellule->{score} != 0) {
       $cre_glyphe = <<"EOF";
-<h2>Création de glyphe</h2>
+<h3>Création de glyphe</h3>
 <form action='/creglyphe/$doc/$l/$c' method='post'>
-Caractère&nbsp; <input type='text' name='caractere' />
+Caractère (ou 'SP' pour espace) <input type='text' name='caractere' />
 <input type='submit' value='Créer glyphe' />
 </form>
 EOF
+    }
+
+    my $assoc_glyphe = '';
+    if ($info_cellule->{dh_assoc}) {
+      $assoc_glyphe = "<p>Dernier calcul d'association $info_cellule->{dh_assoc} (UTC)</p>";
     }
 
     my $dessins = '';
@@ -701,12 +722,19 @@ EOF
       my $img = img_cel_gly($appli, $mdp, $info_doc, $info_cellule, $info_glyphe);
       $dessins .= "<br /><img src='data:image/png;base64," . encode_base64($img->png) . "' alt='comparaison cellule glyphe'/>\n";
     }
+    my $caract_assoc = join ', ', keys %{$info_cellule->{cpt_car}};
     $html = <<"EOF";
 <h1>Cellule</h1>
 <p>Ligne $l, colonne $c -&gt; x = $info_cellule->{xc}, y = $info_cellule->{yc}</p>
-<p>Enveloppe des pixels noirs : $info_cellule->{nb_noir}, enveloppe $info_cellule->{lge} x $info_cellule->{hte} en ($info_cellule->{xe}, $info_cellule->{ye})</p>
-<p>Score : $info_cellule->{score}, nombre de caractères associés $info_cellule->{nb_car}</p>
+<p>Pixels noirs : $info_cellule->{nb_noir}, enveloppe $info_cellule->{lge} x $info_cellule->{hte} en ($info_cellule->{xe}, $info_cellule->{ye})</p>
+<p>Score : $info_cellule->{score}, nombre de caractères associés $info_cellule->{nb_car} ($caract_assoc)</p>
+<p>Créée le $info_cellule->{dh_cre} (UTC)</p>
+$assoc_glyphe
 $cre_glyphe
+<h3>Association aux glyphes</h3>
+<form action='/assocglyphe/$doc/$l/$c' method='post'>
+<input type='submit' value='Association' />
+</form>
 <img src='data:image/png;base64,$data' alt='cellule $doc en ligne $l et en colonne $c' />
 $dessins
 EOF
@@ -726,6 +754,7 @@ EOF
 Appli&nbsp;: $appli
 <br /><a href='/'>Retour</a>
 <br /><a href='/listedoc'>Liste</a>
+<br /><a href='/doc/$doc'>Document $doc</a> (<a href='/grille/$doc'>grille</a>)
 $html
 </body>
 </html>
