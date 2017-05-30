@@ -28,10 +28,8 @@ par bande Caroll et sortant d'une
 imprimante à aiguilles.
 
 Au début de chacun de ces trois listings,
-j'ai écrit un commentaire pour préciser le
-copyright. À l'époque, j'ai commis une
-erreur en donnant la date précise au lieu
-de l'année. Néanmoins, cette erreur a été
+j'ai écrit un commentaire pour donner la date.
+Cette précision a été
 le point de départ de mon projet,
 récupérer les fichiers sources
 I<à l'identique> et les soumettre à
