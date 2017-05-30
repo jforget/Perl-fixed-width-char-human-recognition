@@ -211,6 +211,14 @@ sub maj_cellule {
   return $result;
 }
 
+sub purge_cellule {
+  my ($appli, $mdp, $doc) = @_;
+  my $client = MongoDB->connect('mongodb://localhost');
+  my $coll   = $client->ns("$appli.Cellule");
+  my $result = $coll->remove({ doc => $doc });
+  return $result;
+}
+
 sub get_glyphe {
   my ($appli, $mdp, $car, $num) = @_;
   #say "recherche du glyphe $num pour le caractère $car";
@@ -360,6 +368,7 @@ sub maj_grille {
   $fichier =~ s/\.png$/-grille.png/;
   $ref_param->{grille} = $fichier;
 
+  purge_cellule    ($appli, $mdp, $doc);
   construire_grille($appli, $mdp, $info_doc, $ref_param, 0);
 
   $ref_param->{dh_grille} = horodatage();
@@ -376,6 +385,7 @@ sub val_grille {
   my ($appli, $mdp, $doc) = @_;
   my $info_doc = get_doc($appli, $mdp, $doc);
 
+  purge_cellule    ($appli, $mdp, $doc);
   my @cellule = construire_grille($appli, $mdp, $info_doc, $info_doc, 1);
 
   my $ref_param;
@@ -672,7 +682,7 @@ Appli&nbsp;: $appli
 
 <h2>Grille</h2>
 <form action='/majgrille/$info->{doc}' method='post'>
-Origine&nbsp;: <input type='text' name='x0' value='$info->{x0}' /> <input type='text' name='y0' value='$info->{y0}' />
+Origine&nbsp;: x = <input type='text' name='x0' value='$info->{x0}' />, y = <input type='text' name='y0' value='$info->{y0}' />
 <br />Taille des cellules&nbsp;: largeur <input type='text' name='dx' value='$info->{dx}' /> hauteur <input type='text' name='dy' value='$info->{dy}' />
 <br />Cisaillement horizontal&nbsp: 1 pixel vers la <input type='radio' name='dirh' value='gauche' $gauche >gauche
                                                     <input type='radio' name='dirh' value='droite' $droite >droite toutes les <input type='text' name='cish' value='$info->{cish}' /> lignes
@@ -735,6 +745,7 @@ $cre_glyphe
 <input type='submit' value='Association' />
 </form>
 <img src='data:image/png;base64,$data' alt='cellule $doc en ligne $l et en colonne $c' />
+<hr />
 $dessins
 EOF
   }
@@ -833,6 +844,8 @@ sub img_cel_gly {
   my $noir    = $image->colorAllocate(  0,   0,   0);
   my $vert    = $image->colorAllocate(  0, 255,   0);
   my $bleu    = $image->colorAllocate(  0,   0, 255);
+  my $orange  = $image->colorAllocate(255, 127,   0); # orange : pixels noir -> blancs
+  my $cyan    = $image->colorAllocate(  0, 255, 255);
   my $xe      = $info_cellule->{xe};
   my $ye      = $info_cellule->{ye};
   my $lge     = $info_cellule->{lge};
@@ -869,21 +882,22 @@ sub img_cel_gly {
   for my $y (0 .. $ht - 1) {
     for my $x (0 .. $lg - 1) {
       my ($pix_c, $pix_g); # 0 si blanc, 1 si noir
-      if ($x <= $lge && $y <= $hte) {
-        $pix_c = ($info_cellule->{ind_noir} == $im_cel->getPixel($x, $y));
+      if ($x < $lge && $y < $hte) {
+        $pix_c = 0 + ($info_cellule->{ind_noir} == $im_cel->getPixel($x, $y));
       }
       else {
         $pix_c = 0;
       }
-      if ($x <= $lgg && $y <= $htg) {
-        $pix_g = ($info_glyphe->{ind_noir} == $im_gly->getPixel($x, $y));
+      if ($x < $lgg && $y < $htg) {
+        $pix_g = 0 + ($info_glyphe->{ind_noir} == $im_gly->getPixel($x, $y));
       }
       else {
         $pix_g = 0;
       }
         
+      #if ($y == 21) { say "x = $x, pix_c = $pix_c, pix_g = $pix_g" }
       if ($pix_c != 0 || $pix_g != 0) {
-        my @couleur = (0, $bleu, $vert, $noir);
+        my @couleur = (0, $cyan, $orange, $noir);
         $image->filledRectangle($deltax + $echelle * ($xe + $x), $echelle * ($ye + $y), $deltax + $echelle * ($xe + $x + 1) - 2, $echelle * ($ye + $y + 1) - 2, $couleur[ 2 * $pix_c + $pix_g ]);
       }
     }
