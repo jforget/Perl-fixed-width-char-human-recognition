@@ -139,7 +139,7 @@ post '/association/:doc' => sub {
   }
   my $doc   = route_parameters->get('doc');
   #say "Générationdes associations pour $doc";
-  my $msg = association($appli, $mdp, $doc);
+  my $msg = association($appli, $mdp, $doc, -1, -1);
   redirect "/grille/$doc";
 };
 
@@ -175,11 +175,25 @@ post '/creglyphe/:doc/:l/:c' => sub {
     redirect '/';
   }
   my $car = body_parameters->get('caractere');
-  my $doc   = route_parameters->get('doc');
-  my $l     = route_parameters->get('l');
-  my $c     = route_parameters->get('c');
+  my $doc = route_parameters->get('doc');
+  my $l   = route_parameters->get('l');
+  my $c   = route_parameters->get('c');
   #say "Création d'un glyphe pour $car à l'image de la cellule $doc $l $c";
   my $msg = copie_cel_gly($appli, $mdp, $doc, $l, $c, $car);
+  redirect "/cellule/$doc/$l/$c";
+};
+
+post '/assocglyphe/:doc/:l/:c' => sub {
+  my $appli = setting('username');
+  my $mdp   = setting('password');
+  unless ($appli) {
+    redirect '/';
+  }
+  my $doc = route_parameters->get('doc');
+  my $l   = route_parameters->get('l');
+  my $c   = route_parameters->get('c');
+  say "Générationdes associations pour $doc $l $c";
+  my $msg = association($appli, $mdp, $doc, $l, $c);
   redirect "/cellule/$doc/$l/$c";
 };
 
@@ -224,10 +238,10 @@ sub get_cellule {
 }
 
 sub iter_cellule {
-  my ($appli, $mdp, $doc) = @_;
+  my ($appli, $mdp, $critere) = @_;
   my $client = MongoDB->connect('mongodb://localhost');
   my $coll   = $client->ns("$appli.Cellule");
-  my $iter   = $coll->find({ doc => $doc });
+  my $iter   = $coll->find($critere);
   return $iter
 }
 
@@ -583,11 +597,17 @@ sub construire_grille {
 
 
 sub association {
-  my ($appli, $mdp, $doc) = @_;
+  my ($appli, $mdp, $doc, $l, $c) = @_;
   my $info_doc = get_doc($appli, $mdp, $doc);
-  my $iter = iter_cellule($appli, $mdp, $doc);
+  my $critere = { doc => $doc };
+  if ($l >= 0) {
+    $critere->{l} = 0 + $l;
+    $critere->{c} = 0 + $c;
+  }
+  my $iter = iter_cellule($appli, $mdp, $critere);
   while (my $info_cellule = $iter->next) {
     # calcul du score
+    say "calcul du score l = $info_cellule->{l}, c = $info_cellule->{c}";
     my ($score, $liste_glyphes, $cpt_car) = score_cel($appli, $mdp, $info_doc->{doc}, $info_cellule);
     my $val = { score    => $score, 
                 nb_car   => 0 + keys %$cpt_car,
@@ -597,10 +617,12 @@ sub association {
               };
     my $result = maj_cellule($appli, $mdp, $doc, $info_cellule->{l}, $info_cellule->{c}, $val);
   }
-  my $ref_param;
-  $ref_param->{dh_assoc}  = horodatage();
-  $ref_param->{etat}      = 4;
-  maj_doc($appli, $mdp, $doc, $ref_param);
+  if ($l < 0) {
+    my $ref_param;
+    $ref_param->{dh_assoc}  = horodatage();
+    $ref_param->{etat}      = 4;
+    maj_doc($appli, $mdp, $doc, $ref_param);
+  }
 }
 
 sub aff_liste {
@@ -712,6 +734,9 @@ EOF
 <br /><input type='submit' value='Lancer l association' />
 </form>
 EOF
+  }
+  if ($info->{etat} >= 4) {
+    $association .= "<p>Association lancée le $info->{dh_assoc} (UTC)</p>\n";
   }
 
   my $generation = '';
