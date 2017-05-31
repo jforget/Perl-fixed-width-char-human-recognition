@@ -131,6 +131,30 @@ post '/valgrille/:doc' => sub {
   redirect "/grille/$doc";
 };
 
+post '/association/:doc' => sub {
+  my $appli = setting('username');
+  my $mdp   = setting('password');
+  unless ($appli) {
+    redirect '/';
+  }
+  my $doc   = route_parameters->get('doc');
+  #say "Générationdes associations pour $doc";
+  my $msg = association($appli, $mdp, $doc);
+  redirect "/grille/$doc";
+};
+
+post '/generation/:doc' => sub {
+  my $appli = setting('username');
+  my $mdp   = setting('password');
+  unless ($appli) {
+    redirect '/';
+  }
+  my $doc   = route_parameters->get('doc');
+  #say "Génération du texte pour $doc";
+  my $msg = generation($appli, $mdp, $doc);
+  redirect "/grille/$doc";
+};
+
 get '/cellule/:doc/:l/:c' => sub {
   my $appli = setting('username');
   my $mdp   = setting('password');
@@ -180,6 +204,14 @@ sub get_doc {
   return $obj;
 }
 
+sub maj_doc {
+  my ($appli, $mdp, $doc, $val) = @_;
+  my $client = MongoDB->connect('mongodb://localhost');
+  my $coll   = $client->ns("$appli.Document");
+  my $result = $coll->update({ doc => $doc }, { '$set' => $val });
+  return $result;
+}
+
 sub get_cellule {
   my ($appli, $mdp, $doc, $l, $c) = @_;
   my $client = MongoDB->connect('mongodb://localhost');
@@ -189,6 +221,14 @@ sub get_cellule {
   #say "recherche $doc $l $c";
   #say YAML::Dump($obj);
   return $obj;
+}
+
+sub iter_cellule {
+  my ($appli, $mdp, $doc) = @_;
+  my $client = MongoDB->connect('mongodb://localhost');
+  my $coll   = $client->ns("$appli.Cellule");
+  my $iter   = $coll->find({ doc => $doc });
+  return $iter
 }
 
 sub maj_cellule {
@@ -205,6 +245,14 @@ sub purge_cellule {
   my $coll   = $client->ns("$appli.Cellule");
   my $result = $coll->remove({ doc => $doc });
   return $result;
+}
+
+sub iter_glyphe {
+  my ($appli, $mdp) = @_;
+  my $client = MongoDB->connect('mongodb://localhost');
+  my $coll   = $client->ns("$appli.Glyphe");
+  my $iter   = $coll->find({  });
+  return $iter
 }
 
 sub get_glyphe {
@@ -304,13 +352,13 @@ sub copie_cel_gly {
 sub credoc {
   my ($appli, $mdp, $doc, $fic) = @_;
   if ($doc !~ /^\w+$/) {
-    return "Le nom du document contient des caractères interdits. Seuls les caractères alphanumériques sont autorisés";
+    return "Le nom du document contient des caractères interdits. Seuls les caractères alphanumériques sont autorisés.";
   }
   if ($fic !~ /\.png$/) {
     return "Seuls les fichiers .png sont autorisés";
   }
   if ($fic !~ /^\w+\.png$/) {
-    return "Le nom de fichier contient des caractères interdits. Seuls les caractères alphanumériques et un point sont autorisés";
+    return "Le nom de fichier contient des caractères interdits. Seuls les caractères alphanumériques sont autorisés, ainsi qu'un point pour délimiter l'extension.";
   }
   my %obj = ( doc => $doc, fic => $fic, dx => 30, dy => 50, cish => 0, cisv => 0, etat => 1 );
 
@@ -382,9 +430,8 @@ sub val_grille {
   my $ref_param;
   $ref_param->{dh_valid}  = horodatage();
   $ref_param->{etat}      = 3;
+  maj_doc($appli, $mdp, $doc, $ref_param);
   my $client   = MongoDB->connect('mongodb://localhost');
-  my $coll_doc = $client->ns("$appli.Document");
-  my $res      = $coll_doc->update_many( { doc => $doc }, { '$set' => $ref_param } );
   my $coll_cel = $client->ns("$appli.Cellule");
   my $res0     = $coll_cel->remove( { doc => $doc } );
   my $res1     = $coll_cel->insert_many( [ @cellule ] );
@@ -512,10 +559,11 @@ sub construire_grille {
                              };
           # calcul du score
           my ($score, $liste_glyphes, $cpt_car) = score_cel($appli, $mdp, $info_doc->{doc}, $info_cellule);
-          $info_cellule->{score}   = $score;
-          $info_cellule->{glyphes} = $liste_glyphes;
-          $info_cellule->{cpt_car} = $cpt_car;
-          $info_cellule->{nb_car}  = 0 + keys %$cpt_car;
+          $info_cellule->{score}    = $score;
+          $info_cellule->{glyphes}  = $liste_glyphes;
+          $info_cellule->{cpt_car}  = $cpt_car;
+          $info_cellule->{nb_car}   = 0 + keys %$cpt_car;
+          $info_cellule->{dh_assoc} = horodatage();
           push @cellule, $info_cellule;
         }
                 
@@ -531,6 +579,28 @@ sub construire_grille {
       or die "Fermeture $fichier $!";
   }
   return @cellule;
+}
+
+
+sub association {
+  my ($appli, $mdp, $doc) = @_;
+  my $info_doc = get_doc($appli, $mdp, $doc);
+  my $iter = iter_cellule($appli, $mdp, $doc);
+  while (my $info_cellule = $iter->next) {
+    # calcul du score
+    my ($score, $liste_glyphes, $cpt_car) = score_cel($appli, $mdp, $info_doc->{doc}, $info_cellule);
+    my $val = { score    => $score, 
+                nb_car   => 0 + keys %$cpt_car,
+                glyphes  => $liste_glyphes,
+                cpt_car  => $cpt_car,
+                dh_assoc => horodatage(),
+              };
+    my $result = maj_cellule($appli, $mdp, $doc, $info_cellule->{l}, $info_cellule->{c}, $val);
+  }
+  my $ref_param;
+  $ref_param->{dh_assoc}  = horodatage();
+  $ref_param->{etat}      = 4;
+  maj_doc($appli, $mdp, $doc, $ref_param);
 }
 
 sub aff_liste {
@@ -638,8 +708,7 @@ EOF
   if ($info->{etat} >= 3) {
     $association  = <<"EOF";
 <h2>Association des Cellules avec des Glyphes</h2>
-<form action='/association' method='post'>
-<input type='hidden' name='doc' value='$info->{doc}' />
+<form action='/association/$info->{doc}' method='post'>
 <br /><input type='submit' value='Lancer l association' />
 </form>
 EOF
@@ -649,8 +718,7 @@ EOF
   if ($info->{etat} >= 4) {
     $generation  = <<"EOF";
 <h2>Generation du fichier texte</h2>
-<form action='/generation' method='post'>
-<input type='hidden' name='doc' value='$info->{doc}' />
+<form action='/generation/$info->{doc}' method='post'>
 <br /><input type='submit' value='Lancer la generation' />
 </form>
 EOF
@@ -772,9 +840,7 @@ sub score_cel {
   my %car_cpt    = ();
 
   #say YAML::Dump($info_cellule);
-  my $client = MongoDB->connect('mongodb://localhost');
-  my $coll   = $client->ns("$appli.Glyphe");
-  my $iter   = $coll->find();
+  my $iter   = iter_glyphe($appli, $mdp);
   while (my $info_glyphe = $iter->next) {
     my $sc1 = comp_images($info_cellule, $info_glyphe);
     if ($sc1 < $score_min) {
