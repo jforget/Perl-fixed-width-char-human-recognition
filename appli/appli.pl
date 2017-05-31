@@ -48,23 +48,11 @@ post '/accueil' => sub {
   set 'username' => $appli;
   set 'password' => $mdp;
   verif_glyphe_espace($appli, $mdp);
-  return <<"EOF";
-<html>
-<head>
-<title>Accueil</title>
-</head>
-<body>
-Appli&nbsp;: $appli
-<br />
-<br /><a href='/listedoc'>Liste des documents</a>
-</body>
-</html>
-EOF
-
+  redirect '/listedoc';
 };
 
 
-get '/listedoc' => sub {
+any [ 'get', 'post' ] => '/listedoc' => sub {
   my $appli     = setting('username');
   my $mdp       = setting('password');
   unless ($appli) {
@@ -316,10 +304,13 @@ sub copie_cel_gly {
 sub credoc {
   my ($appli, $mdp, $doc, $fic) = @_;
   if ($doc !~ /^\w+$/) {
-    return "Mauvais format pour le nom du document"
+    return "Le nom du document contient des caractères interdits. Seuls les caractères alphanumériques sont autorisés";
+  }
+  if ($fic !~ /\.png$/) {
+    return "Seuls les fichiers .png sont autorisés";
   }
   if ($fic !~ /^\w+\.png$/) {
-    return "Mauvais format pour le nom du fichier";
+    return "Le nom de fichier contient des caractères interdits. Seuls les caractères alphanumériques et un point sont autorisés";
   }
   my %obj = ( doc => $doc, fic => $fic, dx => 30, dy => 50, cish => 0, cisv => 0, etat => 1 );
 
@@ -546,8 +537,8 @@ sub aff_liste {
   my ($appli, $mdp, $doc, $fic, $msg, $liste_ref) = @_;
 
   # Élimination des caractères dangereux
-  $doc =~ s/\W/?/g;
-  $fic =~ s/[^.\w]/?/g;
+  $doc =~ s/(\W)/'&#' . ord($1) . ';'/eg;
+  $fic =~ s/([^.\w])/'&#' . ord($1) . ';'/eg;
 
   # Valeurs facultatives
   if ($doc ne '') {
@@ -573,6 +564,7 @@ sub aff_liste {
 <html>
 <head>
 <title>Liste des documents</title>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
 </head>
 <body>
 Appli&nbsp;: $appli
@@ -729,7 +721,7 @@ EOF
     for my $gly (@{$info_cellule->{glyphes}}) {
       my $info_glyphe = get_glyphe($appli, $mdp, $gly->{car}, $gly->{num});
       my $img = img_cel_gly($appli, $mdp, $info_doc, $info_cellule, $info_glyphe);
-      $dessins .= "<br /><img src='data:image/png;base64," . encode_base64($img->png) . "' alt='comparaison cellule glyphe'/>\n";
+      $dessins .= "<p><img src='data:image/png;base64," . encode_base64($img->png) . "' alt='comparaison cellule glyphe'/></p>\n";
     }
     my $caract_assoc = join ', ', keys %{$info_cellule->{cpt_car}};
     $html = <<"EOF";
@@ -838,7 +830,7 @@ sub img_cel_gly {
   my $dx      = int($info_doc->{dx});
   my $dy      = int($info_doc->{dy});
   my $largeur = 3 * $echelle * $dx + 2 * $ecart;
-  my $hauteur = 3 * $echelle * $dy;
+  my $hauteur =     $echelle * $dy;
   my $image   = GD::Image->new($largeur, $hauteur);
   my $blanc   = $image->colorAllocate(255, 255, 255);
   my $noir    = $image->colorAllocate(  0,   0,   0);
