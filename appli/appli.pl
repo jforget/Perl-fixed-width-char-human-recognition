@@ -764,6 +764,11 @@ sub aff_doc {
   my $image = GD::Image->newFromPng($fichier);
   my $data  = encode_base64($image->png);
 
+  my $maj_grille = '';
+  if ($info->{etat} >= 2) {
+    $maj_grille .= "<p>Mise à jour de la grille $info->{dh_grille} (UTC)</p>\n";
+  }
+
   # Faut-il proposer la validation de la grille ?
   my $validation = '';
   if ($info->{etat} >= 2) {
@@ -830,7 +835,7 @@ Origine&nbsp;: x = <input type='text' name='x0' value='$info->{x0}' />, y = <inp
                                                   <input type='radio' name='dirv' value='bas'  $bas  >bas tous les <input type='text' name='cisv' value='$info->{cisv}' /> caractères
 <br /><input type='submit' value='grille' />
 </form>
-<p>Mise à jour de la grille $info->{dh_grille} (UTC)</p>
+$maj_grille
 $validation
 $association
 $generation

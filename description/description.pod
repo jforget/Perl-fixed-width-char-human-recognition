@@ -620,6 +620,8 @@ donne une rotation.
 =for HTML
 <img src="ex-rotation.png" alt="Exemple de rotation (exagéré, mais un peu moins)" />
 
+=head2 Comparaison entre une Cellule et un Glyphe
+
 Une fois le découpage effectué, on rogne la Cellule en calculant 
 S<l'« enveloppe »> des pixels (I<bounding box> en anglais).
 Prenons l'exemple de deux Cellules contenant un signe plus.
@@ -685,6 +687,58 @@ la représentation en orange des pixels effacés et la représentation en cyan d
 
 =for HTML
 <img src="comparaison-cellule-glyphe.png" alt="Représentation de la comparaison entre une Cellule et un Glyphe" />
+
+=head1 Après la conversion
+
+Une fois tous les documents traités et convertis en fichiers textes, il ne reste plus S<qu'à :>
+
+=over 4
+
+=item 1
+
+Reconstituer les trois fichiers sources complets, en fusionnant les fichiers textes.
+Rappelez-vous qu'un listing a donné lieu à en moyenne S<8 documents>.
+
+=item 2
+
+Reconstituer un quatrième fichier source. Le troisième listing comporte des annotations
+manuscrites, que j'ai enlevées autant que possible dans les fichiers graphiques numérisés.
+Néanmoins, j'applique ces annotations pour constituer un quatrième listing. Faute de disposer
+de la date de ces annotations, j'adopte le lendemain de la date du troisième listing.
+
+=item 3
+
+Pour les quatre fichiers source, passer la commande Emacs C<tabify>, pour remplacer les suites
+d'espaces par des tabulations là où cela vaut le coup. En effet, en 1983 et 1984, j'étais
+adepte de la solution de facilité consistant à utiliser des tabulations pour l'indentation.
+
+=item 4
+
+Initialiser le dépôt Git du programme Pascal. Pour chacun des quatre fichiers sources, 
+le copier dans ce dépôt, en écrasant l'ancienne version, puis lancer un C<commit>.
+Dans le message du C<commit>, mentionner le fait que le fichier est placé rétroactivement
+sous la licence GPL + Artistic.
+
+=item 5
+
+Un premier C<commit> à la date du jour en 2017, pour ajouter des fichiers F<LICENSE>, F<README>
+et F<LISEZMOI> et pour mettre dans le fichier source les commentaires requis par la GPL.
+
+=item 6
+
+Comme j'ai grandi et mûri depuis 1984, je n'utilise plus de tabulations en dehors des fichiers F<makefile>.
+Donc, passer un C<untabify> sur le fichier source et commiter.
+
+=item 7
+
+Dans le dépôt Git, créer un sous-répertoire pour y mettre les fichiers graphiques issus de la numérisation.
+
+=back
+
+Et maintenant, il ne reste plus qu'à vérifier que cela compile sans erreur, puis à faire évoluer le
+programme...
+
+=head1 En guise de conclusion
 
 =head2 Ce que je n'ai pas fait
 
@@ -774,7 +828,7 @@ voit le dessin. J'avais prévu d'utiliser ce système pour l'affichage des Cellu
 parce qu'ils sont petits, mais pas pour les gros fichiers correspondant à un Document. J'ai été
 obligé de le faire, mais ça fonctionne.
 
-=head2 MongoDB
+=head3 MongoDB
 
 Lorsque je lis le livre sur MongoDB chez O'Reilly, je lis que le shell MongoDB fournit
 une méthode C<find()> qui renvoie une liste de documents vérifiant les critères
@@ -812,7 +866,7 @@ Heureusement d'une part que j'ai feuilleté le livre à la bonne page et d'autre
 souvenais d'un problème évoqué par Sébastien lors d'une L<réunion de Paris.PM|http://paris.mongueurs.net/meetings/2013/0515.html#t>.
 
 
-=head1 Bonnes Surprises
+=head2 Bonnes Surprises
 
 Il y a eu quand même des bonnes surprises. Notamment, dans C<GD>, l'orientation par défaut
 des coordonnées. Les coordonnées X croissent de gauche à droite (comme habituellement), tandis
