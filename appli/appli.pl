@@ -192,7 +192,7 @@ post '/assocglyphe/:doc/:l/:c' => sub {
   my $doc = route_parameters->get('doc');
   my $l   = route_parameters->get('l');
   my $c   = route_parameters->get('c');
-  say "Générationdes associations pour $doc $l $c";
+  #say "Générationdes associations pour $doc $l $c";
   my $msg = association($appli, $mdp, $doc, $l, $c);
   redirect "/cellule/$doc/$l/$c";
 };
@@ -607,7 +607,7 @@ sub association {
   my $iter = iter_cellule($appli, $mdp, $critere);
   while (my $info_cellule = $iter->next) {
     # calcul du score
-    say "calcul du score l = $info_cellule->{l}, c = $info_cellule->{c}";
+    #say "calcul du score l = $info_cellule->{l}, c = $info_cellule->{c}";
     my ($score, $liste_glyphes, $cpt_car) = score_cel($appli, $mdp, $info_doc->{doc}, $info_cellule);
     my $val = { score    => $score, 
                 nb_car   => 0 + keys %$cpt_car,
@@ -623,6 +623,58 @@ sub association {
     $ref_param->{etat}      = 4;
     maj_doc($appli, $mdp, $doc, $ref_param);
   }
+}
+
+sub generation {
+  my ($appli, $mdp, $doc) = @_;
+  my $info_doc = get_doc($appli, $mdp, $doc);
+
+  my @ligne = ();
+  my $critere = { doc => $doc };
+  my $iter = iter_cellule($appli, $mdp, $critere);
+  while (my $info_cellule = $iter->next) {
+
+    my $l       = $info_cellule->{l};
+    my $c       = $info_cellule->{c};
+    my $glyphe  = shift @{ $info_cellule->{glyphes} };
+    my $car     = $glyphe->{car};
+
+    # initialisaton du tableau des lignes
+    $ligne[$l] //= '';
+    my $long    = length($ligne[$l]);
+
+    #say "ligne $l, insérer '$car' en colonne $c";
+    if ($c < length($ligne[$l])) {
+      substr($ligne[$l], $c, 1) = $car;
+    }
+    else {
+      # Il faut étendre la ligne. Supposons qu'elle fasse 3 caractères de
+      # long (colonnes 0 à 2) et que l'on ajoute un nouveau caractère en colonne 6
+      # (longueur résultante 7). Il faut donc ajouter 3 espaces plus le caractère.
+      $ligne[$l] .= ' ' x ($c - $long) . $car;
+    }
+
+  }
+
+  # Des fois qu'une ligne ne contienne rien du tout, aucune Cellule
+  for my $l (0 .. $#ligne) {
+    $ligne[$l] //= '';
+  }
+
+  my $fic = "$doc.txt";
+  open my $fh, '>', $fic
+    or die "ouverture $fic : $!";
+  for (@ligne) {
+    say $fh $_;
+  }
+  close $fh
+    or die "fermeture $fic : $!";
+
+  # Mise à jour du document
+  maj_doc($appli, $mdp, $doc, { txt      => $fic,
+                                etat     => 5,
+                                dh_gener => horodatage(),
+                              });
 }
 
 sub aff_liste {
@@ -723,7 +775,7 @@ sub aff_doc {
 EOF
   }
   if ($info->{etat} >= 3) {
-    $validation .= "<p>Grille validée le $info->{dh_valid}</p>\n";
+    $validation .= "<p>Grille validée le $info->{dh_valid} (UTC)</p>\n";
   }
 
   my $association = '';
@@ -742,11 +794,14 @@ EOF
   my $generation = '';
   if ($info->{etat} >= 4) {
     $generation  = <<"EOF";
-<h2>Generation du fichier texte</h2>
+<h2>Génération du fichier texte</h2>
 <form action='/generation/$info->{doc}' method='post'>
-<br /><input type='submit' value='Lancer la generation' />
+<br /><input type='submit' value='Lancer la génération' />
 </form>
 EOF
+  }
+  if ($info->{etat} >= 5) {
+    $generation .= "<p>Génération du texte le $info->{dh_gener} (UTC)</p>\n";
   }
   
 
