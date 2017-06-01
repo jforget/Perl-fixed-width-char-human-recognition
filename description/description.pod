@@ -708,7 +708,7 @@ de la date de ces annotations, j'adopte le lendemain de la date du troisième li
 
 =item 3
 
-Pour les quatre fichiers source, passer la commande Emacs C<tabify>, pour remplacer les suites
+Pour les quatre fichiers sources, passer la commande Emacs C<tabify>, pour remplacer les suites
 d'espaces par des tabulations là où cela vaut le coup. En effet, en 1983 et 1984, j'étais
 adepte de la solution de facilité consistant à utiliser des tabulations pour l'indentation.
 
@@ -721,13 +721,13 @@ sous la licence GPL + Artistic.
 
 =item 5
 
-Un premier C<commit> à la date du jour en 2017, pour ajouter des fichiers F<LICENSE>, F<README>
-et F<LISEZMOI> et pour mettre dans le fichier source les commentaires requis par la GPL.
+Ajouter des fichiers F<LICENSE>, F<README> et F<LISEZMOI> et mettre dans le fichier source les
+commentaires requis par la GPL. Puis commiter avec la date du jour.
 
 =item 6
 
-Comme j'ai grandi et mûri depuis 1984, je n'utilise plus de tabulations en dehors des fichiers F<makefile>.
-Donc, passer un C<untabify> sur le fichier source et commiter.
+Passer un C<untabify> sur le fichier source et commiter, parce que j'ai grandi et mûri depuis 1984 et que
+je n'utilise plus de tabulations en dehors des fichiers F<makefile>.
 
 =item 7
 
