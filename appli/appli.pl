@@ -58,7 +58,7 @@ any [ 'get', 'post' ] => '/listedoc' => sub {
   unless ($appli) {
     redirect '/';
   }
-  my $liste_ref = get_liste($appli, $mdp);
+  my $liste_ref = liste_doc($appli, $mdp);
   return aff_liste($appli, $mdp,'', '', '', $liste_ref);
 };
 
@@ -72,7 +72,7 @@ post '/credoc' => sub {
   my $fic = body_parameters->get('fichier');
   my $msg = credoc($appli, $mdp, $doc, $fic);
   if ($msg) {
-    return aff_liste($appli, $mdp, $doc, $fic, $msg, get_liste($appli, $mdp));
+    return aff_liste($appli, $mdp, $doc, $fic, $msg, liste_doc($appli, $mdp));
   }
   #say "création du document $doc, basé sur le fichier $fic";
 
@@ -199,7 +199,7 @@ post '/assocglyphe/:doc/:l/:c' => sub {
 
 start;
 
-sub get_liste {
+sub liste_doc {
   my ($appli, $mdp) = @_;
   my $client = MongoDB->connect('mongodb://localhost');
   my $coll   = $client->ns("$appli.Document");
@@ -258,6 +258,20 @@ sub purge_cellule {
   my $client = MongoDB->connect('mongodb://localhost');
   my $coll   = $client->ns("$appli.Cellule");
   my $result = $coll->remove({ doc => $doc });
+  return $result;
+}
+
+sub stat_cellule {
+  my ($appli, $mdp, $doc) = @_;
+  my $client = MongoDB->connect('mongodb://localhost');
+  my $coll   = $client->ns("$appli.Cellule");
+  my $result = $coll->aggregate( [ { '$match' => { 'doc' => $doc } },
+                                   { '$group' => { '_id' => '$doc',
+                                                   'nb'    => { '$sum' => 1 },
+                                                   'maxsc' => { '$max' => '$score' },
+                                                   'moysc' => { '$avg' => '$score' },
+                                     } } ] );
+  #say YAML::Dump($result);
   return $result;
 }
 
@@ -391,6 +405,8 @@ sub credoc {
       $ymin[$index] = $y if $ymin[$index] > $y;
     }
   }
+  # heuristique : pour un Document, les pixels nois sont beaucoup moins nombreux que les blancs
+  # (pour les Glyphes, ce n'est pas forcément la même chose)
   if ($cpt[0] < $cpt[1]) {
     $obj{ind_blanc} = 1;
     $obj{ind_noir}  = 0;
@@ -601,6 +617,7 @@ sub association {
   my $info_doc = get_doc($appli, $mdp, $doc);
   my $critere = { doc => $doc };
   if ($l >= 0) {
+    # Lancement pour une seule Cellule
     $critere->{l} = 0 + $l;
     $critere->{c} = 0 + $c;
   }
@@ -618,6 +635,7 @@ sub association {
     my $result = maj_cellule($appli, $mdp, $doc, $info_cellule->{l}, $info_cellule->{c}, $val);
   }
   if ($l < 0) {
+    # Lancement pour tout le document
     my $ref_param;
     $ref_param->{dh_assoc}  = horodatage();
     $ref_param->{etat}      = 4;
@@ -636,7 +654,7 @@ sub generation {
 
     my $l       = $info_cellule->{l};
     my $c       = $info_cellule->{c};
-    my $glyphe  = shift @{ $info_cellule->{glyphes} };
+    my $glyphe  = shift @{ $info_cellule->{glyphes} }; # Tant pis s'il y a plusieurs Glyphes associés à la Cellule
     my $car     = $glyphe->{car};
 
     # initialisaton du tableau des lignes
@@ -794,6 +812,12 @@ EOF
   }
   if ($info->{etat} >= 4) {
     $association .= "<p>Association lancée le $info->{dh_assoc} (UTC)</p>\n";
+  }
+  if ($info->{etat} >= 3) {
+    my $stat = stat_cellule($appli, $mdp, $doc);
+    $stat = $stat->{_docs}[0];
+    my $score_moyen = int($stat->{moysc} * 100) / 100;
+    $association .= "<p>Nombre de cellules&nbsp;: $stat->{nb}, score maximal&nbsp;: $stat->{maxsc}, score moyen&nbsp;: $score_moyen</p>\n";
   }
 
   my $generation = '';
