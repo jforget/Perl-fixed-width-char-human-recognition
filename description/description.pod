@@ -457,6 +457,24 @@ de bits, représentant le dessin du caractère en pixels noirs et blancs.
 Un Caractère est associé à 1 à n Glyphes,
 un Glyphe est associé à un caractère et un seul.
 
+Et une cinquième table un peu inattendue, la table S<« Requête »>.
+Au début, je pensais faire des requêtes S<« au> fil de S<l'eau » :>
+saisir les critères, cliquer sur un bouton et lire le résultat.
+Je pense qu'il est préférable d'en faire une entité permanente.
+L'utilisateur saisit les critères et on les sauvegarde en base de données.
+Puis il clique sur un bouton S<« Recherche »> et le programme applique les critères
+sur les Cellules et constitue la liste des Cellules extraites, plus un fichier
+graphique où les Cellules extraites sont mises en valeur par un fond coloré.
+Par la suite, l'utilisateur peut consulter à plusieurs reprises le résultat de
+cette Requête (le fichier graphique déjà constitué) et enchaîner vers les
+Cellules sélectionnées grâce à une I<imagemap>.
+
+Certes, avec la création de nouveaux Glyphes, le résultat de la Requête devient
+de plus en plus obsolète, car certaines Cellules ne vérifient plus les critères et
+d'autres se mettent à les vérifier. Il reste encore utilisable pour consulter les Cellules.
+Et l'utilisateur peut de nouveau cliquer sur le bouton S<« Recherche »> pour rafraîchir
+le résultat de la requête.
+
 =head3 Table des Glyphes
 
 Dans la table des Glyphes, le tout premier enregistrement est généré 
