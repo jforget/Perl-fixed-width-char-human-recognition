@@ -565,10 +565,30 @@ sub construire_grille {
         }
         # Ne pas extraire les cellules avec que du blanc
         if ($nb_noir) {
+          # L'enveloppe des pixels noirs
           my $lg_env = $xmax - $xmin + 1;
           my $ht_env = $ymax - $ymin + 1;
           my $cellule = GD::Image->new($lg_env, $ht_env);
           $cellule->copy($image, 0, 0, $x + $xmin, $y + $ymin, $lg_env, $ht_env);
+
+          # Le voisinage : la cellule et les 24 cellules environnantes
+          my $x25 = $x - 2 * $dx;
+          my $y25 = $y - 2 * $dy;
+          if ($x25 < 0) {
+            $x25 = 0;
+          }
+          elsif ($x25 > $info_doc->{taille_x}) {
+            $x25 = $info_doc->{taille_x};
+          }
+          if ($y25 < 0) {
+            $y25 = 0;
+          }
+          elsif ($y25 > $info_doc->{taille_y}) {
+            $y25 = $info_doc->{taille_y};
+          }
+          my $voisinage = GD::Image->new(5 * $dx, 5 * $dy); 
+          $voisinage->copy($image, 0, 0, $x25, $y25, 5 * $dx, 5 * $dy); 
+
           my $info_cellule = { doc     => $info_doc->{doc},
                                dh_cre  => horodatage(),
                                # coordonnées de la cellule
@@ -586,6 +606,7 @@ sub construire_grille {
                                ind_blanc => $cellule->colorExact(255, 255, 255),
                                nb_noir   => $nb_noir,
                                data      => encode_base64($cellule->png),
+                               voisin    => encode_base64($voisinage->png),
                              };
           # calcul du score
           my ($score, $liste_glyphes, $cpt_car) = score_cel($appli, $mdp, $info_doc->{doc}, $info_cellule);
@@ -876,7 +897,7 @@ sub aff_cellule {
 
   my $html;
   if ($info_cellule) {
-    my $data = $info_cellule->{data};
+    my $voisinage = $info_cellule->{voisin};
 
     my $cre_glyphe = '';
     if ($info_cellule->{score} != 0) {
@@ -913,7 +934,7 @@ $cre_glyphe
 <form action='/assocglyphe/$doc/$l/$c' method='post'>
 <input type='submit' value='Association' />
 </form>
-<img src='data:image/png;base64,$data' alt='cellule $doc en ligne $l et en colonne $c' />
+<img src='data:image/png;base64,$voisinage' alt='cellule $doc en ligne $l et en colonne $c' />
 <hr />
 $dessins
 EOF
