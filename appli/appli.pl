@@ -252,6 +252,14 @@ sub iter_cellule {
   return $iter
 }
 
+sub ins_many_cellule {
+  my ($appli, $mdp, $tab_cell) = @_;
+  my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
+  my $coll   = $client->ns("$appli.Cellule");
+  my $result = $coll->insert_many($tab_cell);
+  return $result;
+}
+
 sub maj_cellule {
   my ($appli, $mdp, $doc, $l, $c, $val) = @_;
   my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
@@ -448,9 +456,7 @@ sub maj_grille {
   $ref_param->{dh_grille} = horodatage();
   $ref_param->{grille}    = $fichier;
   $ref_param->{etat}      = 2;
-  my $client = MongoDB->connect('mongodb://localhost');
-  my $coll   = $client->ns("$appli.Document");
-  my $res    = $coll->update_many( { doc => $doc }, { '$set' => $ref_param } );
+  my $result = maj_doc($appli, $mdp, $doc, $ref_param);
 
   return '';
 }
@@ -465,11 +471,9 @@ sub val_grille {
   my $ref_param;
   $ref_param->{dh_valid}  = horodatage();
   $ref_param->{etat}      = 3;
-  maj_doc($appli, $mdp, $doc, $ref_param);
-  my $client   = MongoDB->connect('mongodb://localhost');
-  my $coll_cel = $client->ns("$appli.Cellule");
-  my $res0     = $coll_cel->remove( { doc => $doc } );
-  my $res1     = $coll_cel->insert_many( [ @cellule ] );
+  maj_doc         ($appli, $mdp, $doc, $ref_param);
+  purge_cellule   ($appli, $mdp, $doc);
+  ins_many_cellule($appli, $mdp, [ @cellule ] );
 }
 
 sub construire_grille {
