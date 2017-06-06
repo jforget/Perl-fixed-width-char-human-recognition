@@ -429,6 +429,46 @@ de ce texte descriptif, à définir un schéma de base de
 données et à parler de tables. Mais c'est plus une auto-discipline
 qu'une contrainte imposée par la base de données.
 
+Mais tout d'abord, définir la base de données utilisée et les autorisations
+d'accès.
+
+=head2 Création de la base de données
+
+La création se fait tout simplement dans le shell C<mongo>.
+
+  $ mongo
+  [ message d'accueil ]
+  > use exemple
+  switched to db exemple
+
+Puis la création d'un utilisateur générique pour la base de données, portant
+le même nom que la base de données :
+
+  > db.createUser( { 'user': 'exemple', 'pwd': 's3kr3t', 'roles': [ 'readWrite' ] })
+
+Et pour activer l'authentification, éditer F</etc/mongodb.conf> et changer les S<lignes :>
+
+  # Turn on/off security.  Off is currently the default
+  #noauth = true
+  #auth = true
+
+en
+
+  # Turn on/off security.  Off is currently the default
+  #noauth = true
+  auth = true
+
+et redémarrer le serveur MongoDB.
+
+Maintenant, pour se connecter à la base de données sous le shell C<mongo>, il faudra faire
+
+  $ mongo
+  [ message d'accueil ]
+  > use exemple
+  switched to db exemple
+  > db.auth('exemple', 's3kr3t')
+  1
+
 =head2 Le schéma de base de données
 
 La première table est la table S<« Document ».>
@@ -785,8 +825,9 @@ pour vérifier ces noms de document et de fichier, je n'ai pas cherché à lance
 mon application en I<taint mode>. Je ne me fais pas d'illusion, cela plantera.
 Quant à l'authentification dans MongoDB, elle m'empêchait d'accéder à la base
 alors que je renseignais correctement le mot de passe. Je l'ai donc désactivée.
-Si j'ai du temps disponible, j'essaierai de voir où la configuration cloche et
-je la réactiverai.
+Puis, dans un quatrième mouvement du balancier, j'ai compris comment faire fonctionner
+l'authentification dans le shell C<mongo> et dans les programmes Perl, donc
+je l'ai mise en place sur ma base de données et dans mon applicatio et dans mon applicationn.
 
 S<ORM ?> D'une part, c'est bon pour des bases SQL où le schéma est stocké
 dans la base et accessible par une API. Donc, inutile d'y songer pour 

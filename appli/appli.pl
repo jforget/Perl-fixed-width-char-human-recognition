@@ -201,7 +201,7 @@ start;
 
 sub liste_doc {
   my ($appli, $mdp) = @_;
-  my $client = MongoDB->connect('mongodb://localhost');
+  my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
   my $coll   = $client->ns("$appli.Document");
   my $doc    = $coll->find;
   #say YAML::Dump($doc);
@@ -211,16 +211,23 @@ sub liste_doc {
 
 sub get_doc {
   my ($appli, $mdp, $doc) = @_;
-  my $client = MongoDB->connect('mongodb://localhost');
+  my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
   my $coll   = $client->ns("$appli.Document");
   my $obj    = $coll->find_one({ doc => $doc });
   # say YAML::Dump($obj);
   return $obj;
 }
 
+sub ins_doc {
+  my ($appli, $mdp, $doc) = @_;
+  my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
+  my $coll   = $client->ns("$appli.Document");
+  my $res    = $coll->insert_one($doc);
+}
+
 sub maj_doc {
   my ($appli, $mdp, $doc, $val) = @_;
-  my $client = MongoDB->connect('mongodb://localhost');
+  my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
   my $coll   = $client->ns("$appli.Document");
   my $result = $coll->update({ doc => $doc }, { '$set' => $val });
   return $result;
@@ -228,7 +235,7 @@ sub maj_doc {
 
 sub get_cellule {
   my ($appli, $mdp, $doc, $l, $c) = @_;
-  my $client = MongoDB->connect('mongodb://localhost');
+  my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
   my $coll   = $client->ns("$appli.Cellule");
   my $obj    = $coll->find_one({ doc => $doc, l => 0 + $l, c => 0 + $c });
   #my $obj    = $coll->find_one({ doc => $doc});
@@ -239,7 +246,7 @@ sub get_cellule {
 
 sub iter_cellule {
   my ($appli, $mdp, $critere) = @_;
-  my $client = MongoDB->connect('mongodb://localhost');
+  my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
   my $coll   = $client->ns("$appli.Cellule");
   my $iter   = $coll->find($critere);
   return $iter
@@ -247,7 +254,7 @@ sub iter_cellule {
 
 sub maj_cellule {
   my ($appli, $mdp, $doc, $l, $c, $val) = @_;
-  my $client = MongoDB->connect('mongodb://localhost');
+  my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
   my $coll   = $client->ns("$appli.Cellule");
   my $result = $coll->update({ doc => $doc, l => 0 + $l, c => 0 + $c }, { '$set' => $val });
   return $result;
@@ -255,7 +262,7 @@ sub maj_cellule {
 
 sub purge_cellule {
   my ($appli, $mdp, $doc) = @_;
-  my $client = MongoDB->connect('mongodb://localhost');
+  my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
   my $coll   = $client->ns("$appli.Cellule");
   my $result = $coll->remove({ doc => $doc });
   return $result;
@@ -263,7 +270,7 @@ sub purge_cellule {
 
 sub stat_cellule {
   my ($appli, $mdp, $doc) = @_;
-  my $client = MongoDB->connect('mongodb://localhost');
+  my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
   my $coll   = $client->ns("$appli.Cellule");
   my $result = $coll->aggregate( [ { '$match' => { 'doc' => $doc } },
                                    { '$group' => { '_id' => '$doc',
@@ -277,7 +284,7 @@ sub stat_cellule {
 
 sub iter_glyphe {
   my ($appli, $mdp) = @_;
-  my $client = MongoDB->connect('mongodb://localhost');
+  my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
   my $coll   = $client->ns("$appli.Glyphe");
   my $iter   = $coll->find({  });
   return $iter
@@ -285,8 +292,7 @@ sub iter_glyphe {
 
 sub get_glyphe {
   my ($appli, $mdp, $car, $num) = @_;
-  #say "recherche du glyphe $num pour le caractère $car";
-  my $client = MongoDB->connect('mongodb://localhost');
+  my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
   my $coll   = $client->ns("$appli.Glyphe");
   my $obj    = $coll->find_one({ car => $car, num => 0 + $num });
   #say YAML::Dump($obj);
@@ -295,15 +301,16 @@ sub get_glyphe {
 
 sub get_glyphe_1 {
   my ($appli, $mdp, $car1, $num) = @_;
-  my $client = MongoDB->connect('mongodb://localhost');
+  my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
   my $coll   = $client->ns("$appli.Glyphe");
   my $obj    = $coll->find_one({ car1 => $car1, num => 0 + $num });
+  #say YAML::Dump($obj);
   return $obj;
 }
 
 sub ins_glyphe {
   my ($appli, $mdp, $obj) = @_;
-  my $client = MongoDB->connect('mongodb://localhost');
+  my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
   my $coll   = $client->ns("$appli.Glyphe");
   $coll->insert_one($obj);
   #say YAML::Dump($obj);
@@ -312,7 +319,7 @@ sub ins_glyphe {
 
 sub glyphe_max_1 {
   my ($appli, $mdp, $car1) = @_;
-  my $client = MongoDB->connect('mongodb://localhost');
+  my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
   my $coll   = $client->ns("$appli.Glyphe");
   my $result = $coll->aggregate( [ { '$match' => { 'car1' => $car1 }},
                                    { '$group' => { '_id' => '$car1', 'hnum' => { '$max' => '$num' }}} ] );
@@ -420,9 +427,7 @@ sub credoc {
   $obj{y0}       = $ymin[$obj{ind_noir}];
   $obj{dh_cre}   = horodatage();
 
-  my $client = MongoDB->connect('mongodb://localhost');
-  my $coll   = $client->ns("$appli.Document");
-  my $res    = $coll->insert_one({ %obj });
+  ins_doc($appli, $mdp, { %obj });
   return '';
 }
 
