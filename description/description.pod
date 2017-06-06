@@ -426,8 +426,11 @@ La variabilité des glyphes est réduite, mais elle existe encore.
 
 Bien que j'utilise une base no-SQL, je continue, dans le cadre
 de ce texte descriptif, à définir un schéma de base de
-données et à parler de tables. Mais c'est plus une auto-discipline
+données et à parler de tables et d'enregistrements. Mais c'est plus une auto-discipline
 qu'une contrainte imposée par la base de données.
+Quant au vocabulaire, j'aurais pu utiliser S<« collection »> au lieu de S<« table »>,
+mais ç'aurait été plus difficile d'utiliser S<« document »> au lieu S<d'« enregistrement »>
+car l'une des tables (ou collections si vous préférez) s'appelle S<« Document »>.
 
 Mais tout d'abord, définir la base de données utilisée et les autorisations
 d'accès.
@@ -513,7 +516,9 @@ Certes, avec la création de nouveaux Glyphes, le résultat de la Requête devie
 de plus en plus obsolète, car certaines Cellules ne vérifient plus les critères et
 d'autres se mettent à les vérifier. Il reste encore utilisable pour consulter les Cellules.
 Et l'utilisateur peut de nouveau cliquer sur le bouton S<« Recherche »> pour rafraîchir
-le résultat de la requête.
+le résultat de la requête. C'est à l'utilisateur de décider quand il est souhaitable de déclencher
+le (long) rafraîchissement de la Requête et quand il est préférable de continuer avec une
+Requête légèrement S<« rassise »>.
 
 =head3 Table des Glyphes
 
@@ -940,6 +945,15 @@ de nombreux outils de conversion en HTML, en LATEX, etc. J'avais prévu de consa
 de temps à écrire un tel convertisseur (en me basant bien sûr sur les modules de la distribution
 standard et de CPAN). Éh bien cela n'a pas été nécessaire. Rien que le fait d'envoyer un fichier
 POD sur GitHub fait qu'il est automatiquement traduit en HTML.
+
+Une bonne surprise dont je ne me suis pas rendu compte tout de suite. MongoDB permet de stocker
+des structures de données complexes dans un même enregistrement, comme un tableau de valeurs scalaires,
+ou un tableau de hachages. Ce n'est pas le cas avec les bases  de données SQL puristes qui prônent
+l'adoption des formes normales S<successives :> si vous voulez stocker une donnée indicée, vous devez
+créer une nouvelle table avec, comme clé, la clé de la table d'origine plus la valeur de l'indice.
+Cela dit, du côté de SQL, S<« ils »> sont en train de revenir à des pratiques plus... pratiques et
+à autoriser des colonnes de base de données de type C<JSON>, donc avec la possibilité de définir
+des tableaux et de les emboîter.
 
 =head1 Compléments
 
