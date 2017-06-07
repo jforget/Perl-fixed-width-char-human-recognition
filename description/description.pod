@@ -683,6 +683,12 @@ donne une rotation.
 =for HTML
 <img src="ex-rotation.png" alt="Exemple de rotation (exagéré, mais un peu moins)" />
 
+Et voici un exemple réel, en gros S<plan :>  décalage d'un pixel à gauche toutes les trois lignes,
+décalage d'un pixel vers le bas tous les trois caractères.
+
+=for HTML
+<img src="gros-plan-cisaillement.png" alt="Exemple de cisaillements combinés" />
+
 =head2 Comparaison entre une Cellule et un Glyphe
 
 Une fois le découpage effectué, on rogne la Cellule en calculant 
