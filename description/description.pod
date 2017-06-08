@@ -684,7 +684,8 @@ donne une rotation.
 <img src="ex-rotation.png" alt="Exemple de rotation (exagéré, mais un peu moins)" />
 
 Et voici un exemple réel, en gros S<plan :>  décalage d'un pixel à gauche toutes les trois lignes,
-décalage d'un pixel vers le bas tous les trois caractères.
+décalage d'un pixel vers le bas tous les trois caractères. Vous pouvez voir le léger décalage
+entre la cellule du S<« o »> et la cellule du S<« g »>, ainsi qu'entre le S<« a »> et le S<« m »>.
 
 =for HTML
 <img src="gros-plan-cisaillement.png" alt="Exemple de cisaillements combinés" />
@@ -836,9 +837,10 @@ pour vérifier ces noms de document et de fichier, je n'ai pas cherché à lance
 mon application en I<taint mode>. Je ne me fais pas d'illusion, cela plantera.
 Quant à l'authentification dans MongoDB, elle m'empêchait d'accéder à la base
 alors que je renseignais correctement le mot de passe. Je l'ai donc désactivée.
+
 Puis, dans un quatrième mouvement du balancier, j'ai compris comment faire fonctionner
 l'authentification dans le shell C<mongo> et dans les programmes Perl, donc
-je l'ai mise en place sur ma base de données et dans mon applicatio et dans mon applicationn.
+je l'ai mise en place sur ma base de données et dans mon application.
 
 S<ORM ?> D'une part, c'est bon pour des bases SQL où le schéma est stocké
 dans la base et accessible par une API. Donc, inutile d'y songer pour 
@@ -950,14 +952,15 @@ parce que c'est le système le plus simple pour écrire des documents et parce q
 de nombreux outils de conversion en HTML, en LATEX, etc. J'avais prévu de consacrer un peu
 de temps à écrire un tel convertisseur (en me basant bien sûr sur les modules de la distribution
 standard et de CPAN). Éh bien cela n'a pas été nécessaire. Rien que le fait d'envoyer un fichier
-POD sur GitHub fait qu'il est automatiquement traduit en HTML.
+POD sur GitHub fait qu'il est automatiquement traduit en HTML. Il y a juste un petit
+problème avec les blancs insécables.
 
 Au moment où j'écris ces lignes, je n'ai pas encore mis en place le système des Requêtes.
 Il est trop tôt pour conclure sur le problème des S<« l »> (S<« L »> minuscules),
 des S<« I »> (S<« i »> majuscules) et des S<« 1 »> (chiffres S<« un »>). Je pense néanmoins
 que cela se résoudra sans mal. En revanche, entre les tirets et les blancs soulignés, compte tenu
 de la réduction à l'enveloppe rectangulaire des pixels noirs, la similarité des Cellules est
-très problématique. Heureusement, à l'époque je n'utilisais aucun blanc souligné. Donc le problème
+très problématique. Heureusement, à l'époque (1983--1984) je n'utilisais aucun blanc souligné. Donc le problème
 est éludé. Pour l'instant.
 
 Une bonne surprise dont je ne me suis pas rendu compte tout de suite. MongoDB permet de stocker
