@@ -651,6 +651,7 @@ sub association {
     $critere->{l} = 0 + $l;
     $critere->{c} = 0 + $c;
   }
+  #say YAML::Dump($critere);
   my $iter = iter_cellule($appli, $mdp, $critere);
   while (my $info_cellule = $iter->next) {
     # calcul du score
@@ -930,7 +931,7 @@ EOF
       my $img = img_cel_gly($appli, $mdp, $info_doc, $info_cellule, $info_glyphe);
       $dessins .= "<p><img src='data:image/png;base64," . encode_base64($img->png) . "' alt='comparaison cellule glyphe'/></p>\n";
     }
-    my $caract_assoc = join ', ', keys %{$info_cellule->{cpt_car}};
+    my $caract_assoc = join ', ', map { sprintf "%s U+%X", $_, ord($_) } keys %{$info_cellule->{cpt_car}};
     $html = <<"EOF";
 <h1>Cellule</h1>
 <p>Ligne $l, colonne $c -&gt; x = $info_cellule->{xc}, y = $info_cellule->{yc}</p>
