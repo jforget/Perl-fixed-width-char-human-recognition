@@ -4,17 +4,39 @@
 
 =head1 Introduction
 
-Pendant l'hiver 2016-2017, j'ai décidé de
-prendre un programme Pascal de
+Pendant l'hiver 2014-2015, j'ai décidé de
+prendre un programme e-Lisp de
 calendrier républicain dont les
 racines remontent à plusieurs décennies
 et de l'améliorer. Je ne vais pas
 vous faire un exposé sur les
-développements en Pascal,
+développements en e-Lisp,
 je vais vous expliquer comment
 j'ai initialisé un dépôt Git
 avec des commits remontant à
-1983-1984.
+1989.
+
+=head1 Ooops !
+
+Ooops, c'est l'exposé de l'année précédente. Permettez-moi de faire quelques adaptations.
+
+  s/2014-2015/2016-2017/g;
+  s/e-Lisp/Pascal/g;
+  s/1989/1983-1984/g;
+
+=head1 La véritable introduction
+
+Pendant l'hiver B<2016-2017>, j'ai décidé de
+prendre un programme B<Pascal> de
+calendrier républicain dont les
+racines remontent à plusieurs décennies
+et de l'améliorer. Je ne vais pas
+vous faire un exposé sur les
+développements en B<Pascal>,
+je vais vous expliquer comment
+j'ai initialisé un dépôt Git
+avec des commits remontant à
+B<1983-1984>.
 
 =head1 Circonstances
 
@@ -127,23 +149,102 @@ une option C<--dot-matrix> mais dans
 mon cas, cela n'a rien donné de mieux
 que la tentative sans cette option.
 
+=head3 Remarque : reconnaissance automatisée, non pas optique
+
+Imaginez que vous fassiez l'expérience suivante. Vous créez un script
+shell basé sur le schéma suivant :
+
+                          ___
+                         (   )
+                         (___)_ /dev/random
+                           |
+                     ---------------
+                     | script GIMP | (ou GD.pm)
+                     ---------------
+                         |   |
+                    ------   ------
+                    |             |
+                   ___           ___
+                  (   )         (   )
+      exemple.txt (___)_        (___)_ exemple.png
+                    |             |
+                    |      ----------------
+                    |      |    GOCR      | ou OCRAD, ou Tesseract, ou Cuneiform
+                    |      ----------------
+                    |             |
+                    |            ___
+                    |           (   )
+                    |           (___)_ exemple-2.txt
+                    |             |
+                    ------   ------
+                         |   |
+                     ---------------
+                     |    diff     |
+                     ---------------
+                           |
+                         -----
+                         |  _|
+                         |_/    /dev/stdout et /dev/stderr
+
+Vous le transférez sur un serveur du « claoude », vous l'ajoutez à la
+liste des tâches C<cron> de ce serveur pour qu'il s'exécute à 4h du
+matin et vous coupez la communication avec ce serveur. Lorsque le
+script s'exécute à 4h du matin, combien de rayons lumineux sont déviés
+par une lentille ou réfléchis par un miroir ? Combien de photons
+activent une surface photo-sensible (rétine, barrette CCD) ? Réponse :
+zéro. Il n'y a rien d'optique dans ce traitement.
+
 =head2 Le meilleur moteur de reconnaissance
 
 Le meilleur moteur de reconnaissance de caractères
-est basé sur des réseaux neuronaux.
+est basé sur des réseaux neuronaux et il nécessite
+réellement un capteur optique.
 Il a été publié pour la première fois
 par une start-up libanaise ou, plus précisément,
 phénicienne.
+
+=begin HTML
+
+<img src="U10900.png" alt="Codage Unicode de l'alphabet phénicien" />
+
+<p><font size='2'>Copie d'écran personnelle d'une page 
+<a href='https://fr.wikipedia.org/wiki/Alphabet_ph%C3%A9nicien'>Wikipedia</a>
+licence <a href='http://creativecommons.org/licenses/by-sa/3.0/deed.fr'>Creative Commons attribution, partage dans les mêmes conditions</a>
+</font></p>
+
+<img src="Liseuse.jpg" alt="La liseuse de Fragonard" />
+<p><font size='2'>La Liseuse, par Fragonard (1732--1806), œuvre dans le domaine public.</font></p>
+
+=end HTML
 
 Il admet plusieurs plug-ins, mais
 à chaque fois, cela nécessite un temps
 de paramétrage assez long.
 
+=begin HTML
+
+<img src="geoffroy_henri_jules_en_classe_le_travail_des_petits.jpg" alt="Scène dans une école" />
+
+<p><font size='2'>En classe, le travail des petits, par Henri Jules Geoffroy (1853--1924), œuvre dans le domaine public. Avec un marquage par le site web où j'ai trouvé cette reproduction (pourquoi marquer une œuvre dans le domaine public&nbsp;?)</font></p>
+
+=end HTML
+
 En revanche, les résultats sont
 largement meilleurs que pour les
-programmes ci-dessus
+programmes ci-dessus.
 
-EXEMPLES
+Il y a des problèmes toutefois. Par exemple, avec cette image :
+
+=begin HTML
+
+<img src='Leonov.jpeg' alt='Alexei Leonov en scaphandre' />
+<p size='1'> Source <a href='http://www.popscreen.com/p/MTU3MDkzMDU5/Soviet-CCCP-Astronaut-Space-Patch-Russian-Alexei-Leonov'>http://www.popscreen.com/p/MTU3MDkzMDU5/Soviet-CCCP-Astronaut-Space-Patch-Russian-Alexei-Leonov</a></p>
+
+=end HTML
+
+la plupart des systèmes donnent comme résultat S<« cécécépé »> (U+43 U+43 U+43 U+50),
+alors qu'il faut lire en fait S<« èssèssèssère »> (U+0421 U+0421 U+0421 U+0420).
+Mais reconnaissons que les programmes mentionnés dans le chapitre précédent ne feraient pas mieux.
 
 =head2 Programmes hybrides
 
