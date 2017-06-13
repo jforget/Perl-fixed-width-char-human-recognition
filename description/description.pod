@@ -154,7 +154,7 @@ que la tentative sans cette option.
 Imaginez que vous fassiez l'expérience suivante. Vous créez un script
 shell basé sur le schéma suivant :
 
-                          ___
+  .                        ___
   .                       (   )
   .                       (___)_ /dev/random
   .                         |
@@ -198,10 +198,10 @@ zéro. Il n'y a rien d'optique dans ce traitement.
 
 Le meilleur moteur de reconnaissance de caractères
 est basé sur des réseaux neuronaux et il nécessite
-réellement un capteur optique.
+réellement des capteurs optiques.
 Il a été publié pour la première fois
 par une start-up libanaise ou, plus précisément,
-phénicienne.
+phénicienne aux alentours de 1200 ans avant J-C.
 
 =begin HTML
 
@@ -213,7 +213,7 @@ licence <a href='http://creativecommons.org/licenses/by-sa/3.0/deed.fr'>Creative
 </font></p>
 
 <img src="Liseuse.jpg" alt="La liseuse de Fragonard" />
-<p><font size='2'>La Liseuse, par Fragonard (1732--1806), oeuvre dans le domaine public.</font></p>
+<p><font size='2'>La Liseuse, par Fragonard (1732--1806), oeuvre dans le domaine public, avec quelques adaptations personnelles mineures.</font></p>
 
 =end HTML
 
@@ -243,7 +243,7 @@ Il y a des problèmes toutefois. Par exemple, avec cette image :
 =end HTML
 
 la plupart des systèmes donnent comme résultat S<« cécécépé »> (U+43 U+43 U+43 U+50),
-alors qu'il faut lire en fait S<« èssèssèssère »> (U+0421 U+0421 U+0421 U+0420).
+alors qu'il faut lire en fait S<« essessessère »> (U+0421 U+0421 U+0421 U+0420).
 Mais reconnaissons que les programmes mentionnés dans le chapitre précédent ne feraient pas mieux.
 
 =head2 Programmes hybrides
