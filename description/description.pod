@@ -155,36 +155,36 @@ Imaginez que vous fassiez l'expérience suivante. Vous créez un script
 shell basé sur le schéma suivant :
 
                           ___
-                         (   )
-                         (___)_ /dev/random
-                           |
-                     ---------------
-                     | script GIMP | (ou GD.pm)
-                     ---------------
-                         |   |
-                    ------   ------
-                    |             |
-                   ___           ___
-                  (   )         (   )
-      exemple.txt (___)_        (___)_ exemple.png
-                    |             |
-                    |      ----------------
-                    |      |    GOCR      | ou OCRAD, ou Tesseract, ou Cuneiform
-                    |      ----------------
-                    |             |
-                    |            ___
-                    |           (   )
-                    |           (___)_ exemple-2.txt
-                    |             |
-                    ------   ------
-                         |   |
-                     ---------------
-                     |    diff     |
-                     ---------------
-                           |
-                         -----
-                         |  _|
-                         |_/    /dev/stdout et /dev/stderr
+  .                       (   )
+  .                       (___)_ /dev/random
+  .                         |
+  .                   ---------------
+  .                   | script GIMP | (ou GD.pm)
+  .                   ---------------
+  .                       |   |
+  .                  ------   ------
+  .                  |             |
+  .                 ___           ___
+  .                (   )         (   )
+  .    exemple.txt (___)_        (___)_ exemple.png
+  .                  |             |
+  .                  |      ----------------
+  .                  |      |    GOCR      | ou OCRAD, ou Tesseract, ou Cuneiform
+  .                  |      ----------------
+  .                  |             |
+  .                  |            ___
+  .                  |           (   )
+  .                  |           (___)_ exemple-2.txt
+  .                  |             |
+  .                  ------   ------
+  .                       |   |
+  .                   ---------------
+  .                   |    diff     |
+  .                   ---------------
+  .                         |
+  .                       -----
+  .                       |  _|
+  .                       |_/    /dev/stdout et /dev/stderr
 
 Vous le transférez sur un serveur du « claoude », vous l'ajoutez à la
 liste des tâches C<cron> de ce serveur pour qu'il s'exécute à 4h du
@@ -207,13 +207,13 @@ phénicienne.
 
 <img src="U10900.png" alt="Codage Unicode de l'alphabet phénicien" />
 
-<p><font size='2'>Copie d'écran personnelle d'une page 
+<p><font size='2'>Copie d'ecran personnelle d'une page 
 <a href='https://fr.wikipedia.org/wiki/Alphabet_ph%C3%A9nicien'>Wikipedia</a>
-licence <a href='http://creativecommons.org/licenses/by-sa/3.0/deed.fr'>Creative Commons attribution, partage dans les mêmes conditions</a>
+licence <a href='http://creativecommons.org/licenses/by-sa/3.0/deed.fr'>Creative Commons attribution, partage dans les memes conditions</a>
 </font></p>
 
 <img src="Liseuse.jpg" alt="La liseuse de Fragonard" />
-<p><font size='2'>La Liseuse, par Fragonard (1732--1806), œuvre dans le domaine public.</font></p>
+<p><font size='2'>La Liseuse, par Fragonard (1732--1806), oeuvre dans le domaine public.</font></p>
 
 =end HTML
 
@@ -225,7 +225,7 @@ de paramétrage assez long.
 
 <img src="geoffroy_henri_jules_en_classe_le_travail_des_petits.jpg" alt="Scène dans une école" />
 
-<p><font size='2'>En classe, le travail des petits, par Henri Jules Geoffroy (1853--1924), œuvre dans le domaine public. Avec un marquage par le site web où j'ai trouvé cette reproduction (pourquoi marquer une œuvre dans le domaine public&nbsp;?)</font></p>
+<p><font size='2'>En classe, le travail des petits, par Henri Jules Geoffroy (1853--1924), oeuvre dans le domaine public. Avec un marquage par le site web où j'ai trouvé cette reproduction (pourquoi marquer une oeuvre dans le domaine public&nbsp;?)</font></p>
 
 =end HTML
 
