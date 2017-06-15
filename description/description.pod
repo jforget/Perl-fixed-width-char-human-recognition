@@ -18,7 +18,8 @@ avec des commits remontant à
 
 =head1 Ooops !
 
-Ooops, c'est l'exposé de l'année précédente. Permettez-moi de faire quelques adaptations.
+Ooops, c'est l'exposé de l'année précédente pour les Journées Perl Francophones
+de 2016. Permettez-moi de faire quelques adaptations.
 
   s/2014-2015/2016-2017/g;
   s/e-Lisp/Pascal/g;
@@ -151,6 +152,10 @@ que la tentative sans cette option.
 
 =head3 Remarque : reconnaissance automatisée, non pas optique
 
+J'ai utilisé l'expression C<« reconnaissance> S<automatisée »> et non
+pas S<« optique »> pour les programmes ci-dessus. Parce qu'ils ne font
+pas de traitement optique.
+
 Imaginez que vous fassiez l'expérience suivante. Vous créez un script
 shell basé sur le schéma suivant :
 
@@ -203,31 +208,26 @@ Il a été publié pour la première fois
 par une start-up libanaise ou, plus précisément,
 phénicienne aux alentours de 1200 ans avant J-C.
 
-=begin HTML
-
+=for HTML
 <img src="U10900.png" alt="Codage Unicode de l'alphabet phénicien" />
 
-<p><font size='2'>Copie d'ecran personnelle d'une page 
-<a href='https://fr.wikipedia.org/wiki/Alphabet_ph%C3%A9nicien'>Wikipedia</a>
-licence <a href='http://creativecommons.org/licenses/by-sa/3.0/deed.fr'>Creative Commons attribution, partage dans les memes conditions</a>
-</font></p>
+Copie d'écran personnelle d'une page 
+L<Wikipedia|https://fr.wikipedia.org/wiki/Alphabet_ph%C3%A9nicien>
+licence L<Creative Commons attribution, partage dans les mêmes conditions|http://creativecommons.org/licenses/by-sa/3.0/deed.fr>
 
+=for HTML
 <img src="Liseuse.jpg" alt="La liseuse de Fragonard" />
-<p><font size='2'>La Liseuse, par Fragonard (1732--1806), oeuvre dans le domaine public, avec quelques adaptations personnelles mineures.</font></p>
 
-=end HTML
+La Liseuse, par Fragonard (1732--1806), œuvre dans le domaine public, avec quelques adaptations personnelles mineures.
 
-Il admet plusieurs plug-ins, mais
+Ce système admet plusieurs plug-ins, mais
 à chaque fois, cela nécessite un temps
 de paramétrage assez long.
 
-=begin HTML
-
+=for HTML
 <img src="geoffroy_henri_jules_en_classe_le_travail_des_petits.jpg" alt="Scène dans une école" />
 
-<p><font size='2'>En classe, le travail des petits, par Henri Jules Geoffroy (1853--1924), oeuvre dans le domaine public. Avec un marquage par le site web où j'ai trouvé cette reproduction (pourquoi marquer une oeuvre dans le domaine public&nbsp;?)</font></p>
-
-=end HTML
+En classe, le travail des petits, par Henri Jules Geoffroy (1853--1924), œuvre dans le domaine public. Avec un marquage par le site web où j'ai trouvé cette reproduction (pourquoi marquer une œuvre dans le domaine S<public ?)>
 
 En revanche, les résultats sont
 largement meilleurs que pour les
