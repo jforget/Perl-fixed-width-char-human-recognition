@@ -528,6 +528,20 @@ avec 8 voisins aurait émoussé les coins à angle S<droit :>
   .....      .....
   .....      .....
 
+Exemple tiré du réel, le même caractère S<« p »> que ci-dessus, traité par un
+lissage à 8 voisins.
+
+=for HTML
+<img src="resultat-lissage-v8.png" alt="Extrait d'un listing avant et après lissage, avec au milieu la visualisation des différences" />
+
+Comme vous pouvez le voir, plusieurs coins ont été effacés, car ils n'avaient
+que trois voisins. Le coin en haut à gauche a survécu, parce que la verrue juste à côté (effacée
+à juste titre) constituait un quatrième voisin pour ce pixel de coin.
+
+En revanche, vous pouvez constater que le fossé d'un pixel de large entre la partie en haut à gauche
+et la goutte d'encre isolée en haut à droite a été comblé, Cet avantage ne compense pas, à mon avis,
+l'inconvénient de voir les coins s'effacer.
+
 J'ai donc pris la variante à 4 voisins. Et il suffit d'une génération
 pour avoir un bon nettoyage. D'un autre côté, comme on peut le deviner dans
 le schéma ci-dessus, certains S<« fossés »> comme dans le trait horizontal supérieur
