@@ -543,10 +543,7 @@ et la goutte d'encre isolée en haut à droite a été comblé, Cet avantage ne 
 l'inconvénient de voir les coins s'effacer.
 
 J'ai donc pris la variante à 4 voisins. Et il suffit d'une génération
-pour avoir un bon nettoyage. D'un autre côté, comme on peut le deviner dans
-le schéma ci-dessus, certains S<« fossés »> comme dans le trait horizontal supérieur
-du S<« p »> auraient été comblés avec la version à 8 voisins, alors qu'ils ne le seront
-pas avec la version à 4 voisins.
+pour avoir un bon nettoyage.
 
 On peut considérer que c'est une variante
 du Jeu de la Vie de Conway (John, pas Damian),
