@@ -152,7 +152,7 @@ que la tentative sans cette option.
 
 =head3 Remarque : reconnaissance automatisée, non pas optique
 
-J'ai utilisé l'expression C<« reconnaissance> S<automatisée »> et non
+J'ai utilisé l'expression S<« reconnaissance> S<automatisée »> et non
 pas S<« optique »> pour les programmes ci-dessus. Parce qu'ils ne font
 pas de traitement optique.
 
@@ -235,16 +235,33 @@ programmes ci-dessus.
 
 Il y a des problèmes toutefois. Par exemple, avec cette image :
 
-=begin HTML
-
+=for HTML
 <img src='Leonov.jpeg' alt='Alexei Leonov en scaphandre' />
-<p size='1'> Source <a href='http://www.popscreen.com/p/MTU3MDkzMDU5/Soviet-CCCP-Astronaut-Space-Patch-Russian-Alexei-Leonov'>http://www.popscreen.com/p/MTU3MDkzMDU5/Soviet-CCCP-Astronaut-Space-Patch-Russian-Alexei-Leonov</a></p>
 
-=end HTML
+Source L<http://www.popscreen.com/p/MTU3MDkzMDU5/Soviet-CCCP-Astronaut-Space-Patch-Russian-Alexei-Leonov>
 
 la plupart des systèmes donnent comme résultat S<« cécécépé »> (U+43 U+43 U+43 U+50),
 alors qu'il faut lire en fait S<« essessessère »> (U+0421 U+0421 U+0421 U+0420).
 Mais reconnaissons que les programmes mentionnés dans le chapitre précédent ne feraient pas mieux.
+
+D'un autre côté, les systèmes de ce type peuvent détecter des caractères là où il 
+n'y en a pas. Par exemple, vous les pointez vers S<Cassiopée :>
+
+=for HTML
+<img src='Cassiopee.png' alt='Représentation de la constellation Cassiopée' />
+
+S<Source :> copie d'écran personnelle du logiciel L<Stellarium|http://www.stellarium.org/>
+
+certains détecterons un S<« W »>, d'autres un S<« M »>. Idem 
+L<en regardant dans l'autre sens|https://news.artnet.com/art-world/nasa-photos-alphabet-in-the-sky-400646>,
+L<de l'espace vers la Terre|https://www.mapbox.com/blog/letter-hunt-from-space/>.
+
+Ou bien dans ce dessin abstrait, certains y voient des mots entiers, en l'occurrence des S<prénoms :>
+
+=for HTML
+<img src='EstPhil.gif' alt='Dessin abstrait' />
+
+S<Source :> dessin créé par L<GEF|http://www.gef.free.fr/ambigallery.html> utilisé ici avec l'autorisation des intéressés.
 
 =head2 Programmes hybrides
 
