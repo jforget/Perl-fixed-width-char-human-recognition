@@ -157,7 +157,7 @@ pas S<« optique »> pour les programmes ci-dessus. Parce qu'ils ne font
 pas de traitement optique.
 
 Imaginez que vous fassiez l'expérience suivante. Vous créez un script
-shell basé sur le schéma suivant :
+shell basé sur le schéma S<ci-dessous :>
 
   .                        ___
   .                       (   )
@@ -211,14 +211,14 @@ phénicienne aux alentours de 1200 ans avant J-C.
 =for HTML
 <img src="U10900.png" alt="Codage Unicode de l'alphabet phénicien" />
 
-Copie d'écran personnelle d'une page 
+I<Copie d'écran personnelle d'une page 
 L<Wikipedia|https://fr.wikipedia.org/wiki/Alphabet_ph%C3%A9nicien>
-licence L<Creative Commons attribution, partage dans les mêmes conditions|http://creativecommons.org/licenses/by-sa/3.0/deed.fr>
+licence L<Creative Commons attribution, partage dans les mêmes conditions|http://creativecommons.org/licenses/by-sa/3.0/deed.fr>>
 
 =for HTML
 <img src="Liseuse.jpg" alt="La liseuse de Fragonard" />
 
-La Liseuse, par Fragonard (1732--1806), œuvre dans le domaine public, avec quelques adaptations personnelles mineures.
+I<La Liseuse, par Fragonard (1732--1806), œuvre dans le domaine public, avec quelques adaptations personnelles mineures.>
 
 Ce système admet plusieurs plug-ins, mais
 à chaque fois, cela nécessite un temps
@@ -227,7 +227,7 @@ de paramétrage assez long.
 =for HTML
 <img src="geoffroy_henri_jules_en_classe_le_travail_des_petits.jpg" alt="Scène dans une école" />
 
-En classe, le travail des petits, par Henri Jules Geoffroy (1853--1924), œuvre dans le domaine public. Avec un marquage par le site web où j'ai trouvé cette reproduction (pourquoi marquer une œuvre dans le domaine S<public ?)>
+I<Source : En classe, le travail des petits, par Henri Jules Geoffroy (1853--1924), œuvre dans le domaine public. Avec un marquage par le site web où j'ai trouvé cette reproduction (pourquoi marquer une œuvre dans le domaine S<public ?)>>
 
 En revanche, les résultats sont
 largement meilleurs que pour les
@@ -238,9 +238,9 @@ Il y a des problèmes toutefois. Par exemple, avec cette image :
 =for HTML
 <img src='Leonov.jpeg' alt='Alexei Leonov en scaphandre' />
 
-Source L<http://www.popscreen.com/p/MTU3MDkzMDU5/Soviet-CCCP-Astronaut-Space-Patch-Russian-Alexei-Leonov>
+I<Source L<http://www.popscreen.com/p/MTU3MDkzMDU5/Soviet-CCCP-Astronaut-Space-Patch-Russian-Alexei-Leonov>>
 
-la plupart des systèmes donnent comme résultat S<« cécécépé »> (U+43 U+43 U+43 U+50),
+la plupart des systèmes donnent comme résultat S<« cécécépé »> (U+0043 U+0043 U+0043 U+0050),
 alors qu'il faut lire en fait S<« essessessère »> (U+0421 U+0421 U+0421 U+0420).
 Mais reconnaissons que les programmes mentionnés dans le chapitre précédent ne feraient pas mieux.
 
@@ -250,7 +250,7 @@ n'y en a pas. Par exemple, vous les pointez vers S<Cassiopée :>
 =for HTML
 <img src='Cassiopee.png' alt='Représentation de la constellation Cassiopée' />
 
-S<Source :> copie d'écran personnelle du logiciel L<Stellarium|http://www.stellarium.org/>
+I<S<Source :> copie d'écran personnelle du logiciel L<Stellarium|http://www.stellarium.org/>>
 
 certains détecterons un S<« W »>, d'autres un S<« M »>. Idem 
 L<en regardant dans l'autre sens|https://news.artnet.com/art-world/nasa-photos-alphabet-in-the-sky-400646>,
@@ -261,7 +261,7 @@ Ou bien dans ce dessin abstrait, certains y voient des mots entiers, en l'occurr
 =for HTML
 <img src='EstPhil.gif' alt='Dessin abstrait' />
 
-S<Source :> dessin créé par L<GEF|http://www.gef.free.fr/ambigallery.html> utilisé ici avec l'autorisation des intéressés.
+I<S<Source :> dessin créé par L<GEF|http://www.gef.free.fr/ambigallery.html> utilisé ici avec l'autorisation des intéressés.>
 
 =head2 Programmes hybrides
 
@@ -279,15 +279,15 @@ le fichier graphique à analyser et la moitié droite
 =for HTML
 <img src='Alice1.png' alt='Première étape de la reconnaissance de caractères par Alice-OCR' />
 
-Source : Portrait de Lena Söderberg, (c) Playboy, 1972, utilisé avec la permission tacite de Playboy, incorporé dans une copie d'écran personnelle
+I<Source : Portrait de Lena Söderberg, (c) Playboy, 1972, utilisé avec la permission tacite de Playboy, incorporé dans une copie d'écran personnelle>
 
-Vous lanciez une analyse et un premier
-résultat s'affichait dans la partie droite.
+Vous lanciez une analyse et un premier résultat s'affichait dans la partie droite, avec
+dans la partie gauche les caractères mis en relief par des ovales de couleur pâle.
 
 =for HTML
 <img src='Alice2.png' alt='Deuxième étape de la reconnaissance de caractères par Alice-OCR : reconnaissance automatisée' />
 
-Source : Portrait de Lena Söderberg, (c) Playboy, 1972, utilisé avec la permission tacite de Playboy, incorporé dans une copie d'écran personnelle
+I<Source : Portrait de Lena Söderberg, (c) Playboy, 1972, utilisé avec la permission tacite de Playboy, incorporé dans une copie d'écran personnelle>
 
 S'il y avait des erreurs, vous pouviez
 cliquer sur un glyphe de la partie graphique
@@ -299,7 +299,7 @@ un échantillon représentatif.
 =for HTML
 <img src='Alice3.png' alt='Troisième étape de la reconnaissance de caractères par Alice-OCR : reconnaissance par un humain' />
 
-Source : Portrait de Lena Söderberg, (c) Playboy, 1972, utilisé avec la permission tacite de Playboy, incorporé dans une copie d'écran personnelle
+I<Source : Portrait de Lena Söderberg, (c) Playboy, 1972, utilisé avec la permission tacite de Playboy, incorporé dans une copie d'écran personnelle>
 
 Ensuite, vous relanciez une analyse
 et le résultat tenait compte
@@ -658,7 +658,7 @@ Il est possible d'utiliser plusieurs bases de données séparées pour plusieurs
 de fichiers S<graphiques :> une base de données pour les listings sortant d'une 
 imprimante à aiguilles, une autre base de données pour les listings produits
 par une imprimante HP-41, une base de données pour les tickets de supermarché (ça 
-m'étonnerait que je le fasse, mais je n'exclue pas que d'autres puissent trouver
+m'étonnerait que je le fasse, mais je n'exclus pas que d'autres puissent trouver
 cela intéressant), etc. Le nom de la base de données est saisi dans l'écran de connexion.
 J'ai utilisé le terme S<« appli »>. J'aurais peut-être dû appeler cela S<« projet »>
 ou utiliser un autre nom. C'est  S<« appli »>, c'est comme ça.
@@ -1006,7 +1006,8 @@ commentaires requis par la GPL. Puis commiter avec la date du jour.
 =item 6
 
 Passer un C<untabify> sur le fichier source et commiter, parce que j'ai grandi et mûri depuis 1984 et que
-je n'utilise plus de tabulations en dehors des fichiers F<makefile>.
+je n'utilise plus de tabulations en dehors des fichiers F<makefile>. Et
+L<ça rapporte plus|https://arstechnica.com/information-technology/2017/06/according-to-statistics-programming-with-spaces-instead-of-tabs-makes-you-rich/>.
 
 =item 7
 
