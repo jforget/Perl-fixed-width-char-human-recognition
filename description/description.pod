@@ -665,6 +665,24 @@ ou utiliser un autre nom. C'est  S<« appli »>, c'est comme ça.
 
 =head2 Le schéma de base de données
 
+Le schéma de base, qui sera complété ultérieurement, S<est :>
+
+  .    Document             Caractère
+  .      (1,n)                (0,n)
+  .        |                    |
+  .        |                    |
+  .      (1,1)                (1,1)
+  .     Cellule (1,n)---(0,n) Glyphe
+
+Un Document se découpe en plusieurs Cellules,
+
+Un Caractère se décline en plusieurs Glyphes (mais un caractère peut ne pas apparaître
+dans les Documents de la base de données et ne donner lieu à aucun Glyphe).
+
+Une Cellule peut être associée à un ou parfois plusieurs Glyphes. 
+
+Un Glyphe peut être associé à plusieurs Cellules, mais parfois une seule, voire aucune.
+
 La première table est la table S<« Document ».>
 Cela correspond à un fichier numérisé et à ses
 avatars successifs. Chaque listing a été scanné en huit fichiers graphiques
