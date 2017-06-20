@@ -274,15 +274,33 @@ Pour changer, c'était une application graphique,
 pas un utilitaire en ligne de commande.
 La moitié gauche de la fenêtre affichait
 le fichier graphique à analyser et la moitié droite
-affichait le texte résultat.
+était prévue pour afficher le texte résultat.
+
+=for HTML
+<img src='Alice1.png' alt='Première étape de la reconnaissance de caractères par Alice-OCR' />
+
+Source : Portrait de Lena Söderberg, (c) Playboy, 1972, utilisé avec la permission tacite de Playboy, incorporé dans une copie d'écran personnelle
+
 Vous lanciez une analyse et un premier
 résultat s'affichait dans la partie droite.
+
+=for HTML
+<img src='Alice2.png' alt='Deuxième étape de la reconnaissance de caractères par Alice-OCR : reconnaissance automatisée' />
+
+Source : Portrait de Lena Söderberg, (c) Playboy, 1972, utilisé avec la permission tacite de Playboy, incorporé dans une copie d'écran personnelle
+
 S'il y avait des erreurs, vous pouviez
 cliquer sur un glyphe de la partie graphique
 puis indiquer la véritable transcription.
 Ce n'était pas la peine de pointer
 toutes les erreurs, mais seulement
 un échantillon représentatif.
+
+=for HTML
+<img src='Alice3.png' alt='Troisième étape de la reconnaissance de caractères par Alice-OCR : reconnaissance par un humain' />
+
+Source : Portrait de Lena Söderberg, (c) Playboy, 1972, utilisé avec la permission tacite de Playboy, incorporé dans une copie d'écran personnelle
+
 Ensuite, vous relanciez une analyse
 et le résultat tenait compte
 des corrections que vous aviez données.
@@ -290,6 +308,41 @@ Les associations glyphe -> caractère
 pouvaient même être stockées dans
 une base de données pour l'analyse
 d'un autre fichier.
+
+S<Remarques :> en 2000 ou 2001, j'ai fait très peu d'essais, car j'ai rapidement conclu
+que cela ne correspondait pas à mes besoins du moment. Notamment, je n'ai pas essayé
+avec un fichier graphique contenant à la fois du texte et une photo.
+
+Ici, pour la pseudo-démo, j'ai utilisé un fichier graphique contenant la photo de Lena Söderberg
+pour deux S<raisons :>
+
+=over 4
+
+=item * Parce que cela montre sans ambiguïté qu'il s'agit d'un fichier graphique et non
+d'un fichier texte,
+
+=item * Parce que la tradition veut que tout programme élémentaire affiche S<« Hello
+World ! »>, que toute leçon de programmation présente la recursivité à travers la factorielle
+et la suite de Fibonacci, que tout programme de modélisation 3D affiche une
+théière et que tout programme d'analyse ou de transformation de dessin affiche le
+portrait de Lena.
+
+=back
+
+J'ai essayé de soumettre le portrait de Lena (avec la bulle S<« Hello World ! »>) à C<gocr>
+et à C<cuneiform>. Ils s'en sont tirés. Comme quoi, ce sont quand même de bons programmes 
+lorsqu'ils sont confrontés à une impression de qualité. Et je pense que le vrai programme
+Alice-OCR aurait obtenu un résultat correct également. Mais c'est plus pédagogique en simulant
+une erreur.
+
+Remarquez que la délimitation du point d'exclamation ne fonctionne pas, elle oublie le
+point. Dans le vrai Alice-OCR, c'était le cas avec les S<« i »>, je ne me souviens pas
+avoir testé avec des fichiers graphiques contenant des S<« ! »>, des  S<« j »>, des lettres
+accentuées, des deux-points ou d'autres caractères en plusieurs morceaux.
+J'en ai tiré la leçon qu'il faut mettre l'humain dans la boucle au moment de la délimitation
+des caractères et pas seulement lors de la reconnaissance à proprement parler.
+
+=head3 Autres programmes hybrides
 
 Il existe d'autres systèmes informatiques
 reposant au moins en partie  sur la reconnaissance humaine
