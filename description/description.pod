@@ -654,6 +654,15 @@ Maintenant, pour se connecter à la base de données sous le shell C<mongo>, il 
   > db.auth('exemple', 's3kr3t')
   1
 
+Il est possible d'utiliser plusieurs bases de données séparées pour plusieurs séries
+de fichiers S<graphiques :> une base de données pour les listings sortant d'une 
+imprimante à aiguilles, une autre base de données pour les listings produits
+par une imprimante HP-41, une base de données pour les tickets de supermarché (ça 
+m'étonnerait que je le fasse, mais je n'exclue pas que d'autres puissent trouver
+cela intéressant), etc. Le nom de la base de données est saisi dans l'écran de connexion.
+J'ai utilisé le terme S<« appli »>. J'aurais peut-être dû appeler cela S<« projet »>
+ou utiliser un autre nom. C'est  S<« appli »>, c'est comme ça.
+
 =head2 Le schéma de base de données
 
 La première table est la table S<« Document ».>
