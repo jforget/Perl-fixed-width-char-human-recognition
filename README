@@ -17,7 +17,7 @@ is there to recognize the printed characters.
 I use it to analyse a source code printed by a dot-matrix printer.
 
 See a French-language detailed version in the F<description> directory,
-read L<description/dscription.pod>.
+read L<description/description.pod>.
 
 =head2 LICENSE
 
