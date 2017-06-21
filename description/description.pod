@@ -291,7 +291,7 @@ I<Source : Portrait de Lena Söderberg, (c) Playboy, 1972, utilisé avec la perm
 
 S'il y avait des erreurs, vous pouviez
 cliquer sur un glyphe de la partie graphique
-puis indiquer la véritable transcription.
+puis indiquer la véritable transcription dans une fenêtre.
 Ce n'était pas la peine de pointer
 toutes les erreurs, mais seulement
 un échantillon représentatif.
@@ -330,7 +330,7 @@ portrait de Lena.
 =back
 
 J'ai essayé de soumettre le portrait de Lena (avec la bulle S<« Hello World ! »>) à C<gocr>
-et à C<cuneiform>. Ils s'en sont tirés. Comme quoi, ce sont quand même de bons programmes 
+et à C<cuneiform>. Ils s'en sont tirés correctement. Comme quoi, ce sont quand même de bons programmes 
 lorsqu'ils sont confrontés à une impression de qualité. Et je pense que le vrai programme
 Alice-OCR aurait obtenu un résultat correct également. Mais c'est plus pédagogique en simulant
 une erreur.
@@ -512,16 +512,11 @@ deviendra blanc.
 Dans ce diagramme, j'ai représenté la frontière entre la
 zone de conversion vers le blanc et la zone de conversion vers le noir.
 
-=begin HTML
-
+=for HTML
 <img src="diagramme-HSV.png" alt="Diagramme HSV pour le bleu et l'orange" />
 
-<p><font size='2'>Copie d'écran personnelle d'une page Wikipedia avec des modifications mineures. Comme indiqué dans la page Wikipedia,
-<i lang='en'>Text is available under the Creative Commons Attribution-ShareAlike License; additional terms may apply.</i></font>
-</p>
-
-=end HTML
-
+I<Copie d'écran personnelle d'une page Wikipedia avec des modifications mineures. Comme indiqué dans la page Wikipedia,
+Text is available under the Creative Commons Attribution-ShareAlike License; additional terms may apply.>
 
 À noter un problème culturel.
 Né dans les années 1960, j'ai appris
@@ -665,7 +660,7 @@ ou utiliser un autre nom. C'est  S<« appli »>, c'est comme ça.
 
 =head2 Le schéma de base de données
 
-Le schéma de base, qui sera complété ultérieurement, S<est :>
+Le schéma de base basique, qui sera complété ultérieurement, S<est :>
 
   .    Document             Caractère
   .      (1,n)                (0,n)
@@ -709,6 +704,23 @@ de bits, représentant le dessin du caractère en pixels noirs et blancs.
 Un Caractère est associé à 1 à n Glyphes,
 un Glyphe est associé à un caractère et un seul.
 
+  .                                    Document             Caractère
+  .                               (1,n)  (1,n)                (0,n)
+  .                              /         |                    |
+  .                             /          |                    |
+  .                         (1,1)          |                    |
+  .                        Requête         |                    |
+  .                         (1,n)          |                    |
+  .                           |            |                    |
+  .                         (1,1)          |                    |
+  .                        Critère         |                    |
+  .                         (0,n)          |                    |
+  .                             \          |                    |
+  .                              \         |                    |
+  .                               (0,n)  (1,1)                (1,1)
+  .                                     Cellule (1,n)---(0,n) Glyphe
+
+
 Et une cinquième table un peu inattendue, la table S<« Requête »>.
 Au début, je pensais faire des requêtes S<« au> fil de S<l'eau » :>
 saisir les critères, cliquer sur un bouton et lire le résultat.
@@ -721,6 +733,10 @@ Par la suite, l'utilisateur peut consulter à plusieurs reprises le résultat de
 cette Requête (le fichier graphique déjà constitué) et enchaîner vers les
 Cellules sélectionnées grâce à une I<imagemap>.
 
+Un critère est une entité logique distincte de la Requête, mais dans le schéma
+physique, tous les critères dépendant d'une Requête seront stockés dans un 
+tableau de l'enregistrement Requête.
+
 Certes, avec la création de nouveaux Glyphes, le résultat de la Requête devient
 de plus en plus obsolète, car certaines Cellules ne vérifient plus les critères et
 d'autres se mettent à les vérifier. Il reste encore utilisable pour consulter les Cellules.
@@ -728,6 +744,8 @@ Et l'utilisateur peut de nouveau cliquer sur le bouton S<« Recherche »> pour r
 le résultat de la requête. C'est à l'utilisateur de décider quand il est souhaitable de déclencher
 le (long) rafraîchissement de la Requête et quand il est préférable de continuer avec une
 Requête légèrement S<« rassise »>.
+
+Peut-être vaudrait-il mieux nommer cette table S<« Coloriage »>...
 
 =head3 Table des Glyphes
 
