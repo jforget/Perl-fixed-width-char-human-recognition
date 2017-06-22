@@ -209,6 +209,35 @@ get '/coloriage/:doc/:n' => sub {
   return aff_coloriage($appli, $mdp, $doc, $n);
 };
 
+post '/crecolor/:doc/:n' => sub {
+  #say "crecolor";
+  my $appli = setting('username');
+  my $mdp   = setting('password');
+  my %param;
+  unless ($appli) {
+    redirect '/';
+  }
+  my @critere = ();
+  for my $i (0..5) {
+    my $critere = {};
+    for my $par (qw/select seuil caract selspace/) {
+      $critere->{$par} = body_parameters->get("$par$i") // '';
+    }
+    $critere->{seuil} = 0 + $critere->{seuil};
+    push @critere, $critere;
+  }
+  my $doc   = route_parameters->get('doc');
+  my $n     = route_parameters->get('n');
+  $param{doc} = $doc;
+  $param{n}   = 0 + $n;
+  $param{criteres} = [ @critere ];
+  #say "Mise à jour du coloriage pour $doc";
+  #say YAML::Dump({ %param });
+  my $msg = ins_coloriage($appli, $mdp, $doc, $n, { %param });
+  #say "Mise à jour du coloriage pour $doc";
+  redirect "/coloriage/$doc/$n";
+};
+
 start;
 
 sub liste_doc {
@@ -346,6 +375,34 @@ sub glyphe_max_1 {
   my $num= $result->{_docs}[0]{hnum} // 0;
   #say YAML::Dump($result);
   return $num;
+}
+
+sub get_coloriage {
+  my ($appli, $mdp, $doc, $n) = @_;
+  my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
+  my $coll   = $client->ns("$appli.Coloriage");
+  my $obj    = $coll->find_one({ doc => $doc, n => 0 + $n });
+  #my $obj    = $coll->find_one({ doc => $doc});
+  #say "recherche $doc $l $c";
+  #say YAML::Dump($obj);
+  return $obj;
+}
+
+sub ins_coloriage {
+  my ($appli, $mdp, $doc, $n, $val) = @_;
+  my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
+  my $coll   = $client->ns("$appli.Coloriage");
+  $val->{doc} = $doc;
+  $val->{n}   = 0 + $n;
+  my $res    = $coll->insert_one($val);
+}
+
+sub maj_coloriage {
+  my ($appli, $mdp, $doc, $n, $val) = @_;
+  my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
+  my $coll   = $client->ns("$appli.Coloriage");
+  my $result = $coll->update({ doc => $doc, n => 0 + $n }, { '$set' => $val });
+  return $result;
 }
 
 sub verif_glyphe_espace {
@@ -1026,7 +1083,8 @@ EOF
 <ol>
 $html_crit
 </ol>
-<input type='submit' value='Mettre à jour' />
+<input type='submit' valu
+e='Mettre à jour' />
 </form>
 <h3>Résultat</h3>
 <hr />
