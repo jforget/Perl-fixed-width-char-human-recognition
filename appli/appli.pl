@@ -197,6 +197,18 @@ post '/assocglyphe/:doc/:l/:c' => sub {
   redirect "/cellule/$doc/$l/$c";
 };
 
+get '/coloriage/:doc/:n' => sub {
+  my $appli = setting('username');
+  my $mdp   = setting('password');
+  unless ($appli) {
+    redirect '/';
+  }
+  my $doc   = route_parameters->get('doc');
+  my $n     = route_parameters->get('n');
+  #say "get doc $doc (appli $appli, mdp $mdp)";
+  return aff_coloriage($appli, $mdp, $doc, $n);
+};
+
 start;
 
 sub liste_doc {
@@ -959,6 +971,65 @@ EOF
 <html>
 <head>
 <title>Cellule $doc $l $c</title>
+</head>
+<body>
+Appli&nbsp;: $appli
+<br /><a href='/'>Retour</a>
+<br /><a href='/listedoc'>Liste</a>
+<br /><a href='/doc/$doc'>Document $doc</a> (<a href='/grille/$doc'>grille</a>)
+$html
+</body>
+</html>
+EOF
+};
+
+sub aff_coloriage {
+  my ($appli, $mdp, $doc, $n) = @_;
+  my $info_doc = get_doc($appli, $mdp, $doc);
+
+  my $info_coloriage = {
+      criteres => [ { select => 'multi', score =>  0, car => '',    esp => 0 },
+                    { select => 'score', score => 75, car => '',    esp => 0 },
+                    { select => 'score', score => 50, car => '',    esp => 0 },
+                    { select => 'carac', score =>  0, car => 'abc', esp => 1 },
+                  ],
+  };
+  my $html;
+  my $dessins = '';
+  my $html_crit= '';
+  for my $i (0..7) {
+    $info_coloriage->{criteres}[$i]{select} //= '';
+    my $sel_mult  = $info_coloriage->{criteres}[$i]{select} eq 'multi' ? "checked='1'" : "";
+    my $sel_score = $info_coloriage->{criteres}[$i]{select} eq 'score' ? "checked='1'" : "";
+    my $sel_carac = $info_coloriage->{criteres}[$i]{select} eq 'carac' ? "checked='1'" : "";
+    my $score     = $info_coloriage->{criteres}[$i]{score} // 0;
+    my $carac     = $info_coloriage->{criteres}[$i]{car} // '';
+    my $espace    = $info_coloriage->{criteres}[$i]{esp} ? "checked='1'" : "";
+    $html_crit .= <<"EOF";
+<li><input type='radio' name='select$i' value='multiple' $sel_mult  >cellule reliée à plusieurs caractères
+ OU <input type='radio' name='select$i' value='score'    $sel_score >score ≥ <input type='text' name='seuil$i' value='$score'>
+ OU <input type='radio' name='select$i' value='carac'    $sel_carac >associé à l'un des caractères <input type='text' name='caract$i' value='$carac'>
+                        <input type='checkbox' name='selspace$i' $espace'>plus l'espace</li>
+EOF
+  }
+  $html = <<"EOF";
+<h1>Coloriage</h1>
+<h3>Critères</h3>
+<form action='/crecolor/$doc/$n' method='post'>
+<ol>
+$html_crit
+</ol>
+<input type='submit' value='Mettre à jour' />
+</form>
+<h3>Résultat</h3>
+<hr />
+$dessins
+EOF
+
+  return <<"EOF";
+<html>
+<head>
+<title>Coloriage</title>
 </head>
 <body>
 Appli&nbsp;: $appli
