@@ -997,16 +997,23 @@ sub aff_coloriage {
   my $html;
   my $dessins = '';
   my $html_crit= '';
-  for my $i (0..7) {
-    $info_coloriage->{criteres}[$i]{select} //= '';
-    my $sel_mult  = $info_coloriage->{criteres}[$i]{select} eq 'multi' ? "checked='1'" : "";
-    my $sel_score = $info_coloriage->{criteres}[$i]{select} eq 'score' ? "checked='1'" : "";
-    my $sel_carac = $info_coloriage->{criteres}[$i]{select} eq 'carac' ? "checked='1'" : "";
-    my $score     = $info_coloriage->{criteres}[$i]{score} // 0;
-    my $carac     = $info_coloriage->{criteres}[$i]{car} // '';
-    my $espace    = $info_coloriage->{criteres}[$i]{esp} ? "checked='1'" : "";
+  my @coul = palette();
+  for my $i (0..5) {
+    my $critere = $info_coloriage->{criteres}[$i];
+    $critere->{select} //= '';
+    my $sel_mult  = $critere->{select} eq 'multi' ? "checked='1'" : "";
+    my $sel_score = $critere->{select} eq 'score' ? "checked='1'" : "";
+    my $sel_carac = $critere->{select} eq 'carac' ? "checked='1'" : "";
+    my $score     = $critere->{score} // 0;
+    my $carac     = $critere->{car} // '';
+    my $espace    = $critere->{esp} ? "checked='1'" : "";
+    my $couleur   = $coul[$i];
+    my $rouge = $couleur->[0] // 255;
+    my $vert  = $couleur->[1] // 255;
+    my $bleu  = $couleur->[2] // 255;
     $html_crit .= <<"EOF";
-<li><input type='radio' name='select$i' value='multiple' $sel_mult  >cellule reliée à plusieurs caractères
+<li style='background-color: rgb($rouge, $vert, $bleu)'>
+    <input type='radio' name='select$i' value='multiple' $sel_mult  >cellule reliée à plusieurs caractères
  OU <input type='radio' name='select$i' value='score'    $sel_score >score ≥ <input type='text' name='seuil$i' value='$score'>
  OU <input type='radio' name='select$i' value='carac'    $sel_carac >associé à l'un des caractères <input type='text' name='caract$i' value='$carac'>
                         <input type='checkbox' name='selspace$i' $espace'>plus l'espace</li>
@@ -1173,6 +1180,22 @@ sub img_cel_gly {
   }
              
   return $image;
+}
+
+sub palette {
+  my ($variante) = @_;
+  my @coul = ( [255, 192, 192],
+               [192, 255, 192],   
+               [192, 192, 255],   
+               [255, 255, 192],   
+               [192, 255, 255],   
+               [255, 192, 255],   
+      );
+  #if ($variante eq 'html') {
+  #  for (@coul) {
+  #  }
+  #}
+  return @coul;
 }
 
 sub horodatage {
