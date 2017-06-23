@@ -851,6 +851,14 @@ sub valid_color  {
   my $iter     = iter_cellule ($appli, $mdp, { doc => $doc });
   my @criteres = @{$info_col->{criteres}};
 
+  my $image = GD::Image->newFromPng($info_doc->{fic});
+  my $noir    = $info_doc->{ind_noir};
+  my @coul;
+  for (palette()) {
+    my $coul = $image->colorAllocate(@$_);
+    push @coul, $coul;
+  }
+
   my @cellules = ();
   while (my $info_cellule = $iter->next) {
     my $cell = {}; # Informations abrégées de la Cellule, recopiées dans le Coloriage
@@ -895,10 +903,33 @@ sub valid_color  {
         }
       }
     }
+    if ($cell->{select})  {
+      my $xc = $cell->{xc};
+      my $yc = $cell->{yc};
+      for (my $dx = 0; $dx < $info_doc->{dx}; $dx++) {
+        for (my $dy = 0; $dy < $info_doc->{dy}; $dy++) {
+          my $pixel = $image->getPixel($xc +$dx, $yc + $dy);
+          if ($pixel != $noir) {
+            $image->setPixel($xc + $dx, $yc + $dy, $coul[$cell->{crit}]);
+          }
+        }
+      }
+    }
   }
   #say YAML::Dump([ @cellules ]);
+
+  # Fichier résultat
+  my $nom_fic = "$doc-col$n.png";
+  open my $im, '>', $nom_fic
+    or die "Ouverture $nom_fic $!";
+  print $im $image->png;
+  close $im
+    or die "Fermeture $nom_fic $!";
+
+  # Base de données
   maj_coloriage($appli, $mdp, $doc, $n, { cellules => [ @cellules ],
                                           dh_val   => horodatage(),
+                                          fic      => $nom_fic,
                                         } );
 }
 
