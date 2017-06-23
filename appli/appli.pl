@@ -209,14 +209,35 @@ get '/coloriage/:doc/:n' => sub {
   return aff_coloriage($appli, $mdp, $doc, $n);
 };
 
-post '/crecolor/:doc/:n' => sub {
+post '/majcolor/:doc/:n' => sub {
   #say "crecolor";
   my $appli = setting('username');
   my $mdp   = setting('password');
-  my %param;
   unless ($appli) {
     redirect '/';
   }
+
+  my %param;
+  my $action;
+  my $doc   = route_parameters->get('doc');
+  my $n     = route_parameters->get('n');
+  if ($n eq 'nouveau') {
+    my $liste = liste_coloriage($appli, $mdp, $doc);
+    $n = 0;
+    for my $col (@$liste) {
+      $n = $col->{n} if $n <= $col->{n};
+    }
+    $n++;
+    $param{doc}    = $doc;
+    $param{n}      = 0 + $n;
+    $param{dh_cre} = horodatage();
+    $action        = 'cre';
+  }
+  else {
+    $param{dh_maj} = horodatage();
+    $action        = 'maj';
+  }
+
   my @critere = ();
   for my $i (0..5) {
     my $critere = {};
@@ -226,14 +247,20 @@ post '/crecolor/:doc/:n' => sub {
     $critere->{seuil} = 0 + $critere->{seuil};
     push @critere, $critere;
   }
-  my $doc   = route_parameters->get('doc');
-  my $n     = route_parameters->get('n');
-  $param{doc} = $doc;
-  $param{n}   = 0 + $n;
   $param{criteres} = [ @critere ];
+
   #say "Mise à jour du coloriage pour $doc";
   #say YAML::Dump({ %param });
-  my $msg = ins_coloriage($appli, $mdp, $doc, $n, { %param });
+
+  my $msg;
+  if ($action eq 'cre') {
+    #say "création n = $n";
+    $msg = ins_coloriage($appli, $mdp, $doc, $n, { %param });
+  }
+  else {
+    $msg = maj_coloriage($appli, $mdp, $doc, $n, { %param });
+  }
+
   #say "Mise à jour du coloriage pour $doc";
   redirect "/coloriage/$doc/$n";
 };
@@ -1065,14 +1092,19 @@ sub aff_coloriage {
   my $info_doc = get_doc($appli, $mdp, $doc);
 
   my $info_coloriage;
+  my ($action, $libelle);
   if ($n eq 'nouveau') {
     my @criteres = ( { } ) x 6;
     $info_coloriage = { criteres => [ @criteres ] };
+    $action  = 'majcolor';
+    $libelle = 'Création';
   }
   else {
     $info_coloriage = get_coloriage($appli, $mdp, $doc, $n);
+    $action  = 'majcolor';
+    $libelle = 'Mise à jour';
   }
-  say YAML::Dump($info_coloriage);
+  #say YAML::Dump($info_coloriage);
   my $html;
   my $dessins = '';
   my $html_crit= '';
@@ -1101,12 +1133,11 @@ EOF
   $html = <<"EOF";
 <h1>Coloriage</h1>
 <h3>Critères</h3>
-<form action='/crecolor/$doc/$n' method='post'>
+<form action='/$action/$doc/$n' method='post'>
 <ol>
 $html_crit
 </ol>
-<input type='submit' valu
-e='Mettre à jour' />
+<input type='submit' value='$libelle' />
 </form>
 <h3>Résultat</h3>
 <hr />
