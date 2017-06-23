@@ -850,10 +850,58 @@ sub valid_color  {
   my $info_col = get_coloriage($appli, $mdp, $doc, $n);
   my $iter     = iter_cellule ($appli, $mdp, { doc => $doc });
   my @criteres = @{$info_col->{criteres}};
-  while (my $info_cellule = $iter->next) {
 
+  my @cellules = ();
+  while (my $info_cellule = $iter->next) {
+    my $cell = {}; # Informations abrégées de la Cellule, recopiées dans le Coloriage
+    for (qw/l c xc yc lge hte/) {
+      $cell->{$_} = $info_cellule->{$_};
+    }
+  CRIT:
+    for (my $i = 0; $i < @criteres; ++$i) {
+      my $critere = $criteres[$i];
+      given ($critere->{select}) {
+        when ('multiple') {
+          if ($info_cellule->{nb_car} > 1) {
+            $cell->{crit}   = $i;
+            $cell->{select} = $critere->{select};
+            push @cellules, $cell;
+            last CRIT;
+          }
+        }
+        when ('score') {
+          if ($info_cellule->{score} > $critere->{seuil}) {
+            $cell->{crit}   = $i;
+            $cell->{select} = $critere->{select};
+            push @cellules, $cell;
+            last CRIT;
+          }
+        }
+        when ('caract') {
+          my $ok = 0;
+          my $car = $info_cellule->{cpt_car}[0];
+          if ($critere->{selspace} ne '' && $car eq 'SP') {
+            $ok = 1;
+          }
+          if (index($critere->{caract}, $car) >= 0) {
+            $ok = 1;
+          }
+          if ($ok) {
+            $cell->{crit}   = $i;
+            $cell->{select} = $critere->{select};
+            push @cellules, $cell;
+            last CRIT;
+          }
+        }
+      }
+    }
   }
+  #say YAML::Dump([ @cellules ]);
+  maj_coloriage($appli, $mdp, $doc, $n, { cellules => [ @cellules ],
+                                          dh_val   => horodatage(),
+                                        } );
 }
+
 sub aff_liste {
   my ($appli, $mdp, $doc, $fic, $msg, $liste_ref) = @_;
 
@@ -1115,16 +1163,24 @@ sub aff_coloriage {
   my $info_doc = get_doc($appli, $mdp, $doc);
 
   my $info_coloriage;
-  my ($action, $libelle, $validation);
+  my ($dates, $action, $libelle, $validation);
   if ($n eq 'nouveau') {
     my @criteres = ( { } ) x 6;
     $info_coloriage = { criteres => [ @criteres ] };
+    $dates          = '';
     $action         = 'majcolor';
     $libelle        = 'Création';
     $validation     = '';
   }
   else {
     $info_coloriage = get_coloriage($appli, $mdp, $doc, $n);
+    $dates      = "Créé le $info_coloriage->{dh_cre} (UTC)";
+    if ($info_coloriage->{dh_maj}){
+      $dates .= "<br />Modifié le $info_coloriage->{dh_maj} (UTC)";
+    }
+    if ($info_coloriage->{dh_val}){
+      $dates .= "<br />Validé le $info_coloriage->{dh_maj} (UTC)";
+    }
     $action     = 'majcolor';
     $libelle    = 'Mise à jour';
     $validation = <<"EOF";
@@ -1163,6 +1219,7 @@ EOF
   }
   $html = <<"EOF";
 <h1>Coloriage</h1>
+$dates
 <h3>Critères</h3>
 <form action='/$action/$doc/$n' method='post'>
 <ol>
