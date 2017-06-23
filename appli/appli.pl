@@ -76,7 +76,7 @@ post '/credoc' => sub {
   }
   #say "création du document $doc, basé sur le fichier $fic";
 
-  redirect '/listedoc';
+  redirect "/doc/$doc";
 };
 
 get '/doc/:doc' => sub {
@@ -262,6 +262,19 @@ post '/majcolor/:doc/:n' => sub {
   }
 
   #say "Mise à jour du coloriage pour $doc";
+  redirect "/coloriage/$doc/$n";
+};
+
+post '/valcolor/:doc/:n' => sub {
+  my $appli = setting('username');
+  my $mdp   = setting('password');
+  unless ($appli) {
+    redirect '/';
+  }
+
+  my $doc = route_parameters->get('doc');
+  my $n   = route_parameters->get('n');
+  my $msg = valid_color($appli, $mdp, $doc, $n);
   redirect "/coloriage/$doc/$n";
 };
 
@@ -831,6 +844,16 @@ sub generation {
                               });
 }
 
+sub valid_color  {
+  my($appli, $mdp, $doc, $n) = @_;
+  my $info_doc = get_doc      ($appli, $mdp, $doc);
+  my $info_col = get_coloriage($appli, $mdp, $doc, $n);
+  my $iter     = iter_cellule ($appli, $mdp, { doc => $doc });
+  my @criteres = @{$info_col->{criteres}};
+  while (my $info_cellule = $iter->next) {
+
+  }
+}
 sub aff_liste {
   my ($appli, $mdp, $doc, $fic, $msg, $liste_ref) = @_;
 
@@ -1047,7 +1070,7 @@ EOF
       my $img = img_cel_gly($appli, $mdp, $info_doc, $info_cellule, $info_glyphe);
       $dessins .= "<p><img src='data:image/png;base64," . encode_base64($img->png) . "' alt='comparaison cellule glyphe'/></p>\n";
     }
-    my $caract_assoc = join ', ', map { sprintf "%s U+%X", $_, ord($_) } keys %{$info_cellule->{cpt_car}};
+    my $caract_assoc = join ', ', map { sprintf "&#%d; U+00%X", ord($_), ord($_) } keys %{$info_cellule->{cpt_car}};
     $html = <<"EOF";
 <h1>Cellule</h1>
 <p>Ligne $l, colonne $c -&gt; x = $info_cellule->{xc}, y = $info_cellule->{yc}</p>
@@ -1092,17 +1115,24 @@ sub aff_coloriage {
   my $info_doc = get_doc($appli, $mdp, $doc);
 
   my $info_coloriage;
-  my ($action, $libelle);
+  my ($action, $libelle, $validation);
   if ($n eq 'nouveau') {
     my @criteres = ( { } ) x 6;
     $info_coloriage = { criteres => [ @criteres ] };
-    $action  = 'majcolor';
-    $libelle = 'Création';
+    $action         = 'majcolor';
+    $libelle        = 'Création';
+    $validation     = '';
   }
   else {
     $info_coloriage = get_coloriage($appli, $mdp, $doc, $n);
-    $action  = 'majcolor';
-    $libelle = 'Mise à jour';
+    $action     = 'majcolor';
+    $libelle    = 'Mise à jour';
+    $validation = <<"EOF";
+<h3>Validation</h3>
+<form action='/valcolor/$doc/$n' method='post'>
+<input type='submit' value='Validation' />
+</form>
+EOF
   }
   #say YAML::Dump($info_coloriage);
   my $html;
@@ -1117,6 +1147,7 @@ sub aff_coloriage {
     my $sel_carac = $critere->{select} eq 'carac'    ? "checked='1'" : "";
     my $score     = $critere->{seuil}  // 0;
     my $carac     = $critere->{caract} // '';
+    $carac =~ s/(\W)/sprintf("&#%d", ord($1))/ge;
     my $espace    = $critere->{selspace} ? "checked='1'" : "";
     my $couleur   = $coul[$i];
     my $rouge     = $couleur->[0] // 255;
@@ -1139,6 +1170,7 @@ $html_crit
 </ol>
 <input type='submit' value='$libelle' />
 </form>
+$validation
 <h3>Résultat</h3>
 <hr />
 $dessins
