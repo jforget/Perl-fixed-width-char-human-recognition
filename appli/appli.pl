@@ -377,6 +377,15 @@ sub glyphe_max_1 {
   return $num;
 }
 
+sub liste_coloriage {
+  my ($appli, $mdp, $doc) = @_;
+  my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
+  my $coll   = $client->ns("$appli.Coloriage");
+  my $iter   = $coll->find({ doc => $doc });
+  my @liste   = $iter->all();
+  return [ @liste ];
+}
+
 sub get_coloriage {
   my ($appli, $mdp, $doc, $n) = @_;
   my $client = MongoDB->connect('mongodb://localhost', { db_name => $appli, username => $appli, password => $mdp } );
@@ -920,6 +929,16 @@ EOF
     $association .= "<p>Nombre de cellules&nbsp;: $stat->{nb}, score maximal&nbsp;: $stat->{maxsc}, score moyen&nbsp;: $score_moyen</p>\n";
   }
 
+  my $coloriage = '';
+  if ($info->{etat} >= 3) {
+    my $liste  =liste_coloriage($appli, $mdp, $doc);
+    $coloriage = join ' ', map { sprintf "<a href='/coloriage/$doc/%d'>%d</a>", $_->{n}, $_->{n} } @$liste;
+    $coloriage = <<"EOF";
+<h2>Coloriages</h2>
+<p>$coloriage <a href='/coloriage/$doc/nouveau'>nouveau</a></p>
+EOF
+  }
+
   my $generation = '';
   if ($info->{etat} >= 4) {
     $generation  = <<"EOF";
@@ -962,6 +981,7 @@ Origine&nbsp;: x = <input type='text' name='x0' value='$info->{x0}' />, y = <inp
 $maj_grille
 $validation
 $association
+$coloriage
 $generation
 <img src='data:image/png;base64,$data' alt='document $doc' />
 </body>
@@ -1044,13 +1064,15 @@ sub aff_coloriage {
   my ($appli, $mdp, $doc, $n) = @_;
   my $info_doc = get_doc($appli, $mdp, $doc);
 
-  my $info_coloriage = {
-      criteres => [ { select => 'multi', score =>  0, car => '',    esp => 0 },
-                    { select => 'score', score => 75, car => '',    esp => 0 },
-                    { select => 'score', score => 50, car => '',    esp => 0 },
-                    { select => 'carac', score =>  0, car => 'abc', esp => 1 },
-                  ],
-  };
+  my $info_coloriage;
+  if ($n eq 'nouveau') {
+    my @criteres = ( { } ) x 6;
+    $info_coloriage = { criteres => [ @criteres ] };
+  }
+  else {
+    $info_coloriage = get_coloriage($appli, $mdp, $doc, $n);
+  }
+  say YAML::Dump($info_coloriage);
   my $html;
   my $dessins = '';
   my $html_crit= '';
@@ -1058,16 +1080,16 @@ sub aff_coloriage {
   for my $i (0..5) {
     my $critere = $info_coloriage->{criteres}[$i];
     $critere->{select} //= '';
-    my $sel_mult  = $critere->{select} eq 'multi' ? "checked='1'" : "";
-    my $sel_score = $critere->{select} eq 'score' ? "checked='1'" : "";
-    my $sel_carac = $critere->{select} eq 'carac' ? "checked='1'" : "";
-    my $score     = $critere->{score} // 0;
-    my $carac     = $critere->{car} // '';
-    my $espace    = $critere->{esp} ? "checked='1'" : "";
+    my $sel_mult  = $critere->{select} eq 'multiple' ? "checked='1'" : "";
+    my $sel_score = $critere->{select} eq 'score'    ? "checked='1'" : "";
+    my $sel_carac = $critere->{select} eq 'carac'    ? "checked='1'" : "";
+    my $score     = $critere->{seuil}  // 0;
+    my $carac     = $critere->{caract} // '';
+    my $espace    = $critere->{selspace} ? "checked='1'" : "";
     my $couleur   = $coul[$i];
-    my $rouge = $couleur->[0] // 255;
-    my $vert  = $couleur->[1] // 255;
-    my $bleu  = $couleur->[2] // 255;
+    my $rouge     = $couleur->[0] // 255;
+    my $vert      = $couleur->[1] // 255;
+    my $bleu      = $couleur->[2] // 255;
     $html_crit .= <<"EOF";
 <li style='background-color: rgb($rouge, $vert, $bleu)'>
     <input type='radio' name='select$i' value='multiple' $sel_mult  >cellule reliée à plusieurs caractères
