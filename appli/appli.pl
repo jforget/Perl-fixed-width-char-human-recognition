@@ -885,10 +885,10 @@ sub valid_color  {
             last CRIT;
           }
         }
-        when ('caract') {
+        when ('carac') {
           my $ok = 0;
-          my $car = $info_cellule->{cpt_car}[0];
-          if ($critere->{selspace} ne '' && $car eq 'SP') {
+          my $car = $info_cellule->{glyphes}[0]{car};
+          if ($critere->{selspace} ne '' && ($car eq 'SP' || $car eq ' ')) {
             $ok = 1;
           }
           if (index($critere->{caract}, $car) >= 0) {
@@ -1245,9 +1245,32 @@ EOF
     <input type='radio' name='select$i' value='multiple' $sel_mult  >cellule reliée à plusieurs caractères
  OU <input type='radio' name='select$i' value='score'    $sel_score >score ≥ <input type='text' name='seuil$i' value='$score'>
  OU <input type='radio' name='select$i' value='carac'    $sel_carac >associé à l'un des caractères <input type='text' name='caract$i' value='$carac'>
-                        <input type='checkbox' name='selspace$i' $espace'>plus l'espace</li>
+                        <input type='checkbox' name='selspace$i' $espace>plus l'espace</li>
 EOF
   }
+
+  if ($info_coloriage->{fic}) {
+    my $image = GD::Image->newFromPng($info_coloriage->{fic});
+    $dessins  = encode_base64($image->png);
+    my @map;
+    my $largeur = int($info_doc->{dx});
+    my $hauteur = int($info_doc->{dy});
+    for my $cel (@{$info_coloriage->{cellules}}) {
+      my %cel = %$cel;
+      my ($xg, $yh, $l, $c) = @cel{ qw/xc yc l c/ };
+      my $xd = $xg + $largeur;
+      my $yb = $yh + $hauteur;
+      push @map, "<area coords='$xg,$yh,$xd,$yb' href='/cellule/$doc/$l/$c' />";
+    }
+    my $map = join "\n", @map;
+    $dessins  = <<"EOF";
+<img src='data:image/png;base64,$dessins' alt='document $doc' usemap='#carte' />
+<map name='carte'>
+$map
+</map>
+EOF
+  }
+
   $html = <<"EOF";
 <h1>Coloriage</h1>
 $dates
