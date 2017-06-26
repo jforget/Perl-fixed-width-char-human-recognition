@@ -709,11 +709,11 @@ un Glyphe est associé à un caractère et un seul.
   .                              /         |                    |
   .                             /          |                    |
   .                         (1,1)          |                    |
-  .                        Requête         |                    |
-  .                         (1,n)          |                    |
-  .                           |            |                    |
-  .                         (1,1)          |                    |
-  .                        Critère         |                    |
+  .                  Requête               |                    |
+  .                   (1,n)                |                    |
+  .                     |                  |                    |
+  .                   (1,1)                |                    |
+  .                  Critère               |                    |
   .                         (0,n)          |                    |
   .                             \          |                    |
   .                              \         |                    |
@@ -725,27 +725,30 @@ Et une cinquième table un peu inattendue, la table S<« Requête »>.
 Au début, je pensais faire des requêtes S<« au> fil de S<l'eau » :>
 saisir les critères, cliquer sur un bouton et lire le résultat.
 Je pense qu'il est préférable d'en faire une entité permanente.
+Mais comme la notion de requête est plus associée à la notion de processus
+qu'à la notion de S<« quelque-chose> qui peut se stocker dans une base de 
+S<données »>, j'ai préféré adopter un autre nom pour cette table, le 
+nom S<« Coloriage »>
+
 L'utilisateur saisit les critères et on les sauvegarde en base de données.
 Puis il clique sur un bouton S<« Recherche »> et le programme applique les critères
 sur les Cellules et constitue la liste des Cellules extraites, plus un fichier
 graphique où les Cellules extraites sont mises en valeur par un fond coloré.
 Par la suite, l'utilisateur peut consulter à plusieurs reprises le résultat de
-cette Requête (le fichier graphique déjà constitué) et enchaîner vers les
+ce Coloriage (le fichier graphique déjà constitué) et enchaîner vers les
 Cellules sélectionnées grâce à une I<imagemap>.
 
-Un critère est une entité logique distincte de la Requête, mais dans le schéma
-physique, tous les critères dépendant d'une Requête seront stockés dans un 
-tableau de l'enregistrement Requête.
+Un critère est une entité logique distincte du Coloriage, mais dans le schéma
+physique, tous les critères dépendant d'un Coloriage seront stockés dans un 
+tableau de l'enregistrement Coloriage.
 
-Certes, avec la création de nouveaux Glyphes, le résultat de la Requête devient
+Certes, avec la création de nouveaux Glyphes, le résultat du Coloriage devient
 de plus en plus obsolète, car certaines Cellules ne vérifient plus les critères et
 d'autres se mettent à les vérifier. Il reste encore utilisable pour consulter les Cellules.
 Et l'utilisateur peut de nouveau cliquer sur le bouton S<« Recherche »> pour rafraîchir
-le résultat de la requête. C'est à l'utilisateur de décider quand il est souhaitable de déclencher
-le (long) rafraîchissement de la Requête et quand il est préférable de continuer avec une
-Requête légèrement S<« rassise »>.
-
-Peut-être vaudrait-il mieux nommer cette table S<« Coloriage »>...
+le résultat de la requête du Coloriage. C'est à l'utilisateur de décider quand il est souhaitable de déclencher
+le (long) rafraîchissement du Coloriage et quand il est préférable de continuer avec un
+Coloriage légèrement S<« rassis »>.
 
 =head3 Table des Glyphes
 
@@ -984,6 +987,64 @@ la représentation en orange des pixels effacés et la représentation en cyan d
 
 =for HTML
 <img src="comparaison-cellule-glyphe.png" alt="Représentation de la comparaison entre une Cellule et un Glyphe" />
+
+Il y a un problème, toutefois. Imaginons que les Cellules soient 
+
+  ----------------  ----------------
+  |              |  |              |
+  |        *     |  |              |
+  |        *     |  |              |
+  |        *     |  |      *       |
+  |     *******  |  |      *       |
+  |        *     |  |      *       |
+  |        *     |  |  ********    |
+  |        *     |  |      *       |
+  |              |  |      *       |
+  |              |  |      *       |
+  |              |  |              |
+  ----------------  ----------------
+
+Le calcul des enveloppes donne alors :
+
+  Cellule 1         Cellule 2         Glyphe
+  ----------------  ----------------  ---------
+  |    --------- |  |              |  |   *   |
+  |    |   *   | |  |              |  |   *   |
+  |    |   *   | |  | ----------   |  |   *   |
+  |    |   *   | |  | |    *   |   |  |*******|
+  |    |*******| |  | |    *   |   |  |   *   |
+  |    |   *   | |  | |    *   |   |  |   *   |
+  |    |   *   | |  | |********|   |  |   *   |
+  |    |   *   | |  | |    *   |   |  ---------
+  |    --------- |  | |    *   |   |
+  |              |  | |    *   |   |
+  |              |  | ----------   |
+  ----------------  ----------------
+
+Si la comparaison du Glyphe avec la Cellule 1 donne un résultat parfait de 0 pixel,
+la comparaison du Glyphe avec la Cellule 2 donne un résultat catastrophique :
+
+  Cellule 1         Cellule 2         Glyphe
+  ----------------  ----------------  ---------
+  |    --------- |  |              |  |   #   |
+  |    |   *   | |  |              |  |   #   |
+  |    |   *   | |  | ----------   |  |   #   |
+  |    |   *   | |  | |    #   |   |  |=======|
+  |    |*******| |  | |    #   |   |  |   #   |
+  |    |   *   | |  | |    #   |   |  |   #   |
+  |    |   *   | |  | |=======#|   |  |   *   |
+  |    |   *   | |  | |    #   |   |  ---------
+  |    --------- |  | |    #   |   |
+  |              |  | |    #   |   |
+  |              |  | ----------   |
+  ----------------  ----------------
+
+Le mauvais score provient du fait que l'exension vers la gauche de l'enveloppe des pixels
+de la Cellule provoque eau final un décalage de la barre verticale vers la droite, d'où
+un nombre important de pixels modifiés alors qu'il était naturel de considérer qu'ils n'étaient
+pas modifiés et qu'ils ne comptaient pas dans le score de la Cellule.
+
+Et cela s'est passé dans mes tests. 
 
 =head1 Après la conversion
 
