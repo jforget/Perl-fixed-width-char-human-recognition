@@ -165,7 +165,20 @@ get '/cellule/:doc/:l/:c' => sub {
   my $l     = route_parameters->get('l');
   my $c     = route_parameters->get('c');
   #say "get doc $doc (appli $appli, mdp $mdp)";
-  return aff_cellule($appli, $mdp, $doc, $l, $c);
+  return aff_cellule($appli, $mdp, $doc, $l, $c, 1);
+};
+
+get '/top10/:doc/:l/:c' => sub {
+  my $appli = setting('username');
+  my $mdp   = setting('password');
+  unless ($appli) {
+    redirect '/';
+  }
+  my $doc   = route_parameters->get('doc');
+  my $l     = route_parameters->get('l');
+  my $c     = route_parameters->get('c');
+  #say "get doc $doc (appli $appli, mdp $mdp)";
+  return aff_cellule($appli, $mdp, $doc, $l, $c, 10);
 };
 
 post '/creglyphe/:doc/:l/:c' => sub {
@@ -1119,7 +1132,7 @@ EOF
 };
 
 sub aff_cellule {
-  my ($appli, $mdp, $doc, $l, $c) = @_;
+  my ($appli, $mdp, $doc, $l, $c, $nb) = @_;
   my $info_doc = get_doc($appli, $mdp, $doc);
   my $info_cellule = get_cellule($appli, $mdp, $doc, $l, $c);
 
@@ -1144,10 +1157,30 @@ EOF
     }
 
     my $dessins = '';
-    for my $gly (@{$info_cellule->{glyphes}}) {
+    my @glyphes;
+    if ($nb == 1) {
+      @glyphes= @{$info_cellule->{glyphes}};
+    }
+    else {
+      @glyphes= ();
+      my %glyphes_par_score = ();
+      my $iter = iter_glyphe($appli, $mdp);
+      while (my $info_glyphe = $iter->next) {
+        my $sc1 = comp_images($info_cellule, $info_glyphe);
+        push @{$glyphes_par_score{$sc1}}, { car => $info_glyphe->{car}, num => $info_glyphe->{num}, score => $sc1 };
+      }
+      my $lus = 0;
+      for my $sc1 (sort { $a <=> $b } keys %glyphes_par_score) {
+        push @glyphes,  @{$glyphes_par_score{$sc1}};
+        $lus += 0 + @{$glyphes_par_score{$sc1}};
+        last if $lus >= $nb;
+      }
+    }
+    for my $gly (@glyphes) {
       my $info_glyphe = get_glyphe($appli, $mdp, $gly->{car}, $gly->{num});
+      my $score = $gly->{score} // $info_cellule->{score};
       my $img = img_cel_gly($appli, $mdp, $info_doc, $info_cellule, $info_glyphe);
-      $dessins .= "<p><img src='data:image/png;base64," . encode_base64($img->png) . "' alt='comparaison cellule glyphe'/></p>\n";
+      $dessins .= "<h3>Score $score</h3>\n<p><img src='data:image/png;base64," . encode_base64($img->png) . "' alt='comparaison cellule glyphe'/></p>\n";
     }
     my $caract_assoc = join ', ', map { sprintf "&#%d; U+00%X", ord($_), ord($_) } keys %{$info_cellule->{cpt_car}};
     $html = <<"EOF";
