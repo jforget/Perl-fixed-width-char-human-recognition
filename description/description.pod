@@ -322,7 +322,7 @@ pour deux S<raisons :>
 d'un fichier texte,
 
 =item * Parce que la tradition veut que tout programme élémentaire affiche S<« Hello
-World ! »>, que toute leçon de programmation présente la recursivité à travers la factorielle
+World ! »>, que toute leçon de programmation présentant la récursivité prenne pour exemples la factorielle
 et la suite de Fibonacci, que tout programme de modélisation 3D affiche une
 théière et que tout programme d'analyse ou de transformation de dessin affiche le
 portrait de Lena.
@@ -341,6 +341,8 @@ avoir testé avec des fichiers graphiques contenant des S<« ! »>, des  S<« j 
 accentuées, des deux-points ou d'autres caractères en plusieurs morceaux.
 J'en ai tiré la leçon qu'il faut mettre l'humain dans la boucle au moment de la délimitation
 des caractères et pas seulement lors de la reconnaissance à proprement parler.
+Du coup, pour réduire le nombre de paramètres à renseigner par l'humain, il est essentiel
+que les listings soient dans une police à espacement fixe.
 
 =head3 Autres programmes hybrides
 
@@ -1185,6 +1187,10 @@ de cette application, ce qui m'évite d'avoir à apprendre un système de I<temp
 De même, pour les explications que vous êtes en train de lire, je les écris en POD
 et elles sont traduites en HTML par un convertisseur sans fioritures superflues.
 
+Donc, j'ai utilisé du HTML 1 ou du HTML 2. Enfin, presque, parce qu'il semblerait
+que la méthode pour insérer les fichiers graphiques dans le source HTML (voir ci-dessous)
+ait été introduite dans une version postérieure de HTML.
+
 =head2 Mauvaises surprises
 
 J'ai eu quelques mauvaises surprises lorsque j'ai voulu utiliser les différents modules
@@ -1214,6 +1220,12 @@ l'affichage se fait correctement. Le fichier HTML est beaucoup plus gros, mais a
 voit le dessin. J'avais prévu d'utiliser ce système pour l'affichage des Cellules et des Glyphes,
 parce qu'ils sont petits, mais pas pour les gros fichiers correspondant à un Document. J'ai été
 obligé de le faire, mais ça fonctionne.
+
+Cela dit, si j'avais I<RTFM> jusqu'au bout, j'aurais trouvé le
+L<paragraphe|https://metacpan.org/pod/distribution/Dancer2/lib/Dancer2/Tutorial.pod#Serving-static-files>
+sur l'utilisation de fichiers statiques dans Dancer2. Lorsque je l'ai effectivement
+trouvé et lu, j'avais déjà écrit beaucoup de code, j'ai estimé inutile de revenir
+à une solution plus conventionnelle.
 
 =head3 MongoDB
 
