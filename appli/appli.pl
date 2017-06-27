@@ -483,6 +483,8 @@ sub verif_glyphe_espace {
                                nb_noir   =>  0,
                                ind_noir  => -1, # -1 parce qu'il n'y a pas de noir et que colorExact renvoie -1
                                ind_blanc =>  0,
+                               xg        =>  1,
+                               yg        =>  1,
                                data      => encode_base64($image->png) } );
   }
   return $obj;
@@ -512,6 +514,8 @@ sub copie_cel_gly {
                              nb_noir   => $info_cellule->{nb_noir},
                              ind_noir  => $info_cellule->{ind_noir},
                              ind_blanc => $info_cellule->{ind_blanc},
+                             xg        => $info_cellule->{xg} - $info_cellule->{xe},
+                             yg        => $info_cellule->{yg} - $info_cellule->{ye},
                              data      => $info_cellule->{data},
                              dh_cre    => horodatage(),
                            } );
@@ -691,6 +695,7 @@ sub construire_grille {
         # le plus à gauche et le plus à droite
         my $nb_noir = 0;  
         my ($xmin, $xmax, $ymin, $ymax) = ($dx, 0, $dy, 0);
+        my ($xx, $yy) = (0,0);
         for my $x1 (0 .. $dx) {
           for my $y1 (0 .. $dy) {
             my $pixel = $image->getPixel($x +$x1, $y + $y1);
@@ -700,6 +705,8 @@ sub construire_grille {
               $xmax = $x1 if $xmax < $x1;
               $ymin = $y1 if $ymin > $y1;
               $ymax = $y1 if $ymax < $y1;
+              $xx  += $x1;
+              $yy  += $y1;
             }
           }
         }
@@ -710,6 +717,8 @@ sub construire_grille {
           my $ht_env = $ymax - $ymin + 1;
           my $cellule = GD::Image->new($lg_env, $ht_env);
           $cellule->copy($image, 0, 0, $x + $xmin, $y + $ymin, $lg_env, $ht_env);
+          my $ind_blanc = $cellule->colorExact(255, 255, 255),
+          my $ind_noir = $cellule->colorExact(  0,   0,   0),
 
           # Le voisinage : la cellule et les 24 cellules environnantes
           my $x25 = $x - 2 * $dx;
@@ -741,9 +750,12 @@ sub construire_grille {
                                ye        => $ymin,
                                lge       => $lg_env,
                                hte       => $ht_env,
+                               # centre de gravité (relatif au coin en haut à gauche)
+                               xg        => $xx / $nb_noir,
+                               yg        => $yy / $nb_noir,
                                # graphisme
-                               ind_noir  => $cellule->colorExact(  0,   0,   0),
-                               ind_blanc => $cellule->colorExact(255, 255, 255),
+                               ind_blanc => $ind_blanc,
+                               ind_noir  => $ind_noir,
                                nb_noir   => $nb_noir,
                                data      => encode_base64($cellule->png),
                                voisin    => encode_base64($voisinage->png),
@@ -891,7 +903,7 @@ sub valid_color  {
           }
         }
         when ('score') {
-          if ($info_cellule->{score} > $critere->{seuil}) {
+          if ($info_cellule->{score} >= $critere->{seuil}) {
             $cell->{crit}   = $i;
             $cell->{select} = $critere->{select};
             push @cellules, $cell;
@@ -1243,7 +1255,7 @@ sub aff_coloriage {
       $dates .= "<br />Modifié le $info_coloriage->{dh_maj} (UTC)";
     }
     if ($info_coloriage->{dh_val}){
-      $dates .= "<br />Validé le $info_coloriage->{dh_maj} (UTC)";
+      $dates .= "<br />Validé le $info_coloriage->{dh_val} (UTC)";
     }
     $action     = 'majcolor';
     $libelle    = 'Mise à jour';
@@ -1413,12 +1425,20 @@ sub img_cel_gly {
   my $ye      = $info_cellule->{ye};
   my $lge     = $info_cellule->{lge};
   my $hte     = $info_cellule->{hte};
+  my $xg      = $info_cellule->{xg};
+  my $yg      = $info_cellule->{yg};
   my $im_cel = GD::Image->newFromPngData(decode_base64($info_cellule->{data}));
   my $im_gly = GD::Image->newFromPngData(decode_base64($info_glyphe->{data}));
 
   my $deltax = 0;
+  # Périmètre de la Cellule et périmètre de l'enveloppe
   $image->rectangle(0, 0, $echelle * $dx - 1, $echelle * $dy - 1, $bleu);
   $image->rectangle($echelle * $xe, $echelle * $ye,  $echelle * ($xe + $lge) - 1, $echelle * ($ye + $hte) - 1, $vert);
+
+  # centre de gravité de la Cellule
+  $image->line     (0                     , $echelle * ($yg + 0.5), $echelle * $dx - 1    , $echelle * ($yg + 0.5), $vert);
+  $image->line     ($echelle * ($xg + 0.5), 0                     , $echelle * ($xg + 0.5), $echelle * $dy - 1    , $vert);
+
   for my $y (0 .. $hte - 1) {
     for my $x (0 .. $lge - 1) {
       if ($info_cellule->{ind_noir} == $im_cel->getPixel($x, $y)) {
@@ -1429,8 +1449,15 @@ sub img_cel_gly {
 
   my $lgg     = $info_glyphe->{lge};
   my $htg     = $info_glyphe->{hte};
+  my $xgg     = $info_glyphe->{xg};
+  my $ygg     = $info_glyphe->{yg};
   $deltax     = 2 * ($ecart + $echelle * $dx);
   $image->rectangle($deltax + $echelle * $xe, $echelle * $ye, $deltax + $echelle * ($xe + $lgg) - 1, $echelle * ($ye + $htg) - 1, $vert);
+
+  # centre de gravité du Glyphe
+  $image->line     ($deltax                         , $echelle * ($ye + $ygg + 0.5), $deltax + $echelle * $dx - 1     , $echelle * ($ye + $ygg + 0.5), $vert);
+  $image->line     ($deltax + $echelle * ($xe + $xgg + 0.5), 0                     , $deltax + $echelle * ($xe + $xgg + 0.5), $echelle * $dy - 1     , $vert);
+
   for my $y (0 .. $htg - 1) {
     for my $x (0 .. $lgg - 1) {
       if ($info_glyphe->{ind_noir} == $im_gly->getPixel($x, $y)) {
