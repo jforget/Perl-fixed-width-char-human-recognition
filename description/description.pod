@@ -1067,9 +1067,12 @@ La comparaison avec les Glyphes lettres S<« l »> S<donne :>
 Ce qui augmente le score dans ces deux cas, c'est le fait que la barre verticale comporte un nombre
 important de pixels de différence, dépassant la différence de 28 pixels due à la goutte d'encre en haut à gauche
 du glyphe S<« 1 »>. Pour le premier Glyphe S<« l »>, c'est un peu normal, la barre verticale de la
-Cellule est large de 4 pixels alors que la barre verticale du Glyphe fait 5 pixels de large. Mais pour
-le second Glyphe S<« l »>, la barre verticale fait 4 pixels de large comme pour la Cellule, donc il n'y a
-pas de raison d'avoir une telle différence.
+Cellule est large de 4 pixels alors que la barre verticale du Glyphe fait 5 pixels de large et il
+faut donc effacer une trentaine de pixels. Mais pour le second Glyphe S<« l »>, la barre
+verticale fait 4 pixels de large comme pour la Cellule, donc il n'y a pas de raison d'avoir une
+telle différence. Or, comme la barre n'est pas à la même distance du bord de gauche de
+l'enveloppe dans la Cellule et le Glyphe, il faut effacer toute une colonne et colorier une
+autre, soit une soixantaine de pixels au total.
 
 La solution consiste donc à ne plus caler la comparaison sur le coin en haut à gauche de l'enveloppe
 des pixels noirs, mais de se baser sur le centre de gravité des pixels noirs.

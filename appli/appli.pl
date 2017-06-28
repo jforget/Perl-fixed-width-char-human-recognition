@@ -1199,7 +1199,7 @@ EOF
 <h1>Cellule</h1>
 <p>Ligne $l, colonne $c -&gt; x = $info_cellule->{xc}, y = $info_cellule->{yc}</p>
 <p>Pixels noirs : $info_cellule->{nb_noir}, enveloppe $info_cellule->{lge} x $info_cellule->{hte} en ($info_cellule->{xe}, $info_cellule->{ye})</p>
-<p>Score : $info_cellule->{score}, nombre de caractères associés $info_cellule->{nb_car} ($caract_assoc)</p>
+<p>Score : $info_cellule->{score}, nombre de caractères associés $info_cellule->{nb_car} ($caract_assoc), <a href='/top10/$doc/$l/$c'>top 10 des Glyphes</a></p>
 <p>Créée le $info_cellule->{dh_cre} (UTC)</p>
 $assoc_glyphe
 $cre_glyphe
@@ -1386,13 +1386,13 @@ sub comp_images {
   for my $y (0..$ht - 1) {
     for my $x (0..$lg - 1) {
       my ($pix_c, $pix_g); # 0 si blanc, 1 si noir
-      if ($x <= $lgc && $y <= $htc) {
+      if ($x < $lgc && $y < $htc) {
         $pix_c = ($cel->{ind_noir} == $im_cel->getPixel($x, $y));
       }
       else {
         $pix_c = 0;
       }
-      if ($x <= $lgg && $y <= $htg) {
+      if ($x < $lgg && $y < $htg) {
         $pix_g = ($gly->{ind_noir} == $im_gly->getPixel($x, $y));
       }
       else {
