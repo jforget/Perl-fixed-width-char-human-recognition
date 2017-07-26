@@ -1145,7 +1145,7 @@ emboîtées, l'une avec les coordonnées x dans l'intervalle 0..9, l'autre avec 
 y dans l'intervalle 0..6. Avec la seconde méthode, on commence par remarquer que la Cellule 
 n'a aucun pixel noir avec S<< x < 3 >> ni avec S<< y > 4 >>.  De même, le Glyphe n'a aucun
 pixel noir avec S<< x > 6 >> ni avec S<< y < 2 >>. Donc, les deux boucles emboîtées
-se feront avec x dans l'intervalle 3..6 (au lieu de 0..9) et avec y dans l'interalle 2..4
+se feront avec x dans l'intervalle 3..6 (au lieu de 0..9) et avec y dans l'intervalle 2..4
 (au lieu de 0..6).
 
 Dans les deux dessins, il y a 6 pixels en commun, plus 2 pixels à effacer et 3 à noircir.

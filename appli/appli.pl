@@ -472,14 +472,14 @@ sub verif_glyphe_espace {
   my $obj = get_glyphe_1($appli, $mdp, 'SP', 1);
   unless ($obj) {
     #$obj = { car => ' ', car1 => 'SP', num => 1, dh_cre = horodatage() };
-    my $image = GD::Image->new(2,2);
+    my $image = GD::Image->new(3,3);
     my $blanc = $image->colorAllocate(255, 255, 255);
     ins_glyphe($appli, $mdp, { car       => ' ',
                                car1      => 'SP',
                                num       =>  1,
                                dh_cre    => horodatage(),
-                               lge       =>  2,
-                               hte       =>  2,
+                               lge       =>  3,
+                               hte       =>  3,
                                nb_noir   =>  0,
                                ind_noir  => -1, # -1 parce qu'il n'y a pas de noir et que colorExact renvoie -1
                                ind_blanc =>  0,
@@ -1376,6 +1376,32 @@ sub comp_images {
   my ($cel, $gly) = @_;
   my $im_cel = GD::Image->newFromPngData(decode_base64($cel->{data}));
   my $im_gly = GD::Image->newFromPngData(decode_base64($gly->{data}));
+
+  # Essais à effectuer en faisant varier les arrondis
+  my @essai;
+  my @essai_de_base = map { int $_ } ($cel->{xg}, $cel->{yg}, $gly->{xg}, $gly->{yg});
+  for (0..3) {
+    $essai[$_] = [ @essai_de_base ];
+  }
+  if (frac($cel->{xg}) > frac($gly->{xg})) {
+    $essai[2][0]++;
+    $essai[3][0]++;
+  }
+  else {
+    $essai[2][2]++;
+    $essai[3][2]++;
+  }
+  if (frac($cel->{yg}) > frac($gly->{yg})) {
+    $essai[1][1]++;
+    $essai[3][1]++;
+  }
+  else {
+    $essai[1][3]++;
+    $essai[3][3]++;
+  }
+  #say join ' ', ($cel->{xg}, $cel->{yg}, $gly->{xg}, $gly->{yg});
+  #say YAML::Dump([ @essai ]);
+
   my $lgc = $cel->{lge};
   my $htc = $cel->{hte};
   my $lgg = $gly->{lge};
@@ -1512,6 +1538,9 @@ sub palette {
   return @coul;
 }
 
+sub frac {
+  return $_[0] - int($_[0]);
+}
 sub horodatage {
   return DateTime->now->strftime("%Y-%m-%d %H:%M:%S");
 }
