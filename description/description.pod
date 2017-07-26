@@ -1081,8 +1081,11 @@ tout-à-fait.
 
 Comme le centre de gravité est déterminé par la moyenne des coordonnées x et y
 des pixels noirs, les coordonnées xg et yg auront presque toujours une valeur
-fractionnaire. Comment aligner les pixels de la Cellule avec ceux du S<Glyphe ?>
-Comment arrondir les coordonnées xg et yg ?
+fractionnaire. Et à part le cas de figure d'un Glyphe créé à partir d'une Cellule,
+les parties fractionnaires seront différentes entre les coordonnées du centre
+de gravité de la Cellule et celle du Glyphe.
+Comment aligner les pixels de la Cellule avec ceux du Glyphe avec un décalage
+en nombre S<entier ?> Comment arrondir les coordonnées xg et yg ?
 
 La solution adoptée consiste à faire plusieurs essais, en arrondissant par défaut
 puis par excès. Des deux coordonnées xg_c et xg_g, celle avec la partie fractionnaire
@@ -1090,8 +1093,8 @@ la plus petite est arrondie par défaut, tandis que l'autre est arrondie tantôt
 défaut, tantôt par excès. Idem pour les deux coordonnées yg_c et yg_g.
 Avec un exemple, c'est plus clair.
 
-                  Cellule           Glyphe
-                  xg_c    yg_c      xg_g    yg_g
+  .               Cellule           Glyphe
+  .               xg_c    yg_c      xg_g    yg_g
   coord réelles   17,76   18,90      7,82   16,11
   essai 1         17      18         7      16
   essai 2         17      19         7      16
@@ -1107,6 +1110,54 @@ colonne bleue et de la colonne orange présenté ci-dessus.
 Il est inutile de faire des essais en arrondissant les deux coordonnées xg_c et xg_g
 par excès, il seront redondants avec les essais où les deux coordonnées sont
 arrondies par défaut. Idem pour les ordonnées yg_c et yg_g.
+
+Quant à arrondir xg_c par excès et xg_g par défaut, cela n'a pas de sens, 
+cela contrevient à l'ordre dans lequel sont leurs parties fractionnaires.
+
+Une fois que l'on a choisi une méthode d'arrondi, comment compte-t-on le nombre
+de pixels différents entre la Cellule et le S<Glyphe ?>
+
+La première méthode consiste à dérouler toutes les coordonnées de l'enveloppe commune
+au Glyphe et à la Cellule. Chaque fois qu'un pixel est blanc dans l'un et noir dans l'autre,
+on ajoute +1 au score.
+
+La seconde méthode est moins évidente. On initialise le score avec le nombre de noirs
+de la Cellule, plus le nombre de noirs du Glyphe. Puis on déroule tous les pixels et
+on compte -2 chaque fois que l'on a un pixel noir à la fois dans la Cellule et dans le Glyphe.
+L'avantage de cette seconde méthode est que l'on boucle sur un intervalle plus réduit
+de coordonnées. Cela se verra mieux avec l'exemple ci-dessous
+
+  Cellule            Glyphe
+     0  3  6  9      0  3  6  9
+    ------------    ------------ 
+  0 |         *|    |          |
+    |          |    |          |
+    |    **    |    |    ***   |
+  3 |   ***    |    |    **    |
+    |    **    |    |    ***   |
+    |          |    |          |
+  6 |          |    |*         |
+    ------------    ------------
+
+La Cellule et le Glyphe ont été alignés pour faire coïncider (à peu près) leurs centres
+de gravité. Avec la première méthode, le calcul du score se fera avec deux boucles
+emboîtées, l'une avec les coordonnées x dans l'intervalle 0..9, l'autre avec les coordonnées
+y dans l'intervalle 0..6. Avec la seconde méthode, on commence par remarquer que la Cellule 
+n'a aucun pixel noir avec S<< x < 3 >> ni avec S<< y > 4 >>.  De même, le Glyphe n'a aucun
+pixel noir avec S<< x > 6 >> ni avec S<< y < 2 >>. Donc, les deux boucles emboîtées
+se feront avec x dans l'intervalle 3..6 (au lieu de 0..9) et avec y dans l'interalle 2..4
+(au lieu de 0..6).
+
+Dans les deux dessins, il y a 6 pixels en commun, plus 2 pixels à effacer et 3 à noircir.
+Le score est donc S<2 + 3 = 5>. Avec la seconde méthode, la Cellule a 8 pixels noirs et le Glyphe 
+en a 9. Le calcul commence donc avec un score de 17. Comme il y a 6 pixels noirs en 
+commun, on calculera S<17 - 2 x 6 = 17 - 12 = 5>.
+
+La seconde méthode permet donc un calcul plus rapide. En revanche, s'il faut dessiner
+la Cellule et le Glyphe avec des gros pixels bleus et des gros pixels orange pour
+mettre en évidence la comparaison entre Cellule et Glyphe, alors la seconde méthode
+ne peut pas s'appliquer, il faut réellement passer en revue tous les pixels de l'enveloppe
+commune de la Cellule et du Glyphe.
 
 =head1 Après la conversion
 
