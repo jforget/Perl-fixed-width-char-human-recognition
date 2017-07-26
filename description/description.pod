@@ -1076,6 +1076,37 @@ autre, soit une soixantaine de pixels au total.
 
 La solution consiste donc à ne plus caler la comparaison sur le coin en haut à gauche de l'enveloppe
 des pixels noirs, mais de se baser sur le centre de gravité des pixels noirs.
+Cela permet de réduire notablement ce problème de la colonne bleue et de la colonne orange, sans l'éliminer
+tout-à-fait.
+
+Comme le centre de gravité est déterminé par la moyenne des coordonnées x et y
+des pixels noirs, les coordonnées xg et yg auront presque toujours une valeur
+fractionnaire. Comment aligner les pixels de la Cellule avec ceux du S<Glyphe ?>
+Comment arrondir les coordonnées xg et yg ?
+
+La solution adoptée consiste à faire plusieurs essais, en arrondissant par défaut
+puis par excès. Des deux coordonnées xg_c et xg_g, celle avec la partie fractionnaire
+la plus petite est arrondie par défaut, tandis que l'autre est arrondie tantôt par
+défaut, tantôt par excès. Idem pour les deux coordonnées yg_c et yg_g.
+Avec un exemple, c'est plus clair.
+
+                  Cellule           Glyphe
+                  xg_c    yg_c      xg_g    yg_g
+  coord réelles   17,76   18,90      7,82   16,11
+  essai 1         17      18         7      16
+  essai 2         17      19         7      16
+  essai 3         17      18         8      16
+  essai 4         17      19         8      16
+
+0,76 est inférieur à 0,82, donc l'abscisse xg_c est toujours arrondie par
+défaut et c'est l'abscisse xg_g qui est arrondie par défaut dans la moitié des
+essais et par excès dans l'autre moitié. En gardant le score le plus faible parmi
+les quatre scores calculés, on réduit encore un peu plus le problème de la 
+colonne bleue et de la colonne orange présenté ci-dessus.
+
+Il est inutile de faire des essais en arrondissant les deux coordonnées xg_c et xg_g
+par excès, il seront redondants avec les essais où les deux coordonnées sont
+arrondies par défaut. Idem pour les ordonnées yg_c et yg_g.
 
 =head1 Après la conversion
 
