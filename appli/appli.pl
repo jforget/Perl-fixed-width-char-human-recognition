@@ -1379,28 +1379,32 @@ sub comp_images {
 
   # Essais à effectuer en faisant varier les arrondis
   my @essai;
-  my @essai_de_base = map { int $_ } ($cel->{xg}, $cel->{yg}, $gly->{xg}, $gly->{yg});
+  my %essai_de_base = (xg_c => int($cel->{xg}),
+                       yg_c => int($cel->{yg}),
+                       xg_g => int($gly->{xg}),
+                       yg_g => int($gly->{yg})
+                      );
   for (0..3) {
-    $essai[$_] = [ @essai_de_base ];
+    $essai[$_] = { %essai_de_base };
   }
   if (frac($cel->{xg}) > frac($gly->{xg})) {
-    $essai[2][0]++;
-    $essai[3][0]++;
+    $essai[2]{xg_c}++;
+    $essai[3]{xg_c}++;
   }
   else {
-    $essai[2][2]++;
-    $essai[3][2]++;
+    $essai[2]{xg_g}++;
+    $essai[3]{xg_g}++;
   }
   if (frac($cel->{yg}) > frac($gly->{yg})) {
-    $essai[1][1]++;
-    $essai[3][1]++;
+    $essai[1]{yg_c}++;
+    $essai[3]{yg_c}++;
   }
   else {
-    $essai[1][3]++;
-    $essai[3][3]++;
+    $essai[1]{yg_g}++;
+    $essai[3]{yg_g}++;
   }
-  #say join ' ', ($cel->{xg}, $cel->{yg}, $gly->{xg}, $gly->{yg});
-  #say YAML::Dump([ @essai ]);
+  say join ' ', ($cel->{xg}, $cel->{yg}, $gly->{xg}, $gly->{yg});
+  say YAML::Dump([ @essai ]);
 
   my $lgc = $cel->{lge};
   my $htc = $cel->{hte};
