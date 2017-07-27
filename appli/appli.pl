@@ -261,6 +261,9 @@ post '/majcolor/:doc/:n' => sub {
     push @critere, $critere;
   }
   $param{criteres} = [ @critere ];
+  # Élimination des caractères dangereux
+  $param{desc} = body_parameters->get('desc');
+  $param{desc} =~ s/(\W)/'&#' . ord($1) . ';'/eg;
 
   #say "Mise à jour du coloriage pour $doc";
   #say YAML::Dump({ %param });
@@ -977,7 +980,7 @@ sub aff_liste {
   }
 
   my $liste = '';
-  for (@{$liste_ref}) {
+  for (sort { $a->{doc} cmp $b->{doc} } @{$liste_ref}) {
     my $elem .= "<a href='/doc/$_->{doc}'>$_->{doc}</a>";
     if ($_->{etat} >= 2) {
       $elem .= " <a href='/grille/$_->{doc}'>grille</a>";
@@ -1086,7 +1089,7 @@ EOF
   my $coloriage = '';
   if ($info->{etat} >= 3) {
     my $liste  =liste_coloriage($appli, $mdp, $doc);
-    $coloriage = join ' ', map { sprintf "<a href='/coloriage/$doc/%d'>%d</a>", $_->{n}, $_->{n} } @$liste;
+    $coloriage = join ' ', map { sprintf "<a href='/coloriage/$doc/%d'>%d %s</a><br />", $_->{n}, $_->{n}, $_->{desc} } @$liste;
     $coloriage = <<"EOF";
 <h2>Coloriages</h2>
 <p>$coloriage <a href='/coloriage/$doc/nouveau'>nouveau</a></p>
@@ -1239,6 +1242,7 @@ sub aff_coloriage {
   my $info_doc = get_doc($appli, $mdp, $doc);
 
   my $info_coloriage;
+  my $desc;
   my ($dates, $action, $libelle, $validation);
   if ($n eq 'nouveau') {
     my @criteres = ( { } ) x 6;
@@ -1247,6 +1251,7 @@ sub aff_coloriage {
     $action         = 'majcolor';
     $libelle        = 'Création';
     $validation     = '';
+    $desc           = '';
   }
   else {
     $info_coloriage = get_coloriage($appli, $mdp, $doc, $n);
@@ -1257,6 +1262,7 @@ sub aff_coloriage {
     if ($info_coloriage->{dh_val}){
       $dates .= "<br />Validé le $info_coloriage->{dh_val} (UTC)";
     }
+    $desc       = " value='$info_coloriage->{desc}'";
     $action     = 'majcolor';
     $libelle    = 'Mise à jour';
     $validation = <<"EOF";
@@ -1321,6 +1327,7 @@ EOF
 $dates
 <h3>Critères</h3>
 <form action='/$action/$doc/$n' method='post'>
+<input type='text' name='desc' $desc />
 <ol>
 $html_crit
 </ol>
@@ -1403,8 +1410,8 @@ sub comp_images {
     $essai[1]{yg_g}++;
     $essai[3]{yg_g}++;
   }
-  say join ' ', ($cel->{xg}, $cel->{yg}, $gly->{xg}, $gly->{yg});
-  say YAML::Dump([ @essai ]);
+  #say join ' ', ($cel->{xg}, $cel->{yg}, $gly->{xg}, $gly->{yg});
+  #say YAML::Dump([ @essai ]);
 
   my $lgc = $cel->{lge};
   my $htc = $cel->{hte};
