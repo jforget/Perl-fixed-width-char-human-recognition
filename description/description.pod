@@ -543,7 +543,8 @@ Cela laisse le champ libre à une énorme variabilité
 dans les dessins bitmaps d'un caractère donné.
 Voir les exemples dans les copies d'écran.
 
-INSÉRER COPIE D'ÉCRAN
+=for HTML
+<img src="r.png" alt="Cinq exemples de 'r' pris dans le listing" />
 
 D'où un traitement pour réduire cette variabilité.
 Je passe en revue tous les pixels d'un fichier graphique.
