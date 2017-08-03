@@ -932,7 +932,7 @@ où le découpage des Cellules se fait bien jusqu'à l'esperluette, mais où cel
 complètement pour le mot S<« grégorien »>
 
 =for HTML
-<img src="decalage.png" alt="Décalage en fin de ligne" />
+<img src="decalage-grille.png" alt="Décalage en fin de ligne" />
 
 L'idée consiste à introduire une nouvelle notion de Grille et considérer qu'un Document se découpe
 en plusieurs Grilles, lesquelles se découpent en Cellules. Le modèle de données devient S<donc :>
