@@ -923,6 +923,39 @@ entre la cellule du S<« o »> et la cellule du S<« g »>, ainsi qu'entre le S<
 =for HTML
 <img src="gros-plan-cisaillement.png" alt="Exemple de cisaillements combinés" />
 
+=head3 Mauvaise surprise
+
+Le projet est basé sur l'hypothèse que l'impression se fait avec une police à espacement fixe,
+ce qui permet de calculer facilement les coordonnées pixel des Cellules en fonction de leurs
+coordonnées ligne-colonne. Or il a des irrégularités dans l'impression. Voici un exemple
+où le découpage des Cellules se fait bien jusqu'à l'esperluette, mais où cela débloque
+complètement pour le mot S<« grégorien »>
+
+=for HTML
+<img src="decalage.png" alt="Décalage en fin de ligne" />
+
+L'idée consiste à introduire une nouvelle notion de Grille et considérer qu'un Document se découpe
+en plusieurs Grilles, lesquelles se découpent en Cellules. Le modèle de données devient S<donc :>
+
+  .                                    Document             Caractère
+  .                               (1,n)  (1,n)                (0,n)
+  .                              /         |                    |
+  .                             /          |                    |
+  .                         (1,1)          |                    |
+  .                 Coloriage            (1,1)                  |
+  .                   (1,n)             Grille                  |
+  .                     |                (1,n)                  |
+  .                   (1,1)                |                    |
+  .                  Critère               |                    |
+  .                         (0,n)          |                    |
+  .                             \          |                    |
+  .                              \         |                    |
+  .                               (0,n)  (1,1)                (1,1)
+  .                                     Cellule (1,n)---(0,n) Glyphe
+
+
+
+
 =head2 Comparaison entre une Cellule et un Glyphe
 
 Une fois le découpage effectué, on rogne la Cellule en calculant 
