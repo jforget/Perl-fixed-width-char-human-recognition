@@ -1175,9 +1175,99 @@ L'entité Caractère n'ayant aucune information à part sa clé, elle ne donne p
 
 =head3 Document
 
+Exemple de S<Document :>
+
+  {
+	"_id" : ObjectId("592dc0087a7f462801253963"),
+	"y0" : "298",
+	"ind_noir" : 1,
+	"cisv" : "0",
+	"taille_x" : 2550,
+	"taille_y" : 3509,
+	"x0" : "225",
+	"dy" : "49.5",
+	"nb_noirs" : 174920,
+	"etat" : 3,
+	"fic" : "ex2.png",
+	"ind_blanc" : 0,
+	"cish" : 3,
+	"doc" : "ex2",
+	"dx" : "31",
+	"dh_cre" : "2017-05-30 18:55:04",
+	"grille" : "ex2-grille.png",
+	"dh_grille" : "2017-06-06 19:50:34",
+	"dirh" : "gauche",
+	"dirv" : null,
+	"dh_valid" : "2017-06-06 19:51:22"
+  }
+
+(avant mise en place de l'entité Grille).
+
+
 =head3 Cellule
 
 =head3 Glyphe
+
+Exemple de S<Glyphe :>
+
+  {
+	"_id" : ObjectId("5978f3c37a7f460b407e2066"),
+	"lge" : 23,
+	"dh_cre" : "2017-07-26 19:55:47",
+	"xg" : 8.201086956521738,
+	"ind_blanc" : 0,
+	"data" : "iVBORw0KGgoAAAANSUhEUgAAABcAAAAWAQMAAAARuJVGAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAAN0lEQVQImWNgYGNgqH/fgMANDAw1DHJAbMdQAcQWDDYMMgw/GOTq\nH8BxDQMDGP8B4h9YcAEDAwAWcBYVXE6mZQAAAABJRU5ErkJggg==\n",
+	"num" : 1,
+	"nb_noir" : 184,
+	"car1" : "p",
+	"hte" : 22,
+	"yg" : 8.793478260869566,
+	"car" : "p",
+	"ind_noir" : 1
+  }
+
+Détail des champs
+
+Clé du document
+
+	"car" : "p",
+	"num" : 1,
+
+Clé alternative. Elle coïncide avec la clé C<car>, sauf pour les glyphes associés à l'espace.
+Pour les espaces, on a la valeur C<"SP"> dans C<car1>, pour une meilleure lisibilité dans
+les pages HTML. Évidemment, la clé (pour identifier le Glyphe) comporte aussi le champ C<num>,
+mais c'est la même valeur que pour la clé normale.
+
+	"car1" : "p",
+
+Champ C<_id> automatiquement créé par MongoDB
+
+	"_id" : ObjectId("5978f3c37a7f460b407e2066"),
+
+Le contenu du dessin, un bitmap au format PNG, encodé en MIME::Base64.
+
+	"data" : "iVBORw0KGgoAAAANSUhEUgAAABcAAAAWAQMAAAARuJVGAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAAN0lEQVQImWNgYGNgqH/fgMANDAw1DHJAbMdQAcQWDDYMMgw/GOTq\nH8BxDQMDGP8B4h9YcAEDAwAWcBYVXE6mZQAAAABJRU5ErkJggg==\n",
+
+Comment interpréter les valeurs renvoyées par C<GD:getPixel>
+
+	"ind_noir" : 1
+	"ind_blanc" : 0,
+
+Caractéristiques du S<dessin :> dimensions et nombre de pixels noirs.
+
+	"lge" : 23,
+	"hte" : 22,
+	"nb_noir" : 184,
+
+Coordonnées du centre de gravité des pixels noirs.
+
+	"xg" : 8.201086956521738,
+	"yg" : 8.793478260869566,
+
+Date-heure de création, pour d'éventuels besoins techniques, on ne sait jamais. Fuseau UTC
+pour éviter les problèmes avec l'heure d'été.
+
+	"dh_cre" : "2017-07-26 19:55:47",
 
 =head3 Coloriage
 
