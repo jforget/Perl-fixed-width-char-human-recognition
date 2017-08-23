@@ -323,7 +323,8 @@ d'un fichier texte,
 
 =item * Parce que la tradition veut que tout programme élémentaire affiche S<« Hello
 World ! »>, que toute leçon de programmation présentant la récursivité prenne pour exemples la factorielle
-et la suite de Fibonacci, que tout programme de modélisation 3D affiche une
+et la suite de Fibonacci, que tout générateur d'analyse syntaxique comme yacc
+prenne pour exemple une calculatrice à quatre opération, que tout programme de modélisation 3D affiche une
 théière et que tout programme d'analyse ou de transformation de dessin affiche le
 portrait de Lena.
 
@@ -661,7 +662,7 @@ cela intéressant), etc. Le nom de la base de données est saisi dans l'écran d
 J'ai utilisé le terme S<« appli »>. J'aurais peut-être dû appeler cela S<« projet »>
 ou utiliser un autre nom. C'est  S<« appli »>, c'est comme ça.
 
-=head2 Le schéma de base de données
+=head2 Le modèle logique des données
 
 Le schéma de base basique, qui sera complété ultérieurement, S<est :>
 
@@ -707,22 +708,6 @@ de bits, représentant le dessin du caractère en pixels noirs et blancs.
 Un Caractère est associé à 1 à n Glyphes,
 un Glyphe est associé à un caractère et un seul.
 
-  .                                    Document             Caractère
-  .                               (1,n)  (1,n)                (0,n)
-  .                              /         |                    |
-  .                             /          |                    |
-  .                         (1,1)          |                    |
-  .                  Requête               |                    |
-  .                   (1,n)                |                    |
-  .                     |                  |                    |
-  .                   (1,1)                |                    |
-  .                  Critère               |                    |
-  .                         (0,n)          |                    |
-  .                             \          |                    |
-  .                              \         |                    |
-  .                               (0,n)  (1,1)                (1,1)
-  .                                     Cellule (1,n)---(0,n) Glyphe
-
 
 Et une cinquième table un peu inattendue, la table S<« Requête »>.
 Au début, je pensais faire des requêtes S<« au> fil de S<l'eau » :>
@@ -732,6 +717,22 @@ Mais comme la notion de requête est plus associée à la notion de processus
 qu'à la notion de S<« quelque-chose> qui peut se stocker dans une base de 
 S<données »>, j'ai préféré adopter un autre nom pour cette table, le 
 nom S<« Coloriage »>
+
+  .                                    Document             Caractère
+  .                               (1,n)  (1,n)                (0,n)
+  .                              /         |                    |
+  .                             /          |                    |
+  .                         (1,1)          |                    |
+  .                 Coloriage              |                    |
+  .                   (1,n)                |                    |
+  .                     |                  |                    |
+  .                   (1,1)                |                    |
+  .                  Critère               |                    |
+  .                         (0,n)          |                    |
+  .                             \          |                    |
+  .                              \         |                    |
+  .                               (0,n)  (1,1)                (1,1)
+  .                                     Cellule (1,n)---(0,n) Glyphe
 
 L'utilisateur saisit les critères et on les sauvegarde en base de données.
 Puis il clique sur un bouton S<« Recherche »> et le programme applique les critères
@@ -782,70 +783,11 @@ données (le Glyphe Espace), chaque Cellule aura, dès sa création, un score
 et sera associée à au moins un Glyphe. Cela permet de simplifier d'autres
 portion des traitements du programme.
 
-=head2 L'architecture des traitements
-
-Voici l'arborescence des pages et des
-traitements, dans un ordre  correspondant à peu
-près à la chronologie des opérations.
-
-=head3 Ajout de document
-
-La première fonction accessible à partir du menu principal
-permet uniquement d'ajouter des noms de document
-à la base de données.
-
-Comme cette page est très peu remplie, j'ai décidé de la fusionner
-avec la suivante. La séparation logique reste visible cependant.
-
-=head3 Liste des documents
-
-La deuxième fonction donne la liste des documents.
-De cette page, on enchaîne vers une page consacrée à un
-seul document.
-
-=head3 Document
-
-Dans cette page, on peut spécifier les paramètres
-permettant de découper le document en cellules. Cela genère un fichier
-graphique matérialisant ce découpage, mais sans
-pour autant créer les enregistrements dans la table
-S<« Cellule ».>
-
-Une deuxième fonction dans cette page permet
-de valider le découpage, avec création des
-S<« Cellules ».>
-
-Une troisième fonction permet de lancer l'analyse
-des Cellules du Document pour leur associer le
-ou les Glyphes les plus ressemblants.
-
-Une quatrième fonction permet de sélectionner
-des cellules dans le fichier graphique en fonction
-de certains critères (au moins le score, ou le nombre
-de Glyphes pour chaque Cellule, mais je n'ai pas
-encore choisi les autres critères) et de créer une I<imagemap>
-pour les cellules sélectionnées.
-
-La dernière fonction est celle qui permet de
-créer la version texte du Document, une fois
-que toutes les Cellules ont été reconnues.
-
-=head3 Cellule
-
-Revenons à l'I<imagemap> d'un Document. Elle permet d'accéder
-à la page associée à une Cellule. Sur cette page,
-on a le dessin en gros pixels de la Cellule et celui
-du ou des Glyphes associés à la Cellule. S'il y a beaucoup d'écarts
-entre ces deux dessins, l'utilisateur peut créer un nouveau
-Glyphe. A priori, le Glyphe créé sera identique à la Cellule
-dont il est issu. Si besoin est, je prévoirai une façon de créer
-un Glyphe à partir d'un autre Glyphe en effectuant des retouches
-(gommer certains pixels, ajouter une goutte d'encre se traduisant 
-par un cercle de pixels, etc), mais dans un premier temps, je me contente
-de copier le dessin d'une Cellule dans le Glyphe.
-
-
 =head2 Quadrillage
+
+Avant de définir le modèle physique de données, il faut analyser
+deux processus, le découpage d'un Document en Cellules et l'association
+entre les Cellules et les Glyphes.
 
 Pour définir le quadrillage, il faut renseigner
 les coordonnées pixel de la Cellule (ou de l'espace)
@@ -979,19 +921,19 @@ Les signes ne sont pas centrés de la même manière dans leur Cellule.
 
 La comparaison brute de ces deux Cellules donne de nombreuses différences.
 Les S<« C<=> »> montrent les pixels noirs communs (deux seulement), 
-les S<« C<#> »> montrent les pixels différents (22).
+les S<« C<≠> »> montrent les pixels différents (22).
 
   ----------------  ----------------
   |              |  |              |
-  |        #     |  |              |
-  |        #     |  |              |
-  |        #     |  |      #       |
-  |     #=#####  |  |      =       |
-  |        #     |  |      #       |
-  |        =     |  |   #####=#    |
-  |        #     |  |      #       |
-  |              |  |      #       |
-  |              |  |      #       |
+  |        ≠     |  |              |
+  |        ≠     |  |              |
+  |        ≠     |  |      ≠       |
+  |     ≠=≠≠≠≠≠  |  |      =       |
+  |        ≠     |  |      ≠       |
+  |        =     |  |   ≠≠≠≠≠=≠    |
+  |        ≠     |  |      ≠       |
+  |              |  |      ≠       |
+  |              |  |      ≠       |
   |              |  |              |
   ----------------  ----------------
 
@@ -1062,16 +1004,16 @@ la comparaison du Glyphe avec la Cellule 2 donne un résultat catastrophique :
 
   Cellule 1         Cellule 2         Glyphe
   ----------------  ----------------  ---------
-  |    --------- |  |              |  |   #   |
-  |    |   *   | |  |              |  |   #   |
-  |    |   *   | |  | ----------   |  |   #   |
-  |    |   *   | |  | |    #   |   |  |=======|
-  |    |*******| |  | |    #   |   |  |   #   |
-  |    |   *   | |  | |    #   |   |  |   #   |
-  |    |   *   | |  | |=======#|   |  |   *   |
-  |    |   *   | |  | |    #   |   |  ---------
-  |    --------- |  | |    #   |   |
-  |              |  | |    #   |   |
+  |    --------- |  |              |  |   ≠   |
+  |    |   *   | |  |              |  |   ≠   |
+  |    |   *   | |  | ----------   |  |   ≠   |
+  |    |   *   | |  | |    ≠   |   |  |=======|
+  |    |*******| |  | |    ≠   |   |  |   ≠   |
+  |    |   *   | |  | |    ≠   |   |  |   ≠   |
+  |    |   *   | |  | |=======≠|   |  |   *   |
+  |    |   *   | |  | |    ≠   |   |  ---------
+  |    --------- |  | |    ≠   |   |
+  |              |  | |    ≠   |   |
   |              |  | ----------   |
   ----------------  ----------------
 
@@ -1192,6 +1134,115 @@ la Cellule et le Glyphe avec des gros pixels bleus et des gros pixels orange pou
 mettre en évidence la comparaison entre Cellule et Glyphe, alors la seconde méthode
 ne peut pas s'appliquer, il faut réellement passer en revue tous les pixels de l'enveloppe
 commune de la Cellule et du Glyphe.
+
+=head2 Modèle physique des données
+
+S<Rappel :> le modèle logique des données S<est :>
+
+  .                                    Document             Caractère
+  .                               (1,n)  (1,n)                (0,n)
+  .                              /         |                    |
+  .                             /          |                    |
+  .                         (1,1)          |                    |
+  .                 Coloriage            (1,1)                  |
+  .                   (1,n)             Grille                  |
+  .                     |                (1,n)                  |
+  .                   (1,1)                |                    |
+  .                  Critère               |                    |
+  .                         (0,n)          |                    |
+  .                             \          |                    |
+  .                              \         |                    |
+  .                               (0,n)  (1,1)                (1,1)
+  .                                     Cellule (1,n)---(0,n) Glyphe
+
+Aucune des relations hiérarchiques (c'est-à-dire avec un C<(1,1)> d'un côté)
+n'est porteuse de données. Elles sont donc matérialisées par le fait que la clé
+de l'entité fille contient la clé de l'entité mère, ou par le fait que les documents
+implémentant les entités filles sont inclus dans le document implémentant l'entité
+mère.
+
+Par exemple, un document Coloriage est identifié par le code du Document associé,
+plus un numéro séquentiel et ce document Coloriage contient la liste des
+Critères définis pour ce Coloriage.
+
+La relation Critère-Cellule est implémentée en incluant la liste des couples
+Cellule-Critère (uniquement les clés) dans le document Coloriage.
+De même, la relation Cellule-Glyphe est implémentée en incluant la liste des
+clés de Glyphe, plus quelques autres informations, dans le document de la Cellule.
+
+L'entité Caractère n'ayant aucune information à part sa clé, elle ne donne pas lieu
+à une collection MongoDB.
+
+=head3 Document
+
+=head3 Cellule
+
+=head3 Glyphe
+
+=head3 Coloriage
+
+=head2 L'architecture des traitements
+
+Voici l'arborescence des pages et des
+traitements, dans un ordre  correspondant à peu
+près à la chronologie des opérations.
+
+=head3 Ajout de document
+
+La première fonction accessible à partir du menu principal
+permet uniquement d'ajouter des noms de document
+à la base de données.
+
+Comme cette page est très peu remplie, j'ai décidé de la fusionner
+avec la suivante. La séparation logique reste visible cependant.
+
+=head3 Liste des documents
+
+La deuxième fonction donne la liste des documents.
+De cette page, on enchaîne vers une page consacrée à un
+seul document.
+
+=head3 Document
+
+Dans cette page, on peut spécifier les paramètres
+permettant de découper le document en cellules. Cela genère un fichier
+graphique matérialisant ce découpage, mais sans
+pour autant créer les enregistrements dans la table
+S<« Cellule ».>
+
+Une deuxième fonction dans cette page permet
+de valider le découpage, avec création des
+S<« Cellules ».>
+
+Une troisième fonction permet de lancer l'analyse
+des Cellules du Document pour leur associer le
+ou les Glyphes les plus ressemblants.
+
+Une quatrième fonction permet de sélectionner
+des cellules dans le fichier graphique en fonction
+de certains critères (au moins le score, ou le nombre
+de Glyphes pour chaque Cellule, mais je n'ai pas
+encore choisi les autres critères) et de créer une I<imagemap>
+pour les cellules sélectionnées.
+
+La dernière fonction est celle qui permet de
+créer la version texte du Document, une fois
+que toutes les Cellules ont été reconnues.
+
+=head3 Cellule
+
+Revenons à l'I<imagemap> d'un Document. Elle permet d'accéder
+à la page associée à une Cellule. Sur cette page,
+on a le dessin en gros pixels de la Cellule et celui
+du ou des Glyphes associés à la Cellule. S'il y a beaucoup d'écarts
+entre ces deux dessins, l'utilisateur peut créer un nouveau
+Glyphe. A priori, le Glyphe créé sera identique à la Cellule
+dont il est issu. Si besoin est, je prévoirai une façon de créer
+un Glyphe à partir d'un autre Glyphe en effectuant des retouches
+(gommer certains pixels, ajouter une goutte d'encre se traduisant 
+par un cercle de pixels, etc), mais dans un premier temps, je me contente
+de copier le dessin d'une Cellule dans le Glyphe.
+
 
 =head1 Après la conversion
 
