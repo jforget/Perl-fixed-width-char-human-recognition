@@ -1453,6 +1453,7 @@ sub img_cel_gly {
   my $bleu    = $image->colorAllocate(  0,   0, 255);
   my $orange  = $image->colorAllocate(255, 127,   0); # orange : pixels noir -> blancs
   my $cyan    = $image->colorAllocate(  0, 255, 255);
+  my $jaune   = $image->colorAllocate(255, 255, 192);
   my $xe      = $info_cellule->{xe};
   my $ye      = $info_cellule->{ye};
   my $lge     = $info_cellule->{lge};
@@ -1463,6 +1464,14 @@ sub img_cel_gly {
   my $im_gly = GD::Image->newFromPngData(decode_base64($info_glyphe->{data}));
 
   my $deltax = 0;
+  # Grille des pixels pour la Cellule
+  for (my $x = 0; $x < $echelle * $dx; $x += $echelle) {
+    $image->line($x, 0, $x, $echelle * $dy - 1, $jaune);
+  }
+  for (my $y = 0; $y < $hauteur; $y += $echelle) {
+    $image->line(0, $y, $echelle * $dx - 1, $y, $jaune);
+  }
+
   # Périmètre de la Cellule et périmètre de l'enveloppe
   $image->rectangle(0, 0, $echelle * $dx - 1, $echelle * $dy - 1, $bleu);
   $image->rectangle($echelle * $xe, $echelle * $ye,  $echelle * ($xe + $lge) - 1, $echelle * ($ye + $hte) - 1, $vert);
