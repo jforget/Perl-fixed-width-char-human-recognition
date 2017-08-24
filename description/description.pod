@@ -1657,66 +1657,115 @@ pour pouvoir reconstituer la clé complète du Critère.
 
 =head2 L'architecture des traitements
 
+Les traitements sont organisés en pages, qui permettent d'afficher
+le contenu de la base de données. Dans chaque page, il y a un ou plusieurs
+formulaires, qui permettent de mettre à jour la base de données.
+Certaines pages ont une variante, qui affiche les informations
+de manière légèrement différente, mais qui contient les mêmes formulaires.
+
 Voici l'arborescence des pages et des
 traitements, dans un ordre  correspondant à peu
 près à la chronologie des opérations.
 
-=head3 Ajout de document
+=head3 Page : liste des documents
 
-La première fonction accessible à partir du menu principal
-permet uniquement d'ajouter des noms de document
-à la base de données.
-
-Comme cette page est très peu remplie, j'ai décidé de la fusionner
-avec la suivante. La séparation logique reste visible cependant.
-
-=head3 Liste des documents
-
-La deuxième fonction donne la liste des documents.
+La première fonction donne la liste des documents.
 De cette page, on enchaîne vers une page consacrée à un
 seul document.
 
-=head3 Document
+=head4 Formulaire : ajout de document
 
-Dans cette page, on peut spécifier les paramètres
+La liste des Documents contient un formulaire destiné à créer
+un Document. On se contente de donner un nom au Document
+et de spécifier de quel fichier PNG il est tiré.
+
+=head3 Page : Document
+
+Cette page affiche les caractéristiques d'un Document, ainsi
+que la liste des Coloriages définis pour de Document.
+Cette liste de Coloriages comporte une entrée supplémentaire,
+C<« nouveau »>, qui permet d'enchaîner vers la page des Coloriages,
+mais pour créer un nouveau Coloriage au lieu d'afficher et de modifier
+un Coloriage existant.
+
+La page de base affiche le fichier PNG d'où est tiré le Document,
+tandis que la variante S<« grille »> affiche un dessin où les 
+bords des Cellules sont matérialisés. 
+
+=head4 Formulaire: grille
+
+Dans cette formulaire, on peut spécifier les paramètres
 permettant de découper le document en cellules. Cela genère un fichier
 graphique matérialisant ce découpage, mais sans
 pour autant créer les enregistrements dans la table
 S<« Cellule ».>
 
-Une deuxième fonction dans cette page permet
+=head4 Formulaire : validation de la grille
+
+Ce deuxième formulaire ne comporte qu'un bouton d'action. Il permet
 de valider le découpage, avec création des
-S<« Cellules ».>
+S<« Cellules ».> Cela ne sert à rien de modifier les valeurs dans
+le premier formulaire, elles sont ignorées si vous cliquez sur
+S<« Validation »>.
 
-Une troisième fonction permet de lancer l'analyse
-des Cellules du Document pour leur associer le
-ou les Glyphes les plus ressemblants.
+=head4 Formulaire : Association des Cellules avec les Glyphes
 
-Une quatrième fonction permet de sélectionner
-des cellules dans le fichier graphique en fonction
-de certains critères (au moins le score, ou le nombre
-de Glyphes pour chaque Cellule, mais je n'ai pas
-encore choisi les autres critères) et de créer une I<imagemap>
-pour les cellules sélectionnées.
+Ce troisième formulaire ne comporte également qu'un bouton
+d'action. Il permet de lancer l'analyse des Cellules du Document pour
+leur associer le ou les Glyphes les plus ressemblants.
 
-La dernière fonction est celle qui permet de
-créer la version texte du Document, une fois
-que toutes les Cellules ont été reconnues.
+=head4 Formulaire : Génération du fichier texte
 
-=head3 Cellule
+Ce dernier formulaire ne comporte également qu'un bouton
+d'action. Il permet de créer le fichier texte en fonction des
+associations Cellules -- Glyphes.
 
-Revenons à l'I<imagemap> d'un Document. Elle permet d'accéder
-à la page associée à une Cellule. Sur cette page,
-on a le dessin en gros pixels de la Cellule et celui
-du ou des Glyphes associés à la Cellule. S'il y a beaucoup d'écarts
-entre ces deux dessins, l'utilisateur peut créer un nouveau
-Glyphe. A priori, le Glyphe créé sera identique à la Cellule
-dont il est issu. Si besoin est, je prévoirai une façon de créer
-un Glyphe à partir d'un autre Glyphe en effectuant des retouches
-(gommer certains pixels, ajouter une goutte d'encre se traduisant 
-par un cercle de pixels, etc), mais dans un premier temps, je me contente
-de copier le dessin d'une Cellule dans le Glyphe.
+=head3 Page : Coloriage
 
+Cette page reçoit en paramètre le numéro d'un Coloriage ou le mot
+C<"nouveau">. Dans le premier cas, c'est pour travailler sur un Coloriage
+existant, dans le second cas c'est pour en créer un nouveau.
+
+Si le Coloriage est validé, la page affiche l'imagemap du Coloriage permettant
+de choisir une Cellule répondant à un critère et d'enchaîner 
+vers sa page.
+
+=head4 Formulaire : Critères
+
+Ce formulaire permet de créer ou de modifier un Coloriage, en spécifiant les
+six Critères associés. En outre, il est prévu de donner un titre à ce Coloriage,
+le numéro servant de clé n'étant pas très descriptif.
+
+La mise à jour se contente de modifier les Critères (et le libellé descriptif).
+Elle ne déroule pas la collection des Cellules pour savoir lesquelles correspondent
+à tel ou tel Critère.
+
+=head4 Formulaire : Validation
+
+Ce formulaire ne contient qu'un bouton d'action. Il lance la recherche en base
+de données, pour associer les Cellules à tel ou tel Critère.
+
+=head3 Page : Cellule
+
+Sur la page associée à une Cellule, on a le dessin en gros pixels de
+la Cellule et celui du ou des Glyphes associés à la Cellule.
+
+Cette page a une variante, S« top10 »>, qui reprend la recherche du meilleur
+Glyphe, mais ne s'arrête pas au meilleur d'entre eux. Il prend les dix
+meilleurs et les affiche tous.
+
+=head4 Formulaire : Création de Glyphe
+
+Ce formulaire n'apparaît que si le score de la Cellule n'est pas zéro.
+Il est alors possible de créer un Glyphe en recopiant les informations de
+la Cellule. La seule information manquante est le Caractère dont dépend
+le Glyphe.
+
+=head4 Formulaire : Association aux Glyphes
+
+Permet de lancer la recherche du meilleur Glyphe, comme le formulaire
+S<« Association> des Cellules avec les S<Glyphes »> de la page S<« Document »>,
+mais uniquement pour la Cellule en cours.
 
 =head1 Après la conversion
 
