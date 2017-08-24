@@ -1203,8 +1203,58 @@ Exemple de S<Document :>
 
 (avant mise en place de l'entité Grille).
 
+Détail des champs
 
-=head3 Cellule
+Clé du document
+
+	"doc" : "ex2",
+
+Champ C<_id> automatiquement créé par MongoDB
+
+	"_id" : ObjectId("592dc0087a7f462801253963"),
+
+Informations diverses, comme le nom du fichier graphique origine
+et celui du fichier où la grille est matérialisée, la taille
+en pixels dudit fichier, le nombre de pixels noirs.
+
+	"fic" : "ex2.png",
+	"grille" : "ex2-grille.png",
+	"taille_x" : 2550,
+	"taille_y" : 3509,
+	"nb_noirs" : 174920,
+
+Comment interpréter les valeurs renvoyées par C<GD:getPixel>
+
+	"ind_noir" : 1,
+	"ind_blanc" : 0,
+
+À  quel point du traitement est-on arrivé, ainsi que les dates-heures
+où l'on est arrivé aux différents états.
+
+	"etat" : 3,
+	"dh_cre" : "2017-05-30 18:55:04",
+	"dh_grille" : "2017-06-06 19:50:34",
+	"dh_valid" : "2017-06-06 19:51:22"
+
+Les différents états possible S<sont :>
+
+=over 4
+
+=item 1 Le document est créé.
+
+=item 2 Les informations de grille sont saisies et le fichier généré.
+
+=item 3 La grille est validée, c'est-à-dire que les Cellules ont été
+générées en fonction de cette grille.
+
+=item 4 La procédure d'association a été lancée pour toutes les Cellules
+du Document
+
+=item 5 Le fichier texte final a été généré.
+
+=back
+
+À suivre lorsque l'entité Grille sera mise en place.
 
 =head3 Glyphe
 
@@ -1259,7 +1309,8 @@ Caractéristiques du S<dessin :> dimensions et nombre de pixels noirs.
 	"hte" : 22,
 	"nb_noir" : 184,
 
-Coordonnées du centre de gravité des pixels noirs.
+Coordonnées du centre de gravité des pixels noirs. Certes, 15 chiffres après la virgule,
+c'est un peu excessif. Mais c'est plus simple de laisser faire Perl et MongoDB.
 
 	"xg" : 8.201086956521738,
 	"yg" : 8.793478260869566,
@@ -1269,7 +1320,317 @@ pour éviter les problèmes avec l'heure d'été.
 
 	"dh_cre" : "2017-07-26 19:55:47",
 
+=head3 Cellule
+
+  {
+	"_id" : ObjectId("5978f3167a7f460b407e1f13"),
+	"yg" : 18.793478260869566,
+	"hte" : 22,
+	"ye" : 10,
+	"xe" : 5,
+	"doc" : "ex1",
+	"xg" : 13.201086956521738,
+	"glyphes" : [
+		{
+			"car" : "p",
+			"num" : 1
+		}
+	],
+	"data" : "iVBORw0KGgoAAAANSUhEUgAAABcAAAAWAQMAAAARuJVGAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAAN0lEQVQImWNgYGNgqH/fgMANDAw1DHJAbMdQAcQWDDYMMgw/GOTq\nH8BxDQMDGP8B4h9YcAEDAwAWcBYVXE6mZQAAAABJRU5ErkJggg==\n",
+	"dh_assoc" : "2017-07-27 05:14:51",
+	"yc" : 27,
+	"l" : 0,
+	"c" : 0,
+	"score" : 0,
+	"voisin" : "iVBORw0KGgoAAAANSUhEUgAAAJoAAAD3AQMAAADfW9/QAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAACDElEQVRYhe3XwWrbMAAG4F8IrEuwrj2E6BUCu3hg7FfpI3g3D8zq\n2y4jfYGRvopO7bGP0EAPO85jFw/GNKmOJUdSkzWUQcE/iNhfkBXHkiwBc+bMsVlETD0AV99bKAV6\n7yHRyDyEh7pcJZf08QbcYo8cJTreMslbhw0E0UjlyrbeDShAdw4r1BDwMCMd9JlBYTFXckT28HLs\ndRlQ0k0EbTvEIts57I6jDJDdcnmx9pDq/7NQ8hCJ+uMQ5vJLXdTXCc55s1lHbFlHMI9iFcHfEXzq\ntX7o7qWYApc+UtWjjmHvI4viJnPVyWf59CmStcNxLioAV52qI2imis5e8zqCtvVtFsGbk0j2t5kW\nIZoRH0F+Hg6H9EuJ6s7q0BnotgH51h7HasAa5M7inLefixjm/4z/I1QP7YMw3cfZfQ+en41Cj47E\nx0IjTiLXuNRf+SgDZDEkO67P+bmI/lME9VQfYt4h+PEozZpHhCg2BRbNFIXG6x5pI6e31IJpXPlI\nDeY+6geXZlOcM+eVksBbn5AWFW/2r7xxX6JX3PWIP5XDPoadyD7IEPfL9h9yUn1E+4Zlz2DHA2yn\nKB2O1at30lUfUajjSCyWMbQje4rdCUSItF2HiLSO4KrpzKwYYLI/dLjI7KN0OGfOK4e2mdl6TEP0\nNr1G+l46Mp2WbZ/Djx7yRQn+y0Pz2j3YABnMB/wLn3MdnyG5fxsAAAAASUVORK5CYII=\n",
+	"ind_noir" : 1,
+	"nb_car" : 1,
+	"ind_blanc" : 0,
+	"lge" : 23,
+	"xc" : 42,
+	"dh_cre" : "2017-07-26 19:52:50",
+	"nb_noir" : 184,
+	"cpt_car" : {
+		"p" : 1
+	}
+  }
+
+Détail des champs
+
+Clé interne de MongoDB
+
+	"_id" : ObjectId("5978f3167a7f460b407e1f13"),
+
+Clé logique : le document et les coordonnées ligne-colonne.
+
+	"doc" : "ex1",
+	"l" : 0,
+	"c" : 0,
+
+Coordonnées pixel de la Cellule
+
+	"xc" : 42,
+	"yc" : 27,
+
+Caractéristiques de l'enveloppe des pixels noirs. Le champ C<data>
+contient le graphique, un bitmap au format PNG, encodé en MIME::Base64.
+
+	"xe" : 5,
+	"ye" : 10,
+	"lge" : 23,
+	"hte" : 22,
+	"data" : "iVBORw0KGgoAAAANSUhEUgAAABcAAAAWAQMAAAARuJVGAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAAN0lEQVQImWNgYGNgqH/fgMANDAw1DHJAbMdQAcQWDDYMMgw/GOTq\nH8BxDQMDGP8B4h9YcAEDAwAWcBYVXE6mZQAAAABJRU5ErkJggg==\n",
+	"nb_noir" : 184,
+
+Comment interpréter les valeurs renvoyées par C<GD:getPixel>
+
+	"ind_noir" : 1,
+	"ind_blanc" : 0,
+
+Coordonnées du centre de gravité des pixels noirs. Certes, 15 chiffres après la virgule,
+c'est un peu excessif. Mais c'est plus simple de laisser faire Perl et MongoDB.
+
+	"xg" : 13.201086956521738,
+	"yg" : 18.793478260869566,
+
+Purement esthétique : la Cellule et ses voisines. Juste pour
+améliorer l'affichage et afficher la Cellule dans son contexte.
+Encore une fois, c'est du PNG encodé par MIME::Base64.
+
+	"voisin" : "iVBORw0KGgoAAAANSUhEUgAAAJoAAAD3AQMAAADfW9/QAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAACDElEQVRYhe3XwWrbMAAG4F8IrEuwrj2E6BUCu3hg7FfpI3g3D8zq\n2y4jfYGRvopO7bGP0EAPO85jFw/GNKmOJUdSkzWUQcE/iNhfkBXHkiwBc+bMsVlETD0AV99bKAV6\n7yHRyDyEh7pcJZf08QbcYo8cJTreMslbhw0E0UjlyrbeDShAdw4r1BDwMCMd9JlBYTFXckT28HLs\ndRlQ0k0EbTvEIts57I6jDJDdcnmx9pDq/7NQ8hCJ+uMQ5vJLXdTXCc55s1lHbFlHMI9iFcHfEXzq\ntX7o7qWYApc+UtWjjmHvI4viJnPVyWf59CmStcNxLioAV52qI2imis5e8zqCtvVtFsGbk0j2t5kW\nIZoRH0F+Hg6H9EuJ6s7q0BnotgH51h7HasAa5M7inLefixjm/4z/I1QP7YMw3cfZfQ+en41Cj47E\nx0IjTiLXuNRf+SgDZDEkO67P+bmI/lME9VQfYt4h+PEozZpHhCg2BRbNFIXG6x5pI6e31IJpXPlI\nDeY+6geXZlOcM+eVksBbn5AWFW/2r7xxX6JX3PWIP5XDPoadyD7IEPfL9h9yUn1E+4Zlz2DHA2yn\nKB2O1at30lUfUajjSCyWMbQje4rdCUSItF2HiLSO4KrpzKwYYLI/dLjI7KN0OGfOK4e2mdl6TEP0\nNr1G+l46Mp2WbZ/Djx7yRQn+y0Pz2j3YABnMB/wLn3MdnyG5fxsAAAAASUVORK5CYII=\n",
+
+Les dates-heures de création et de calcul des associations. On utilise l'heure
+UTC, ce qui évite les problèmes de changement d'heure.
+
+	"dh_cre" : "2017-07-26 19:52:50",
+	"dh_assoc" : "2017-07-27 05:14:51",
+
+Relation Cellule-Glyphe. Ici, la Cellule est reliée à un seul Glyphe.
+Mais on devine ce qui se passe lorsque la Cellule est associée à plusieurs
+Glyphes. Le champ C<glyphes> contient les clés pour tous les Glyphes
+sélectionnés. Le champ C<cpt_car> contient l'histogramme par caractère
+de C<glyphes> et le champ C<cpt_car> contient le nombre de paires stockées
+dans le champ C<glyphes>.
+
+	"nb_car" : 1,
+	"cpt_car" : {
+		"p" : 1
+	}
+	"glyphes" : [
+		{
+			"car" : "p",
+			"num" : 1
+		}
+	]
+	"score" : 0,
+
+Voici la relation Cellule-Glyphe pour une Cellule associée
+à deux Glyphes correspondant à deux Caractères différents,
+un S<« r »> et un espace.
+
+	"nb_car" : 2,
+	"score" : 221,
+	"glyphes" : [
+		{
+			"car" : " ",
+			"num" : 1
+		},
+		{
+			"num" : 1,
+			"car" : "r"
+		}
+	],
+	"cpt_car" : {
+		"r" : 1,
+		"SP" : 1
+	},
+
 =head3 Coloriage
+
+Cette fois-ci, le contenu est un peu abrégé, pour ne pas lister
+toutes les Cellules sélectionnées dans ce Coloriage.
+
+  {
+	"_id" : ObjectId("59797b3b7a7f46119e01faf1"),
+	"doc" : "ex1",
+	"n" : 1,
+	"desc" : "Lima&#32;India&#32;Unite",
+	"dh_cre" : "2017-07-27 05:33:47",
+	"criteres" : [
+		{
+			"caract" : "l",
+			"seuil" : 0,
+			"selspace" : "",
+			"select" : "carac"
+		},
+		{
+			"caract" : "I",
+			"selspace" : "",
+			"seuil" : 0,
+			"select" : "carac"
+		},
+		{
+			"select" : "carac",
+			"caract" : "1",
+			"seuil" : 0,
+			"selspace" : ""
+		},
+		{
+			"select" : "",
+			"caract" : "",
+			"selspace" : "",
+			"seuil" : 0
+		},
+		{
+			"seuil" : 0,
+			"selspace" : "",
+			"caract" : "",
+			"select" : ""
+		},
+		{
+			"selspace" : "",
+			"seuil" : 0,
+			"caract" : "",
+			"select" : ""
+		}
+	],
+	"dh_maj" : "2017-07-27 05:44:26",
+	"cellules" : [
+		{
+			"select" : "carac",
+			"yc" : 30,
+			"xc" : 350,
+			"c" : 10,
+			"lge" : 16,
+			"crit" : 0,
+			"hte" : 30,
+			"l" : 0
+		},
+		{
+			"select" : "carac",
+			"yc" : 83,
+			"xc" : 719,
+			"c" : 22,
+			"lge" : 17,
+			"crit" : 0,
+			"hte" : 30,
+			"l" : 1
+		},
+		{
+			"l" : 1,
+			"crit" : 2,
+			"lge" : 17,
+			"hte" : 30,
+			"c" : 38,
+			"xc" : 1212,
+			"select" : "carac",
+			"yc" : 89
+		},
+	],
+	"fic" : "ex1-col1.png",
+	"dh_val" : "2017-07-27 05:44:58"
+  }
+
+Comme toujours, la clé interne de MongoDB
+
+	"_id" : ObjectId("59797b3b7a7f46119e01faf1"),
+
+La clé pour les besoins de l'application.
+
+	"doc" : "ex1",
+	"n" : 1,
+
+Informations diverses : un libellé explicatif, le nom du fichier
+où les Cellules sont coloriées et les dates-heures de création,
+de mise à jour des critères et de validation (examen et sélection
+des Cellules avec constitution du fichier graphique).
+
+	"desc" : "Lima&#32;India&#32;Unite",
+	"fic" : "ex1-col1.png",
+	"dh_cre" : "2017-07-27 05:33:47",
+	"dh_maj" : "2017-07-27 05:44:26",
+	"dh_val" : "2017-07-27 05:44:58"
+
+Liste des Critères du Coloriage, liste incluse dans le document
+Coloriage. Même si l'on n'utilise que trois Critères sur les six
+disponibles, le tableau contient six postes, les trois derniers
+étant vides.
+
+	"criteres" : [
+		{
+			"caract" : "l",
+			"seuil" : 0,
+			"selspace" : "",
+			"select" : "carac"
+		},
+		{
+			"caract" : "I",
+			"selspace" : "",
+			"seuil" : 0,
+			"select" : "carac"
+		},
+		{
+			"select" : "carac",
+			"caract" : "1",
+			"seuil" : 0,
+			"selspace" : ""
+		},
+		{
+			"select" : "",
+			"caract" : "",
+			"selspace" : "",
+			"seuil" : 0
+		},
+		{
+			"seuil" : 0,
+			"selspace" : "",
+			"caract" : "",
+			"select" : ""
+		},
+		{
+			"selspace" : "",
+			"seuil" : 0,
+			"caract" : "",
+			"select" : ""
+		}
+	],
+
+Relation Glyphes-Critère. C'est inclus directement dans le Coloriage,
+pas dans le sous-document Critère. Du coup, on stocke le numéro de critère
+pour pouvoir reconstituer la clé complète du Critère.
+
+	"cellules" : [
+		{
+			"select" : "carac",
+			"yc" : 30,
+			"xc" : 350,
+			"c" : 10,
+			"lge" : 16,
+			"crit" : 0,
+			"hte" : 30,
+			"l" : 0
+		},
+		{
+			"select" : "carac",
+			"yc" : 83,
+			"xc" : 719,
+			"c" : 22,
+			"lge" : 17,
+			"crit" : 0,
+			"hte" : 30,
+			"l" : 1
+		},
+		{
+			"l" : 1,
+			"crit" : 2,
+			"lge" : 17,
+			"hte" : 30,
+			"c" : 38,
+			"xc" : 1212,
+			"select" : "carac",
+			"yc" : 89
+		},
+	],
 
 =head2 L'architecture des traitements
 
