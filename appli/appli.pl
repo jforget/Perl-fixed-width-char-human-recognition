@@ -510,8 +510,8 @@ sub copie_cel_gly {
                              nb_noir   => $info_cellule->{nb_noir},
                              ind_noir  => $info_cellule->{ind_noir},
                              ind_blanc => $info_cellule->{ind_blanc},
-                             xg        => $info_cellule->{xg} - $info_cellule->{xe},
-                             yg        => $info_cellule->{yg} - $info_cellule->{ye},
+                             xg        => $info_cellule->{xg},
+                             yg        => $info_cellule->{yg},
                              data      => $info_cellule->{data},
                              dh_cre    => horodatage(),
                            } );
@@ -747,8 +747,8 @@ sub construire_grille {
                                lge       => $lg_env,
                                hte       => $ht_env,
                                # centre de gravité (relatif au coin en haut à gauche)
-                               xg        => $xx / $nb_noir,
-                               yg        => $yy / $nb_noir,
+                               xg        => $xx / $nb_noir - $xmin,
+                               yg        => $yy / $nb_noir - $ymin,
                                # graphisme
                                ind_blanc => $ind_blanc,
                                ind_noir  => $ind_noir,
@@ -1191,7 +1191,9 @@ EOF
       $dessins .= "<h3>Score $score</h3>\n<p><img src='data:image/png;base64," . encode_base64($img->png) . "' alt='comparaison cellule glyphe'/></p>\n";
     }
     my $caract_assoc = join ', ', map { sprintf "&#%d; U+00%X", ord($_), ord($_) } keys %{$info_cellule->{cpt_car}};
-    my $centre_g = sprintf("<p>Centre de gravité en %.2f, %.2f</p>", $info_cellule->{xg}, $info_cellule->{yg});
+    my $centre_g = sprintf("<p>Centre de gravité en %.2f, %.2f par rapport à l'enveloppe, en %.2f, %.2f par rapport à la cellule</p>",
+                           $info_cellule->{xg}, $info_cellule->{yg},
+                           $info_cellule->{xe} + $info_cellule->{xg}, $info_cellule->{ye} + $info_cellule->{yg});
     $html = <<"EOF";
 <h1>Cellule</h1>
 <p>Ligne $l, colonne $c -&gt; x = $info_cellule->{xc}, y = $info_cellule->{yc}</p>
@@ -1477,8 +1479,17 @@ sub img_cel_gly {
   $image->rectangle($echelle * $xe, $echelle * $ye,  $echelle * ($xe + $lge) - 1, $echelle * ($ye + $hte) - 1, $vert);
 
   # centre de gravité de la Cellule
-  $image->line     (0                     , $echelle * ($yg + 0.5), $echelle * $dx - 1    , $echelle * ($yg + 0.5), $vert);
-  $image->line     ($echelle * ($xg + 0.5), 0                     , $echelle * ($xg + 0.5), $echelle * $dy - 1    , $vert);
+  my ($x1, $y1, $x2, $y2);
+  $x1 = 0;
+  $y1 = $echelle * ($ye + $yg + 0.5);
+  $y2 = $y1;
+  $x2 = $echelle * $dx - 1;
+  $image->line     ($x1, $y1, $x2, $y2, $vert);
+  $x1 = $echelle * ($xe + $xg + 0.5);
+  $y1 = 0;
+  $x2 = $x1;
+  $y2 = $echelle * $dy - 1;
+  $image->line     ($x1, $y1, $x2, $y2, $vert);
 
   for my $y (0 .. $hte - 1) {
     for my $x (0 .. $lge - 1) {
