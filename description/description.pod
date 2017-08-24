@@ -685,7 +685,7 @@ Un Glyphe peut être associé à plusieurs Cellules, mais parfois une seule, voi
 La première table est la table S<« Document ».>
 Cela correspond à un fichier numérisé et à ses
 avatars successifs. Chaque listing a été scanné en huit fichiers graphiques
-environ, donc donnera lieu à huit documents.
+environ, donc donnera lieu à huit Documents.
 
 La deuxième table est la table S<« Cellule ».>
 Elle représente les cellules obtenues en découpant le Document. Les informations de cette table
@@ -697,7 +697,7 @@ en MIME/base64.
 
 La troisième table est la table S<« Caractère ».>
 Elle comporte environ 96 enregistrements,
-pour les caractères S<« ! »> à S<« } ».> Je rappelle
+pour les caractères espace à S<« } ».> Je rappelle
 que j'ai utilisé de l'ASCII 7 bits.
 Comme il n'y a pas d'information à stocker, peut-être que
 cette table ne sera pas implémentée.
@@ -713,7 +713,7 @@ Et une cinquième table un peu inattendue, la table S<« Requête »>.
 Au début, je pensais faire des requêtes S<« au> fil de S<l'eau » :>
 saisir les critères, cliquer sur un bouton et lire le résultat.
 Je pense qu'il est préférable d'en faire une entité permanente.
-Mais comme la notion de requête est plus associée à la notion de processus
+Mais comme la notion de requête est plus associée à la notion de processus éphémère
 qu'à la notion de S<« quelque-chose> qui peut se stocker dans une base de 
 S<données »>, j'ai préféré adopter un autre nom pour cette table, le 
 nom S<« Coloriage »>
@@ -797,7 +797,7 @@ Cellules du quadrillage. Ces dimensions peuvent
 avoir une partie décimale. Ainsi, si on attribue
 la valeur 40,34 à la largeur, alors
 les abscisses-pixel des Cellules successives
-seront 0, 40, 80, 121, 151, 181, 212, etc.
+seront 0, 40, 80, 121, 161, 201, 242, etc.
 La largeur de chaque Cellule sera arrondie
 à S<41 pixels,> tant pis s'il y a un recouvrement
 entre deux Cellules voisines.
@@ -1004,14 +1004,14 @@ la comparaison du Glyphe avec la Cellule 2 donne un résultat catastrophique :
 
   Cellule 1         Cellule 2         Glyphe
   ----------------  ----------------  ---------
-  |    --------- |  |              |  |   ≠   |
-  |    |   *   | |  |              |  |   ≠   |
-  |    |   *   | |  | ----------   |  |   ≠   |
-  |    |   *   | |  | |    ≠   |   |  |=======|
-  |    |*******| |  | |    ≠   |   |  |   ≠   |
-  |    |   *   | |  | |    ≠   |   |  |   ≠   |
-  |    |   *   | |  | |=======≠|   |  |   *   |
-  |    |   *   | |  | |    ≠   |   |  ---------
+  |    --------- |  |              |  |   *   |
+  |    |   =   | |  |              |  |   *   |
+  |    |   =   | |  | ----------   |  |   *   |
+  |    |   =   | |  | |    ≠   |   |  |*******|
+  |    |=======| |  | |    ≠   |   |  |   *   |
+  |    |   =   | |  | |    ≠   |   |  |   *   |
+  |    |   =   | |  | |=======≠|   |  |   *   |
+  |    |   =   | |  | |    ≠   |   |  ---------
   |    --------- |  | |    ≠   |   |
   |              |  | |    ≠   |   |
   |              |  | ----------   |
@@ -1129,7 +1129,9 @@ Le score est donc S<2 + 3 = 5>. Avec la seconde méthode, la Cellule a 8 pixels 
 en a 9. Le calcul commence donc avec un score de 17. Comme il y a 6 pixels noirs en 
 commun, on calculera S<17 - 2 x 6 = 17 - 12 = 5>.
 
-La seconde méthode permet donc un calcul plus rapide. En revanche, s'il faut dessiner
+La seconde méthode permet donc un calcul plus rapide. De plus, elle permet de ne pas se
+préoccuper du cas où un pixel se trouve en dehors du dessin du Glyphe (pixel 0,9 dans l'exemple
+ci-dessus) ou en dehors de l'enveloppe de la Cellule (pixel 6,0). En revanche, s'il faut dessiner
 la Cellule et le Glyphe avec des gros pixels bleus et des gros pixels orange pour
 mettre en évidence la comparaison entre Cellule et Glyphe, alors la seconde méthode
 ne peut pas s'appliquer, il faut réellement passer en revue tous les pixels de l'enveloppe
@@ -1161,14 +1163,14 @@ de l'entité fille contient la clé de l'entité mère, ou par le fait que les d
 implémentant les entités filles sont inclus dans le document implémentant l'entité
 mère.
 
-Par exemple, un document Coloriage est identifié par le code du Document associé,
-plus un numéro séquentiel et ce document Coloriage contient la liste des
+Par exemple, un enregistrement Coloriage est identifié par le code du Document associé,
+plus un numéro séquentiel et cet enregistrement Coloriage contient la liste des
 Critères définis pour ce Coloriage.
 
 La relation Critère-Cellule est implémentée en incluant la liste des couples
-Cellule-Critère (uniquement les clés) dans le document Coloriage.
+Cellule-Critère (uniquement les clés) dans l'enregistrement Coloriage.
 De même, la relation Cellule-Glyphe est implémentée en incluant la liste des
-clés de Glyphe, plus quelques autres informations, dans le document de la Cellule.
+clés de Glyphe, plus quelques autres informations, dans l'enregistrement de la Cellule.
 
 L'entité Caractère n'ayant aucune information à part sa clé, elle ne donne pas lieu
 à une collection MongoDB.
@@ -1240,7 +1242,7 @@ Les différents états possible S<sont :>
 
 =over 4
 
-=item 1 Le document est créé.
+=item 1 Le Document est créé.
 
 =item 2 Les informations de grille sont saisies et le fichier généré.
 
@@ -1278,7 +1280,7 @@ Exemple de S<Glyphe :>
 
 Détail des champs
 
-Clé du document
+Clé de l'enregistrement
 
 	"car" : "p",
 	"num" : 1,
@@ -1361,7 +1363,7 @@ Clé interne de MongoDB
 
 	"_id" : ObjectId("5978f3167a7f460b407e1f13"),
 
-Clé logique : le document et les coordonnées ligne-colonne.
+Clé logique : le Document et les coordonnées ligne-colonne.
 
 	"doc" : "ex1",
 	"l" : 0,
@@ -1551,7 +1553,7 @@ des Cellules avec constitution du fichier graphique).
 	"dh_maj" : "2017-07-27 05:44:26",
 	"dh_val" : "2017-07-27 05:44:58"
 
-Liste des Critères du Coloriage, liste incluse dans le document
+Liste des Critères du Coloriage, liste incluse dans l'enregistrement
 Coloriage. Même si l'on n'utilise que trois Critères sur les six
 disponibles, le tableau contient six postes, les trois derniers
 étant vides.
