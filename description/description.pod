@@ -1325,43 +1325,43 @@ pour éviter les problèmes avec l'heure d'été.
 =head3 Cellule
 
   {
-	"_id" : ObjectId("5978f3167a7f460b407e1f13"),
-	"yg" : 18.793478260869566,
-	"hte" : 22,
+	"_id" : ObjectId("599f186e7a7f4608c805e3e1"),
+	"ind_blanc" : 0,
 	"ye" : 10,
-	"xe" : 5,
-	"doc" : "ex1",
-	"xg" : 13.201086956521738,
+	"dh_assoc" : "2017-08-24 18:18:26",
+	"xc" : 42,
 	"glyphes" : [
 		{
-			"car" : "p",
-			"num" : 1
+			"num" : 1,
+			"car" : "p"
 		}
 	],
-	"data" : "iVBORw0KGgoAAAANSUhEUgAAABcAAAAWAQMAAAARuJVGAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAAN0lEQVQImWNgYGNgqH/fgMANDAw1DHJAbMdQAcQWDDYMMgw/GOTq\nH8BxDQMDGP8B4h9YcAEDAwAWcBYVXE6mZQAAAABJRU5ErkJggg==\n",
-	"dh_assoc" : "2017-07-27 05:14:51",
-	"yc" : 27,
-	"l" : 0,
 	"c" : 0,
-	"score" : 0,
-	"voisin" : "iVBORw0KGgoAAAANSUhEUgAAAJoAAAD3AQMAAADfW9/QAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAACDElEQVRYhe3XwWrbMAAG4F8IrEuwrj2E6BUCu3hg7FfpI3g3D8zq\n2y4jfYGRvopO7bGP0EAPO85jFw/GNKmOJUdSkzWUQcE/iNhfkBXHkiwBc+bMsVlETD0AV99bKAV6\n7yHRyDyEh7pcJZf08QbcYo8cJTreMslbhw0E0UjlyrbeDShAdw4r1BDwMCMd9JlBYTFXckT28HLs\ndRlQ0k0EbTvEIts57I6jDJDdcnmx9pDq/7NQ8hCJ+uMQ5vJLXdTXCc55s1lHbFlHMI9iFcHfEXzq\ntX7o7qWYApc+UtWjjmHvI4viJnPVyWf59CmStcNxLioAV52qI2imis5e8zqCtvVtFsGbk0j2t5kW\nIZoRH0F+Hg6H9EuJ6s7q0BnotgH51h7HasAa5M7inLefixjm/4z/I1QP7YMw3cfZfQ+en41Cj47E\nx0IjTiLXuNRf+SgDZDEkO67P+bmI/lME9VQfYt4h+PEozZpHhCg2BRbNFIXG6x5pI6e31IJpXPlI\nDeY+6geXZlOcM+eVksBbn5AWFW/2r7xxX6JX3PWIP5XDPoadyD7IEPfL9h9yUn1E+4Zlz2DHA2yn\nKB2O1at30lUfUajjSCyWMbQje4rdCUSItF2HiLSO4KrpzKwYYLI/dLjI7KN0OGfOK4e2mdl6TEP0\nNr1G+l46Mp2WbZ/Djx7yRQn+y0Pz2j3YABnMB/wLn3MdnyG5fxsAAAAASUVORK5CYII=\n",
-	"ind_noir" : 1,
-	"nb_car" : 1,
-	"ind_blanc" : 0,
-	"lge" : 23,
-	"xc" : 42,
-	"dh_cre" : "2017-07-26 19:52:50",
+	"dh_cre" : "2017-08-24 18:18:18",
 	"nb_noir" : 184,
+	"nb_car" : 1,
+	"lge" : 23,
+	"yc" : 27,
+	"doc" : "ex1",
+	"l" : 0,
+	"yg" : 8.793478260869566,
+	"score" : 0,
+	"hte" : 22,
+	"voisin" : "iVBORw0KGgoAAAANSUhEUgAAAJoAAAD3AQMAAADfW9/QAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAACDElEQVRYhe3XwWrbMAAG4F8IrEuwrj2E6BUCu3hg7FfpI3g3D8zq\n2y4jfYGRvopO7bGP0EAPO85jFw/GNKmOJUdSkzWUQcE/iNhfkBXHkiwBc+bMsVlETD0AV99bKAV6\n7yHRyDyEh7pcJZf08QbcYo8cJTreMslbhw0E0UjlyrbeDShAdw4r1BDwMCMd9JlBYTFXckT28HLs\ndRlQ0k0EbTvEIts57I6jDJDdcnmx9pDq/7NQ8hCJ+uMQ5vJLXdTXCc55s1lHbFlHMI9iFcHfEXzq\ntX7o7qWYApc+UtWjjmHvI4viJnPVyWf59CmStcNxLioAV52qI2imis5e8zqCtvVtFsGbk0j2t5kW\nIZoRH0F+Hg6H9EuJ6s7q0BnotgH51h7HasAa5M7inLefixjm/4z/I1QP7YMw3cfZfQ+en41Cj47E\nx0IjTiLXuNRf+SgDZDEkO67P+bmI/lME9VQfYt4h+PEozZpHhCg2BRbNFIXG6x5pI6e31IJpXPlI\nDeY+6geXZlOcM+eVksBbn5AWFW/2r7xxX6JX3PWIP5XDPoadyD7IEPfL9h9yUn1E+4Zlz2DHA2yn\nKB2O1at30lUfUajjSCyWMbQje4rdCUSItF2HiLSO4KrpzKwYYLI/dLjI7KN0OGfOK4e2mdl6TEP0\nNr1G+l46Mp2WbZ/Djx7yRQn+y0Pz2j3YABnMB/wLn3MdnyG5fxsAAAAASUVORK5CYII=\n",
+	"xe" : 5,
+	"xg" : 8.201086956521738,
 	"cpt_car" : {
 		"p" : 1
-	}
+	},
+	"ind_noir" : 1,
+	"data" : "iVBORw0KGgoAAAANSUhEUgAAABcAAAAWAQMAAAARuJVGAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAAN0lEQVQImWNgYGNgqH/fgMANDAw1DHJAbMdQAcQWDDYMMgw/GOTq\nH8BxDQMDGP8B4h9YcAEDAwAWcBYVXE6mZQAAAABJRU5ErkJggg==\n"
   }
 
 Détail des champs
 
 Clé interne de MongoDB
 
-	"_id" : ObjectId("5978f3167a7f460b407e1f13"),
+	"_id" : ObjectId("599f186e7a7f4608c805e3e1"),
 
 Clé logique : le Document et les coordonnées ligne-colonne.
 
@@ -1381,7 +1381,7 @@ contient le graphique, un bitmap au format PNG, encodé en MIME::Base64.
 	"ye" : 10,
 	"lge" : 23,
 	"hte" : 22,
-	"data" : "iVBORw0KGgoAAAANSUhEUgAAABcAAAAWAQMAAAARuJVGAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAAN0lEQVQImWNgYGNgqH/fgMANDAw1DHJAbMdQAcQWDDYMMgw/GOTq\nH8BxDQMDGP8B4h9YcAEDAwAWcBYVXE6mZQAAAABJRU5ErkJggg==\n",
+	"data" : "iVBORw0KGgoAAAANSUhEUgAAABcAAAAWAQMAAAARuJVGAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAAN0lEQVQImWNgYGNgqH/fgMANDAw1DHJAbMdQAcQWDDYMMgw/GOTq\nH8BxDQMDGP8B4h9YcAEDAwAWcBYVXE6mZQAAAABJRU5ErkJggg==\n"
 	"nb_noir" : 184,
 
 Comment interpréter les valeurs renvoyées par C<GD:getPixel>
@@ -1392,8 +1392,8 @@ Comment interpréter les valeurs renvoyées par C<GD:getPixel>
 Coordonnées du centre de gravité des pixels noirs. Certes, 15 chiffres après la virgule,
 c'est un peu excessif. Mais c'est plus simple de laisser faire Perl et MongoDB.
 
-	"xg" : 13.201086956521738,
-	"yg" : 18.793478260869566,
+	"xg" : 8.201086956521738,
+	"yg" : 8.793478260869566,
 
 Purement esthétique : la Cellule et ses voisines. Juste pour
 améliorer l'affichage et afficher la Cellule dans son contexte.
@@ -1404,8 +1404,26 @@ Encore une fois, c'est du PNG encodé par MIME::Base64.
 Les dates-heures de création et de calcul des associations. On utilise l'heure
 UTC, ce qui évite les problèmes de changement d'heure.
 
-	"dh_cre" : "2017-07-26 19:52:50",
-	"dh_assoc" : "2017-07-27 05:14:51",
+	"dh_cre" : "2017-08-24 18:18:18",
+	"dh_assoc" : "2017-08-24 18:18:26",
+
+Récapitulatf sur les coordonnées : 
+
+=for HTML
+<img src="Cellule-p.png" alt="Dessin de la Cellule p en gros pixels, pour mettre en valeur les différentes coordonnées" />
+
+	"xc" : 42,
+	"yc" : 27,
+	"xe" : 5,
+	"ye" : 10,
+	"lge" : 23,
+	"hte" : 22,
+	"xg" : 8.201086956521738,
+	"yg" : 8.793478260869566,
+
+Les coordonnées du centre de gravité sont relatives au coin en haut à
+gauche de l'enveloppe, pas à celui de la Cellule. Et les boucles sur
+les pixels se font de 0 à C<lge - 1> et de 0 à C<hte - 1>.
 
 Relation Cellule-Glyphe. Ici, la Cellule est reliée à un seul Glyphe.
 Mais on devine ce qui se passe lorsque la Cellule est associée à plusieurs
@@ -1428,7 +1446,10 @@ dans le champ C<glyphes>.
 
 Voici la relation Cellule-Glyphe pour une Cellule associée
 à deux Glyphes correspondant à deux Caractères différents,
-un S<« r »> et un espace.
+un S<« r »> et un espace. Vous pouvez constater que dans le 
+tableau C<glyphes> on utilise la clé normale de l'espace, 
+tandis que dans le hachage C<cpt_car> on prend la clé 
+affichable C<"SP">.
 
 	"nb_car" : 2,
 	"score" : 221,
