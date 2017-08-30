@@ -1128,6 +1128,58 @@ mettre en évidence la comparaison entre Cellule et Glyphe, alors la seconde mé
 ne peut pas s'appliquer, il faut réellement passer en revue tous les pixels de l'enveloppe
 commune de la Cellule et du Glyphe.
 
+Reprenons la comparaison entre la Cellule en ligne 1, colonne 38 et le Glyphe S<« l »> numéro 1.
+
+=for HTML
+<img src="probleme3.png" alt="Association d'une Cellule lettre l avec un Glyphe lettre l" />
+
+Pour la Cellule, on a :
+
+   xg  =  7.77
+   yg  = 15.91
+   lge = 17
+   hte = 30
+
+Pour le Glyphe, on a :
+
+   xg  =  7.02
+   yg  = 16.11
+   lge = 16
+   hte = 30
+
+Les quatre tentatives S<seront :>
+
+  Centre de gravité Cellule    7  15     7  16    8  15    8  16
+  Centre de gravité Glyphe     7  16     7  16    7  16    7  16
+
+  Plage de valeurs X Cellule   0..16     0..16    0..16    0..16
+  relative au CDG             -7.. 9    -7.. 9   -8.. 8   -8.. 8
+  Plage de valeurs Y Cellule   0..29     0..29    0..29    0..29
+  relative au CDG            -15..14   -16..13  -15..14  -16..13
+
+  Plage de valeurs X Glyphe    0..15     0..15    0..15    0..15
+  relative au CDG             -7.. 8    -7.. 8   -7.. 8   -7.. 8
+  Plage de valeurs Y Glyphe    0..29     0..29    0..29    0..29
+  relative au CDG            -16..13   -16..13  -16..13  -16..13
+
+  Méthode 1
+  Plage combinée X            -7.. 9    -7.. 9   -8.. 8   -8.. 8
+  Plage combinée Y           -16..14   -16..13  -16..14  -16..13
+
+  Plage X Cellule              0..16     0..16    0..16    0..16
+  Plage Y Cellule             -1..29     0..29   -1..29    0..29
+  Plage X Glyphe               0..16     0..16   -1..15   -1..15
+  Plage Y Glyphe               0..30     0..29    0..30    0..29
+
+  Méthode 2
+  Plage combinée X            -7.. 8    -7.. 8   -7.. 8   -7.. 8
+  Plage combinée Y           -15..13   -16..13  -15..13  -16..13
+
+  Plage X Cellule              0..15     0..15    1..16    1..16
+  Plage Y Cellule              0..28     0..29    0..28    0..29
+  Plage X Glyphe               0..15     0..15    0..15    0..15
+  Plage Y Glyphe               1..29     0..29    1..29    0..29
+
 =head2 Modèle physique des données
 
 S<Rappel :> le modèle logique des données S<est :>
