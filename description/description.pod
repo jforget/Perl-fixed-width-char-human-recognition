@@ -324,7 +324,7 @@ d'un fichier texte,
 =item * Parce que la tradition veut que tout programme élémentaire affiche S<« Hello
 World ! »>, que toute leçon de programmation présentant la récursivité prenne pour exemples la factorielle
 et la suite de Fibonacci, que tout générateur d'analyse syntaxique comme yacc
-prenne pour exemple une calculatrice à quatre opération, que tout programme de modélisation 3D affiche une
+prenne pour exemple une calculatrice à quatre opérations, que tout programme de modélisation 3D affiche une
 théière et que tout programme d'analyse ou de transformation de dessin affiche le
 portrait de Lena.
 
@@ -753,15 +753,6 @@ Et l'utilisateur peut de nouveau cliquer sur le bouton S<« Recherche »> pour r
 le résultat de la requête du Coloriage. C'est à l'utilisateur de décider quand il est souhaitable de déclencher
 le (long) rafraîchissement du Coloriage et quand il est préférable de continuer avec un
 Coloriage légèrement S<« rassis »>.
-
-=head3 Table des Glyphes
-
-Dans la table des Glyphes, le tout premier enregistrement est généré 
-automatiquement. Il s'agit du Glyphe Espace. Lorsque l'utilisateur
-saisit le paramètre C<appli> et le mot de passe, le programme vérifie que le
-Glyphe Espace existe et, si nécessaire, le crée.
-
-Les autres Glyphes sont créés par copie d'une Cellule.
 
 =head3 Relation entre Cellules et Glyphes
 
@@ -1242,21 +1233,31 @@ Les différents états possible S<sont :>
 
 =over 4
 
-=item 1 Le Document est créé.
+=item 1
 
-=item 2 Les informations de grille sont saisies et le fichier généré.
+Le Document est créé.
 
-=item 3 La grille est validée, c'est-à-dire que les Cellules ont été
+=item 2
+
+Les informations de grille sont saisies et le fichier généré.
+
+=item 3
+
+La grille est validée, c'est-à-dire que les Cellules ont été
 générées en fonction de cette grille.
 
-=item 4 La procédure d'association a été lancée pour toutes les Cellules
+=item 4
+
+La procédure d'association a été lancée pour toutes les Cellules
 du Document
 
-=item 5 Le fichier texte final a été généré.
+=item 5
+
+Le fichier texte final a été généré.
 
 =back
 
-À suivre lorsque l'entité Grille sera mise en place.
+À compléter lorsque l'entité Grille sera mise en place.
 
 =head3 Glyphe
 
@@ -1317,10 +1318,17 @@ c'est un peu excessif. Mais c'est plus simple de laisser faire Perl et MongoDB.
 	"xg" : 8.201086956521738,
 	"yg" : 8.793478260869566,
 
-Date-heure de création, pour d'éventuels besoins techniques, on ne sait jamais. Fuseau UTC
-pour éviter les problèmes avec l'heure d'été.
+Date-heure de création, pour d'éventuels besoins techniques, on ne sait jamais. Fuseau 
+horaire UTC pour éviter les problèmes avec l'heure d'été.
 
 	"dh_cre" : "2017-07-26 19:55:47",
+
+Dans la table des Glyphes, le tout premier enregistrement est généré 
+automatiquement. Il s'agit du Glyphe Espace. Lorsque l'utilisateur
+saisit le paramètre C<appli> et le mot de passe, le programme vérifie que le
+Glyphe Espace existe et, si nécessaire, le crée.
+
+Les autres Glyphes sont créés par copie d'une Cellule.
 
 =head3 Cellule
 
@@ -1381,7 +1389,7 @@ contient le graphique, un bitmap au format PNG, encodé en MIME::Base64.
 	"ye" : 10,
 	"lge" : 23,
 	"hte" : 22,
-	"data" : "iVBORw0KGgoAAAANSUhEUgAAABcAAAAWAQMAAAARuJVGAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAAN0lEQVQImWNgYGNgqH/fgMANDAw1DHJAbMdQAcQWDDYMMgw/GOTq\nH8BxDQMDGP8B4h9YcAEDAwAWcBYVXE6mZQAAAABJRU5ErkJggg==\n"
+	"data" : "iVBORw0KGgoAAAANSUhEUgAAABcAAAAWAQMAAAARuJVGAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAAN0lEQVQImWNgYGNgqH/fgMANDAw1DHJAbMdQAcQWDDYMMgw/GOTq\nH8BxDQMDGP8B4h9YcAEDAwAWcBYVXE6mZQAAAABJRU5ErkJggg==\n",
 	"nb_noir" : 184,
 
 Comment interpréter les valeurs renvoyées par C<GD:getPixel>
@@ -1423,7 +1431,7 @@ Récapitulatf sur les coordonnées :
 
 Les coordonnées du centre de gravité sont relatives au coin en haut à
 gauche de l'enveloppe, pas à celui de la Cellule. Et les boucles sur
-les pixels se font de 0 à C<lge - 1> et de 0 à C<hte - 1>.
+les pixels se font de C<0> à C<lge - 1> et de C<0> à C<hte - 1>.
 
 Relation Cellule-Glyphe. Ici, la Cellule est reliée à un seul Glyphe.
 Mais on devine ce qui se passe lorsque la Cellule est associée à plusieurs
@@ -1618,6 +1626,37 @@ disponibles, le tableau contient six postes, les trois derniers
 		}
 	],
 
+Les valeurs possibles de C<select> S<sont :>
+
+=over 4
+
+=item multiple
+
+Une Cellule est sélectionnée si elle est associée à plusieurs Glyphes
+dépendant de Caractères différents.
+
+=item score
+
+Une Cellule est sélectionnée si son score dépasse la valeur stockée
+dans C<seuil>.
+
+En enchaînant plusieurs Critères avec des valeurs décroissantes de C<seuil>,
+on obtient une classification par intervalles de scores.
+
+=item carac
+
+Une Cellule est sélectionnée si le Glyphe auquel elle est associée
+dépend d'un caractère stocké dans C<caract>. Si C<selspace> est
+logiquement vrai (selon les conventions de Perl), la Cellule sera sélectionnée
+si elle est associée à un Glyphe dépendant du Caractère espace.
+
+Dans le cas, relativement rare, où une Cellule est associée à plusieurs
+Glyphes de même score, alors on prend en compte le premier Glyphe, on ignore
+les suivants. Et en général, cette Cellule a déjà été sélectionnée par un
+Critère précédent de type C<multiple>.
+
+=back
+
 Relation Glyphes-Critère. C'est inclus directement dans le Coloriage,
 pas dans le sous-document Critère. Du coup, on stocke le numéro de critère
 pour pouvoir reconstituer la clé complète du Critère.
@@ -1750,7 +1789,7 @@ de données, pour associer les Cellules à tel ou tel Critère.
 Sur la page associée à une Cellule, on a le dessin en gros pixels de
 la Cellule et celui du ou des Glyphes associés à la Cellule.
 
-Cette page a une variante, S« top10 »>, qui reprend la recherche du meilleur
+Cette page a une variante, S<« top10 »>, qui reprend la recherche du meilleur
 Glyphe, mais ne s'arrête pas au meilleur d'entre eux. Il prend les dix
 meilleurs et les affiche tous.
 
