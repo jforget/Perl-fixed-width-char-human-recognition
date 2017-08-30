@@ -1186,9 +1186,19 @@ EOF
     }
     for my $gly (@glyphes) {
       my $info_glyphe = get_glyphe($appli, $mdp, $gly->{car}, $gly->{num});
-      my $score = $gly->{score} // $info_cellule->{score};
-      my $img = img_cel_gly($appli, $mdp, $info_doc, $info_cellule, $info_glyphe);
-      $dessins .= "<h3>Score $score</h3>\n<p><img src='data:image/png;base64," . encode_base64($img->png) . "' alt='comparaison cellule glyphe'/></p>\n";
+      my $score    = $gly->{score} // $info_cellule->{score};
+      my $img      = img_cel_gly($appli, $mdp, $info_doc, $info_cellule, $info_glyphe);
+      my $centre_C = sprintf("<p>Centre de gravité en %.2f, %.2f par rapport à l'enveloppe</p>",
+                             $info_cellule->{xg}, $info_cellule->{yg});
+      my $centre_G = sprintf("<p>Centre de gravité du Glyphe « %s » (U+00%2X) n° %d en %.2f, %.2f</p>",
+                             $info_glyphe->{car1}, ord($gly->{car}), $gly->{num}, $info_glyphe->{xg}, $info_glyphe->{yg});
+      my $png      = encode_base64($img->png);
+      $dessins .= <<"EOF";
+<h3>Score $score</h3>
+$centre_C
+$centre_G
+<p><img src='data:image/png;base64,$png' alt='comparaison cellule glyphe'/></p>
+EOF
     }
     my $caract_assoc = join ', ', map { sprintf "&#%d; U+00%X", ord($_), ord($_) } keys %{$info_cellule->{cpt_car}};
     my $centre_g = sprintf("<p>Centre de gravité en %.2f, %.2f par rapport à l'enveloppe, en %.2f, %.2f par rapport à la cellule</p>",
