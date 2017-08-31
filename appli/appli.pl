@@ -19,6 +19,7 @@ use YAML;
 use GD;
 use MIME::Base64;
 use DateTime;
+use List::Util qw/min max/;
 use experimental qw/switch/;
 
 set 'session' => 'Simple';
@@ -1393,29 +1394,29 @@ sub comp_images {
 
   # Essais à effectuer en faisant varier les arrondis
   my @essai;
-  my %essai_de_base = (xg_c => int($cel->{xg}),
-                       yg_c => int($cel->{yg}),
-                       xg_g => int($gly->{xg}),
-                       yg_g => int($gly->{yg})
+  my %essai_de_base = (xg_Cel => int($cel->{xg}),
+                       yg_Cel => int($cel->{yg}),
+                       xg_Gly => int($gly->{xg}),
+                       yg_Gly => int($gly->{yg})
                       );
   for (0..3) {
     $essai[$_] = { %essai_de_base };
   }
   if (frac($cel->{xg}) > frac($gly->{xg})) {
-    $essai[2]{xg_c}++;
-    $essai[3]{xg_c}++;
+    $essai[2]{xg_Cel}++;
+    $essai[3]{xg_Cel}++;
   }
   else {
-    $essai[2]{xg_g}++;
-    $essai[3]{xg_g}++;
+    $essai[2]{xg_Gly}++;
+    $essai[3]{xg_Gly}++;
   }
   if (frac($cel->{yg}) > frac($gly->{yg})) {
-    $essai[1]{yg_c}++;
-    $essai[3]{yg_c}++;
+    $essai[1]{yg_Cel}++;
+    $essai[3]{yg_Cel}++;
   }
   else {
-    $essai[1]{yg_g}++;
-    $essai[3]{yg_g}++;
+    $essai[1]{yg_Gly}++;
+    $essai[3]{yg_Gly}++;
   }
   #say join ' ', ($cel->{xg}, $cel->{yg}, $gly->{xg}, $gly->{yg});
   #say YAML::Dump([ @essai ]);
@@ -1424,6 +1425,46 @@ sub comp_images {
   my $htc = $cel->{hte};
   my $lgg = $gly->{lge};
   my $htg = $gly->{hte};
+
+  for my $num_essai (0..3) {
+    # Plages de valeurs combinées pour x et y, relativement au CDG
+    my ($dep_x, $arr_x, $dep_y, $arr_y);
+    $dep_x = max(         - $essai[$num_essai]{xg_Cel},          - $essai[$num_essai]{xg_Gly});
+    $arr_x = min($lgc - 1 - $essai[$num_essai]{xg_Cel}, $lgg - 1 - $essai[$num_essai]{xg_Gly});
+    $dep_y = max(         - $essai[$num_essai]{yg_Cel},          - $essai[$num_essai]{yg_Gly});
+    $arr_y = min($htc - 1 - $essai[$num_essai]{yg_Cel}, $htg - 1 - $essai[$num_essai]{yg_Gly});
+
+    # Plages de valeurs combinées, mais relativement au coin en haut à gauche des dessins respectifs
+    # En fait, il est inutile de les calculer.
+    #my $dep_x_Cel = $dep_x + $essai[$num_essai]{xg_Cel};
+    #my $arr_x_Cel = $arr_x + $essai[$num_essai]{xg_Cel};
+    #my $dep_y_Cel = $dep_y + $essai[$num_essai]{yg_Cel};
+    #my $arr_y_Cel = $arr_y + $essai[$num_essai]{yg_Cel};
+    #my $dep_x_Gly = $dep_x + $essai[$num_essai]{xg_Gly};
+    #my $arr_x_Gly = $arr_x + $essai[$num_essai]{xg_Gly};
+    #my $dep_y_Gly = $dep_y + $essai[$num_essai]{yg_Gly};
+    #my $arr_y_Gly = $arr_y + $essai[$num_essai]{yg_Gly};
+
+    my $commun = 0;
+    for my $y ($dep_y .. $arr_y) {
+      my $y_Cel = $y + $essai[$num_essai]{yg_Cel};
+      my $y_Gly = $y + $essai[$num_essai]{yg_Gly};
+      for my $x ($dep_x .. $arr_x) {
+        my $x_Cel = $x + $essai[$num_essai]{xg_Cel};
+        my $x_Gly = $x + $essai[$num_essai]{xg_Gly};
+        my ($pix_Cel, $pix_Gly); # 0 si blanc, 1 si noir
+        $pix_Cel = ($cel->{ind_noir} == $im_cel->getPixel($x_Cel, $y_Cel));
+        $pix_Gly = ($gly->{ind_noir} == $im_gly->getPixel($x_Gly, $y_Gly));
+        if ($pix_Cel == 1 && $pix_Gly == 1) {
+          $commun++;
+        }
+      }
+    }
+    $essai[$num_essai]{score} = $cel->{nb_noir} + $gly->{nb_noir} - 2 * $commun;
+  }
+  printf("Glyphe « %s » (U+00%2X) n° %d\n", $gly->{car1}, ord($gly->{car}), $gly->{num});
+  say YAML::Dump([ @essai ]);
+
   my $lg = $lgc > $lgg ? $lgc : $lgg;
   my $ht = $htc > $htg ? $htc : $htg;
   my $score = 0;
