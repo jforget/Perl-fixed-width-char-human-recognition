@@ -1149,6 +1149,26 @@ Pour le Glyphe, on a :
 
 Les quatre tentatives S<seront :>
 
+  Centre de gravité Cellule       7  15              7  16            8  15             8  16
+  Centre de gravité Glyphe        7  16              7  16            7  16             7  16
+
+  Plage de valeurs Cellule   ( 0..16,  0..29)  ( 0..16,  0..29)  ( 0..16,  0..29)  ( 0..16,  0..29)
+  relative au CDG            (-7.. 9,-15..14)  (-7.. 9,-16..13)  (-8.. 8,-15..14)  (-8.. 8,-16..13)
+  Plage de valeurs Glyphe    ( 0..15,  0..29)  ( 0..15,  0..29)  ( 0..15,  0..29)  ( 0..15,  0..29)
+  relative au CDG            (-7.. 8,-16..13)  (-7.. 8,-16..13)  (-7.. 8,-16..13)  (-7.. 8,-16..13)
+
+  Méthode 1
+  Plage combinée             (-7.. 9,-16..14)  (-7.. 9,-16..13)  (-8.. 8,-16..14)  (-8.. 8,-16..13)
+  relative au CDG
+  Plage combinée Cellule     ( 0..16, -1..29)  ( 0..16,  0..29)  ( 0..16, -1..29)  ( 0..16,  0..29)
+  Plage combinée Glyphe      ( 0..16,  0..30)  ( 0..16,  0..29)  (-1..15,  0..30)  (-1..15,  0..29)
+
+  Méthode 2
+  Plage combinée             (-7.. 8,-15..13)  (-7.. 8,-16..13)  (-7.. 8,-15..13)  (-7.. 8,-16..13)
+  relative au CDG
+  Plage combinée Cellule     ( 0..15,  0..28)  ( 0..15,  0..29)  ( 1..16,  0..28)  ( 1..16,  0..29)
+  Plage combinée Glyphe      ( 0..15,  1..29)  ( 0..15,  0..29)  ( 0..15,  1..29)  ( 0..15,  0..29)
+
   Centre de gravité Cellule    7  15     7  16    8  15    8  16
   Centre de gravité Glyphe     7  16     7  16    7  16    7  16
 
