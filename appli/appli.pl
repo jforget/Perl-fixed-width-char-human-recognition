@@ -1175,8 +1175,11 @@ EOF
       my %glyphes_par_score = ();
       my $iter = iter_glyphe($appli, $mdp);
       while (my $info_glyphe = $iter->next) {
-        my $sc1 = comp_images($info_cellule, $info_glyphe);
-        push @{$glyphes_par_score{$sc1}}, { car => $info_glyphe->{car}, num => $info_glyphe->{num}, score => $sc1 };
+        my @essai = comp_images($info_cellule, $info_glyphe);
+        for my $essai (@essai) {
+          my $sc1 = $essai->{score};
+          push @{$glyphes_par_score{$sc1}}, { car => $info_glyphe->{car}, num => $info_glyphe->{num}, score => $sc1 };
+        }
       }
       my $lus = 0;
       for my $sc1 (sort { $a <=> $b } keys %glyphes_par_score) {
@@ -1374,15 +1377,30 @@ sub score_cel {
   #say YAML::Dump($info_cellule);
   my $iter   = iter_glyphe($appli, $mdp);
   while (my $info_glyphe = $iter->next) {
-    my $sc1 = comp_images($info_cellule, $info_glyphe);
-    if ($sc1 < $score_min) {
-      @glyphes = ( { car => $info_glyphe->{car}, num => $info_glyphe->{num} } );
-      %car_cpt = ( $info_glyphe->{car1} => 1 );
-      $score_min = $sc1;
-    }
-    elsif ($sc1 == $score_min) {
-      push @glyphes, { car => $info_glyphe->{car}, num => $info_glyphe->{num} };
-      $car_cpt{ $info_glyphe->{car1} } ++;
+    my @essai = comp_images($info_cellule, $info_glyphe);
+    for my $essai (@essai) {
+      my $sc1 = $essai->{score};
+      if ($sc1 < $score_min) {
+        @glyphes = ( { car    => $info_glyphe->{car},
+                       num    => $info_glyphe->{num},
+                       xg_Cel => $essai->{xg_Cel},
+                       yg_Cel => $essai->{yg_Cel},
+                       xg_Gly => $essai->{xg_Gly},
+                       yg_Gly => $essai->{yg_Gly},
+                      } );
+        %car_cpt = ( $info_glyphe->{car1} => 1 );
+        $score_min = $sc1;
+      }
+      elsif ($sc1 == $score_min) {
+        push @glyphes, { car    => $info_glyphe->{car},
+                         num    => $info_glyphe->{num},
+                         xg_Cel => $essai->{xg_Cel},
+                         yg_Cel => $essai->{yg_Cel},
+                         xg_Gly => $essai->{xg_Gly},
+                         yg_Gly => $essai->{yg_Gly},
+                      };
+        $car_cpt{ $info_glyphe->{car1} } ++;
+      }
     }
   }
   return ($score_min, [ @glyphes ], { %car_cpt });
@@ -1462,35 +1480,12 @@ sub comp_images {
       }
     }
     $essai[$num_essai]{score} = $cel->{nb_noir} + $gly->{nb_noir} - 2 * $commun;
-    say "$essai[$num_essai]{score} = $cel->{nb_noir} + $gly->{nb_noir} - 2 * $commun";
+    #say "$essai[$num_essai]{score} = $cel->{nb_noir} + $gly->{nb_noir} - 2 * $commun";
   }
-  printf("Glyphe « %s » (U+00%2X) n° %d\n", $gly->{car1}, ord($gly->{car}), $gly->{num});
-  say YAML::Dump([ @essai ]);
+  #printf("Glyphe « %s » (U+00%2X) n° %d\n", $gly->{car1}, ord($gly->{car}), $gly->{num});
+  #say YAML::Dump([ @essai ]);
 
-  my $lg = $lgc > $lgg ? $lgc : $lgg;
-  my $ht = $htc > $htg ? $htc : $htg;
-  my $score = 0;
-  for my $y (0..$ht - 1) {
-    for my $x (0..$lg - 1) {
-      my ($pix_c, $pix_g); # 0 si blanc, 1 si noir
-      if ($x < $lgc && $y < $htc) {
-        $pix_c = ($cel->{ind_noir} == $im_cel->getPixel($x, $y));
-      }
-      else {
-        $pix_c = 0;
-      }
-      if ($x < $lgg && $y < $htg) {
-        $pix_g = ($gly->{ind_noir} == $im_gly->getPixel($x, $y));
-      }
-      else {
-        $pix_g = 0;
-      }
-      if ($pix_c != $pix_g) {
-        $score ++;
-      }
-    }
-  }
-  return $score;
+  return @essai;
 }
 
 sub img_cel_gly {
