@@ -1399,24 +1399,20 @@ sub comp_images {
                        xg_Gly => int($gly->{xg}),
                        yg_Gly => int($gly->{yg})
                       );
-  for (0..3) {
+  for (0..8) {
     $essai[$_] = { %essai_de_base };
   }
-  if (frac($cel->{xg}) > frac($gly->{xg})) {
-    $essai[2]{xg_Cel}++;
-    $essai[3]{xg_Cel}++;
+  for (3, 4, 5) {
+    $essai[$_]{xg_Cel}++;
   }
-  else {
-    $essai[2]{xg_Gly}++;
-    $essai[3]{xg_Gly}++;
+  for (6, 7, 8) {
+    $essai[$_]{xg_Gly}++;
   }
-  if (frac($cel->{yg}) > frac($gly->{yg})) {
-    $essai[1]{yg_Cel}++;
-    $essai[3]{yg_Cel}++;
+  for (1, 4, 7) {
+    $essai[$_]{yg_Cel}++;
   }
-  else {
-    $essai[1]{yg_Gly}++;
-    $essai[3]{yg_Gly}++;
+  for (2, 5, 8) {
+    $essai[$_]{yg_Gly}++;
   }
   #say join ' ', ($cel->{xg}, $cel->{yg}, $gly->{xg}, $gly->{yg});
   #say YAML::Dump([ @essai ]);
@@ -1426,7 +1422,7 @@ sub comp_images {
   my $lgg = $gly->{lge};
   my $htg = $gly->{hte};
 
-  for my $num_essai (0..3) {
+  for my $num_essai (0..$#essai) {
     # Plages de valeurs combinées pour x et y, relativement au CDG
     my ($dep_x, $arr_x, $dep_y, $arr_y);
     $dep_x = max(         - $essai[$num_essai]{xg_Cel},          - $essai[$num_essai]{xg_Gly});
