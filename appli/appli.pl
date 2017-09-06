@@ -1435,32 +1435,38 @@ sub comp_images {
     $arr_y = min($htc - 1 - $essai[$num_essai]{yg_Cel}, $htg - 1 - $essai[$num_essai]{yg_Gly});
 
     # Plages de valeurs combinées, mais relativement au coin en haut à gauche des dessins respectifs
-    # En fait, il est inutile de les calculer.
-    #my $dep_x_Cel = $dep_x + $essai[$num_essai]{xg_Cel};
-    #my $arr_x_Cel = $arr_x + $essai[$num_essai]{xg_Cel};
-    #my $dep_y_Cel = $dep_y + $essai[$num_essai]{yg_Cel};
-    #my $arr_y_Cel = $arr_y + $essai[$num_essai]{yg_Cel};
-    #my $dep_x_Gly = $dep_x + $essai[$num_essai]{xg_Gly};
-    #my $arr_x_Gly = $arr_x + $essai[$num_essai]{xg_Gly};
-    #my $dep_y_Gly = $dep_y + $essai[$num_essai]{yg_Gly};
-    #my $arr_y_Gly = $arr_y + $essai[$num_essai]{yg_Gly};
+    my $dep_x_Cel = $dep_x + $essai[$num_essai]{xg_Cel};
+    my $arr_x_Cel = $arr_x + $essai[$num_essai]{xg_Cel};
+    my $dep_y_Cel = $dep_y + $essai[$num_essai]{yg_Cel};
+    my $arr_y_Cel = $arr_y + $essai[$num_essai]{yg_Cel};
+    my $dep_x_Gly = $dep_x + $essai[$num_essai]{xg_Gly};
+    my $arr_x_Gly = $arr_x + $essai[$num_essai]{xg_Gly};
+    my $dep_y_Gly = $dep_y + $essai[$num_essai]{yg_Gly};
+    my $arr_y_Gly = $arr_y + $essai[$num_essai]{yg_Gly};
+    say "$dep_y_Cel $arr_y_Cel $dep_y_Gly $arr_y_Gly";
 
     my $commun = 0;
-    for my $y ($dep_y .. $arr_y) {
-      my $y_Cel = $y + $essai[$num_essai]{yg_Cel};
-      my $y_Gly = $y + $essai[$num_essai]{yg_Gly};
-      for my $x ($dep_x .. $arr_x) {
-        my $x_Cel = $x + $essai[$num_essai]{xg_Cel};
-        my $x_Gly = $x + $essai[$num_essai]{xg_Gly};
+    my ($x_Cel, $y_Cel, $x_Gly, $y_Gly);
+
+    for ($y_Cel  = $dep_y_Cel, $y_Gly = $dep_y_Gly;
+         $y_Cel <= $arr_y_Cel;
+         $y_Cel++, $y_Gly++) {
+
+        for ($x_Cel  = $dep_x_Cel, $x_Gly = $dep_x_Gly;
+             $x_Cel <= $arr_x_Cel;
+             $x_Cel ++, $x_Gly++) {
+
         my ($pix_Cel, $pix_Gly); # 0 si blanc, 1 si noir
         $pix_Cel = ($cel->{ind_noir} == $im_cel->getPixel($x_Cel, $y_Cel));
         $pix_Gly = ($gly->{ind_noir} == $im_gly->getPixel($x_Gly, $y_Gly));
         if ($pix_Cel == 1 && $pix_Gly == 1) {
           $commun++;
         }
+
       }
     }
     $essai[$num_essai]{score} = $cel->{nb_noir} + $gly->{nb_noir} - 2 * $commun;
+    say "$essai[$num_essai]{score} = $cel->{nb_noir} + $gly->{nb_noir} - 2 * $commun";
   }
   printf("Glyphe « %s » (U+00%2X) n° %d\n", $gly->{car1}, ord($gly->{car}), $gly->{num});
   say YAML::Dump([ @essai ]);
