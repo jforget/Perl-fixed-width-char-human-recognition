@@ -754,26 +754,6 @@ le résultat de la requête du Coloriage. C'est à l'utilisateur de décider qua
 le (long) rafraîchissement du Coloriage et quand il est préférable de continuer avec un
 Coloriage légèrement S<« rassis »>.
 
-=head3 Relation entre Cellules et Glyphes
-
-Compte tenu des irrégularités des gouttes d'encre, le dessin en pixels
-d'une Cellule
-ne correspond pas au dessin épuré d'un Glyphe. On associe
-une Cellule à un Glyphe en comparant les pixels et en minimisant
-le nombre de pixels différents. Ce nombre, le S<« score »,>
-est stocké dans l'enregistrement Cellule.
-
-Il y a un problème avec cette méthode, dans la mesure où une Cellule
-peut correspondre à plusieurs Glyphes différents. Si ces Glyphes
-dépendent du même Caractère, ce n'est pas grave. Mais si ces Glyphes
-représentent des Caractères différents... J'en tiendrai compte
-pour mes traitements.
-
-En raison de l'existence systématique d'au moins un Glyphe dans la base de
-données (le Glyphe Espace), chaque Cellule aura, dès sa création, un score
-et sera associée à au moins un Glyphe. Cela permet de simplifier d'autres
-portion des traitements du programme.
-
 =head2 Quadrillage
 
 Avant de définir le modèle physique de données, il faut analyser
@@ -889,7 +869,25 @@ en plusieurs Grilles, lesquelles se découpent en Cellules. Le modèle de donné
 
 
 
-=head2 Comparaison entre une Cellule et un Glyphe
+=head2 Relation entre Cellules et Glyphes
+
+Compte tenu des irrégularités des gouttes d'encre, le dessin en pixels
+d'une Cellule
+ne correspond pas au dessin épuré d'un Glyphe. On associe
+une Cellule à un Glyphe en comparant les pixels et en minimisant
+le nombre de pixels différents. Ce nombre, le S<« score »,>
+est stocké dans l'enregistrement Cellule.
+
+Il y a un problème avec cette méthode, dans la mesure où une Cellule
+peut correspondre à plusieurs Glyphes différents. Si ces Glyphes
+dépendent du même Caractère, ce n'est pas grave. Mais si ces Glyphes
+représentent des Caractères différents... J'en tiendrai compte
+pour mes traitements.
+
+En raison de l'existence systématique d'au moins un Glyphe dans la base de
+données (le Glyphe Espace), chaque Cellule aura, dès sa création, un score
+et sera associée à au moins un Glyphe. Cela permet de simplifier d'autres
+portion des traitements du programme.
 
 Une fois le découpage effectué, on rogne la Cellule en calculant 
 S<l'« enveloppe »> des pixels (I<bounding box> en anglais).
@@ -1055,31 +1053,32 @@ Comment aligner les pixels de la Cellule avec ceux du Glyphe avec un décalage
 en nombre S<entier ?> Comment arrondir les coordonnées xg et yg ?
 
 La solution adoptée consiste à faire plusieurs essais, en arrondissant par défaut
-puis par excès. Des deux coordonnées xg_c et xg_g, celle avec la partie fractionnaire
-la plus petite est arrondie par défaut, tandis que l'autre est arrondie tantôt par
-défaut, tantôt par excès. Idem pour les deux coordonnées yg_c et yg_g.
+puis par excès. Pour les abscises xg_Cel et xg_Gly, on fait une série de tests
+où les deux sont arrondies par défaut, une deuxième où xg_Cel est arrondie par
+excès tandis que xg_Gly est arrondie par défaut, puis une troisième où
+xg_Cel est de nouveau arrondie par défaut et xg_Gly est cette fois-ci arrondie
+par excès. Inutile de faire l'essai où les deux abscises sont arrondies par
+excès, cet essai serait redondant avec celui où elles sont arrondies par défaut.
+
+Et c'est la même chose pour les ordonnées.
 Avec un exemple, c'est plus clair.
 
   .               Cellule           Glyphe
-  .               xg_c    yg_c      xg_g    yg_g
+  .               xg_Cel  yg_Cel    xg_Gly  yg_Gly
   coord réelles   17,76   18,90      7,82   16,11
-  essai 1         17      18         7      16
-  essai 2         17      19         7      16
-  essai 3         17      18         8      16
-  essai 4         17      19         8      16
+  essai 0         17      18         7      16
+  essai 1         17      18         8 *    16
+  essai 2         17      18         7      17 *
+  essai 3         18 *    18         7      16
+  essai 4         18 *    18         8 *    16
+  essai 4         18 *    18         7      17 *
+  essai 0         17      19 *       7      16
+  essai 1         17      19 *       8 *    16
+  essai 2         17      19 *       7      17 *
 
-0,76 est inférieur à 0,82, donc l'abscisse xg_c est toujours arrondie par
-défaut et c'est l'abscisse xg_g qui est arrondie par défaut dans la moitié des
-essais et par excès dans l'autre moitié. En gardant le score le plus faible parmi
-les quatre scores calculés, on réduit encore un peu plus le problème de la 
+En gardant le score le plus faible parmi
+les neuf scores calculés, on réduit encore un peu plus le problème de la 
 colonne bleue et de la colonne orange présenté ci-dessus.
-
-Il est inutile de faire des essais en arrondissant les deux coordonnées xg_c et xg_g
-par excès, il seront redondants avec les essais où les deux coordonnées sont
-arrondies par défaut. Idem pour les ordonnées yg_c et yg_g.
-
-Quant à arrondir xg_c par excès et xg_g par défaut, cela n'a pas de sens, 
-cela contrevient à l'ordre dans lequel sont leurs parties fractionnaires.
 
 Une fois que l'on a choisi une méthode d'arrondi, comment compte-t-on le nombre
 de pixels différents entre la Cellule et le S<Glyphe ?>
@@ -1147,7 +1146,7 @@ Pour le Glyphe, on a :
    lge = 16
    hte = 30
 
-Les quatre tentatives S<seront :>
+On va se contenter d'illustrer quatre tentatives pour que le tableau reste lisible.
 
   Centre de gravité Cellule       7  15              7  16            8  15             8  16
   Centre de gravité Glyphe        7  16              7  16            7  16             7  16
