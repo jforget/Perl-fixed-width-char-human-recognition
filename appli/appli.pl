@@ -1192,7 +1192,7 @@ EOF
     for my $gly (@glyphes) {
       my $info_glyphe = get_glyphe($appli, $mdp, $gly->{car}, $gly->{num});
       my $score    = $gly->{score} // $info_cellule->{score};
-      my $img      = img_cel_gly($appli, $mdp, $info_doc, $info_cellule, $info_glyphe);
+      my $img      = img_cel_gly($appli, $mdp, $info_doc, $info_cellule, $info_glyphe, $gly);
       my $centre_C = sprintf("<p>Centre de gravité en %.2f, %.2f par rapport à l'enveloppe arrondi à %d, %d</p>",
                              $info_cellule->{xg}, $info_cellule->{yg}, $gly->{xg_Cel}, $gly->{yg_Cel});
       my $centre_G = sprintf("<p>Centre de gravité du Glyphe « %s » (U+00%2X) n° %d en %.2f, %.2f arrondi à %d, %d</p>",
@@ -1416,7 +1416,9 @@ sub comp_images {
   my %essai_de_base = (xg_Cel => int($cel->{xg}),
                        yg_Cel => int($cel->{yg}),
                        xg_Gly => int($gly->{xg}),
-                       yg_Gly => int($gly->{yg})
+                       yg_Gly => int($gly->{yg}),
+                       car    =>     $gly->{car},
+                       num    =>     $gly->{num},
                       );
   for (0..8) {
     $essai[$_] = { %essai_de_base };
@@ -1481,8 +1483,6 @@ sub comp_images {
       }
     }
     $essai[$num_essai]{score} = $cel->{nb_noir} + $gly->{nb_noir} - 2 * $commun;
-    $essai[$num_essai]{car}   = $gly->{car};
-    $essai[$num_essai]{num}   = $gly->{num};
     #say "$essai[$num_essai]{score} = $cel->{nb_noir} + $gly->{nb_noir} - 2 * $commun";
   }
   #printf("Glyphe « %s » (U+00%2X) n° %d\n", $gly->{car1}, ord($gly->{car}), $gly->{num});
@@ -1492,7 +1492,7 @@ sub comp_images {
 }
 
 sub img_cel_gly {
-  my ($appli, $mdp, $info_doc, $info_cellule, $info_glyphe)= @_;
+  my ($appli, $mdp, $info_doc, $info_cellule, $info_glyphe, $info_rel)= @_;
   my $echelle =  5;
   my $ecart   = 10;
   my $dx      = int($info_doc->{dx});
@@ -1511,8 +1511,8 @@ sub img_cel_gly {
   my $ye      = $info_cellule->{ye};
   my $lge     = $info_cellule->{lge};
   my $hte     = $info_cellule->{hte};
-  my $xg      = $info_cellule->{xg};
-  my $yg      = $info_cellule->{yg};
+  my $xg      = $info_rel->{xg_Cel};
+  my $yg      = $info_rel->{yg_Cel};
   my $im_cel = GD::Image->newFromPngData(decode_base64($info_cellule->{data}));
   my $im_gly = GD::Image->newFromPngData(decode_base64($info_glyphe->{data}));
 
@@ -1549,11 +1549,13 @@ sub img_cel_gly {
       }
     }
   }
+  my $lgc     = $info_cellule->{lge};
+  my $htc     = $info_cellule->{hte};
 
   my $lgg     = $info_glyphe->{lge};
   my $htg     = $info_glyphe->{hte};
-  my $xgg     = $info_glyphe->{xg};
-  my $ygg     = $info_glyphe->{yg};
+  my $xgg     = $info_rel->{xg_Gly};
+  my $ygg     = $info_rel->{yg_Gly};
   $deltax     = 2 * ($ecart + $echelle * $dx);
   $image->rectangle($deltax + $echelle * $xe, $echelle * $ye, $deltax + $echelle * ($xe + $lgg) - 1, $echelle * ($ye + $htg) - 1, $vert);
 
@@ -1571,18 +1573,44 @@ sub img_cel_gly {
 
   my $lg = $lge > $lgg ? $lge : $lgg;
   my $ht = $hte > $htg ? $hte : $htg;
+
+  # Plages de valeurs combinées pour x et y, relativement au CDG
+  my ($dep_x, $arr_x, $dep_y, $arr_y);
+  $dep_x = min(         - $info_rel->{xg_Cel},          - $info_rel->{xg_Gly});
+  $arr_x = max($lgc - 1 - $info_rel->{xg_Cel}, $lgg - 1 - $info_rel->{xg_Gly});
+  $dep_y = min(         - $info_rel->{yg_Cel},          - $info_rel->{yg_Gly});
+  $arr_y = max($htc - 1 - $info_rel->{yg_Cel}, $htg - 1 - $info_rel->{yg_Gly});
+
+  # Plages de valeurs combinées, mais relativement au coin en haut à gauche des dessins respectifs
+  my $dep_x_Cel = $dep_x + $info_rel->{xg_Cel};
+  my $arr_x_Cel = $arr_x + $info_rel->{xg_Cel};
+  my $dep_y_Cel = $dep_y + $info_rel->{yg_Cel};
+  my $arr_y_Cel = $arr_y + $info_rel->{yg_Cel};
+  my $dep_x_Gly = $dep_x + $info_rel->{xg_Gly};
+  my $arr_x_Gly = $arr_x + $info_rel->{xg_Gly};
+  my $dep_y_Gly = $dep_y + $info_rel->{yg_Gly};
+  my $arr_y_Gly = $arr_y + $info_rel->{yg_Gly};
+
   $deltax  =  ($ecart + $echelle * $dx);
-  for my $y (0 .. $ht - 1) {
-    for my $x (0 .. $lg - 1) {
+  my ($x_Cel, $y_Cel, $x_Gly, $y_Gly);
+
+  for ($y_Cel  = $dep_y_Cel, $y_Gly = $dep_y_Gly;
+       $y_Cel <= $arr_y_Cel;
+       $y_Cel++, $y_Gly++) {
+
+    for ($x_Cel  = $dep_x_Cel, $x_Gly = $dep_x_Gly;
+         $x_Cel <= $arr_x_Cel;
+         $x_Cel ++, $x_Gly++) {
+
       my ($pix_c, $pix_g); # 0 si blanc, 1 si noir
-      if ($x < $lge && $y < $hte) {
-        $pix_c = 0 + ($info_cellule->{ind_noir} == $im_cel->getPixel($x, $y));
+      if ($x_Cel>= 0 && $x_Cel < $lge && $y_Cel >= 0 && $y_Cel < $hte) {
+        $pix_c = 0 + ($info_cellule->{ind_noir} == $im_cel->getPixel($x_Cel, $y_Cel));
       }
       else {
         $pix_c = 0;
       }
-      if ($x < $lgg && $y < $htg) {
-        $pix_g = 0 + ($info_glyphe->{ind_noir} == $im_gly->getPixel($x, $y));
+      if ($x_Gly >= 0 && $x_Gly < $lgg && $y_Gly >= 0 && $y_Gly < $htg) {
+        $pix_g = 0 + ($info_glyphe->{ind_noir} == $im_gly->getPixel($x_Gly, $y_Gly));
       }
       else {
         $pix_g = 0;
@@ -1591,7 +1619,9 @@ sub img_cel_gly {
       #if ($y == 21) { say "x = $x, pix_c = $pix_c, pix_g = $pix_g" }
       if ($pix_c != 0 || $pix_g != 0) {
         my @couleur = (0, $cyan, $orange, $noir);
-        $image->filledRectangle($deltax + $echelle * ($xe + $x), $echelle * ($ye + $y), $deltax + $echelle * ($xe + $x + 1) - 2, $echelle * ($ye + $y + 1) - 2, $couleur[ 2 * $pix_c + $pix_g ]);
+        $image->filledRectangle($deltax + $echelle * ($xe + $x_Cel),         $echelle * ($ye + $y_Cel),
+                                $deltax + $echelle * ($xe + $x_Cel + 1) - 2, $echelle * ($ye + $y_Cel + 1) - 2,
+                                $couleur[ 2 * $pix_c + $pix_g ]);
       }
     }
   }
