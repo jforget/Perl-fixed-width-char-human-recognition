@@ -1071,10 +1071,10 @@ Avec un exemple, c'est plus clair.
   essai 2         17      18         7      17 *
   essai 3         18 *    18         7      16
   essai 4         18 *    18         8 *    16
-  essai 4         18 *    18         7      17 *
-  essai 0         17      19 *       7      16
-  essai 1         17      19 *       8 *    16
-  essai 2         17      19 *       7      17 *
+  essai 5         18 *    18         7      17 *
+  essai 6         17      19 *       7      16
+  essai 7         17      19 *       8 *    16
+  essai 8         17      19 *       7      17 *
 
 En gardant le score le plus faible parmi
 les neuf scores calculés, on réduit encore un peu plus le problème de la 
@@ -1480,7 +1480,8 @@ les pixels se font de C<0> à C<lge - 1> et de C<0> à C<hte - 1>.
 Relation Cellule-Glyphe. Ici, la Cellule est reliée à un seul Glyphe.
 Mais on devine ce qui se passe lorsque la Cellule est associée à plusieurs
 Glyphes. Le champ C<glyphes> contient les clés pour tous les Glyphes
-sélectionnés. Le champ C<cpt_car> contient l'histogramme par caractère
+sélectionnés, ainsi que les valeurs utilisées pour faire coïncider les centres de gravité.
+Le champ C<cpt_car> contient l'histogramme par caractère
 de C<glyphes> et le champ C<cpt_car> contient le nombre de paires stockées
 dans le champ C<glyphes>.
 
