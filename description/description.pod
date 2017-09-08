@@ -1211,27 +1211,27 @@ L'entité Caractère n'ayant aucune information à part sa clé, elle ne donne p
 Exemple de S<Document :>
 
   {
-	"_id" : ObjectId("592dc0087a7f462801253963"),
-	"y0" : "298",
-	"ind_noir" : 1,
-	"cisv" : "0",
-	"taille_x" : 2550,
-	"taille_y" : 3509,
-	"x0" : "225",
-	"dy" : "49.5",
-	"nb_noirs" : 174920,
-	"etat" : 3,
-	"fic" : "ex2.png",
-	"ind_blanc" : 0,
-	"cish" : 3,
-	"doc" : "ex2",
-	"dx" : "31",
-	"dh_cre" : "2017-05-30 18:55:04",
-	"grille" : "ex2-grille.png",
-	"dh_grille" : "2017-06-06 19:50:34",
-	"dirh" : "gauche",
-	"dirv" : null,
-	"dh_valid" : "2017-06-06 19:51:22"
+        "_id" : ObjectId("592dc0087a7f462801253963"),
+        "y0" : "298",
+        "ind_noir" : 1,
+        "cisv" : "0",
+        "taille_x" : 2550,
+        "taille_y" : 3509,
+        "x0" : "225",
+        "dy" : "49.5",
+        "nb_noirs" : 174920,
+        "etat" : 3,
+        "fic" : "ex2.png",
+        "ind_blanc" : 0,
+        "cish" : 3,
+        "doc" : "ex2",
+        "dx" : "31",
+        "dh_cre" : "2017-05-30 18:55:04",
+        "grille" : "ex2-grille.png",
+        "dh_grille" : "2017-06-06 19:50:34",
+        "dirh" : "gauche",
+        "dirv" : null,
+        "dh_valid" : "2017-06-06 19:51:22"
   }
 
 (avant mise en place de l'entité Grille).
@@ -1240,34 +1240,34 @@ Détail des champs
 
 Clé du document
 
-	"doc" : "ex2",
+        "doc" : "ex2",
 
 Champ C<_id> automatiquement créé par MongoDB
 
-	"_id" : ObjectId("592dc0087a7f462801253963"),
+        "_id" : ObjectId("592dc0087a7f462801253963"),
 
 Informations diverses, comme le nom du fichier graphique origine
 et celui du fichier où la grille est matérialisée, la taille
 en pixels dudit fichier, le nombre de pixels noirs.
 
-	"fic" : "ex2.png",
-	"grille" : "ex2-grille.png",
-	"taille_x" : 2550,
-	"taille_y" : 3509,
-	"nb_noirs" : 174920,
+        "fic" : "ex2.png",
+        "grille" : "ex2-grille.png",
+        "taille_x" : 2550,
+        "taille_y" : 3509,
+        "nb_noirs" : 174920,
 
 Comment interpréter les valeurs renvoyées par C<GD:getPixel>
 
-	"ind_noir" : 1,
-	"ind_blanc" : 0,
+        "ind_noir" : 1,
+        "ind_blanc" : 0,
 
 À  quel point du traitement est-on arrivé, ainsi que les dates-heures
 où l'on est arrivé aux différents états.
 
-	"etat" : 3,
-	"dh_cre" : "2017-05-30 18:55:04",
-	"dh_grille" : "2017-06-06 19:50:34",
-	"dh_valid" : "2017-06-06 19:51:22"
+        "etat" : 3,
+        "dh_cre" : "2017-05-30 18:55:04",
+        "dh_grille" : "2017-06-06 19:50:34",
+        "dh_valid" : "2017-06-06 19:51:22"
 
 Les différents états possible S<sont :>
 
@@ -1304,64 +1304,64 @@ Le fichier texte final a été généré.
 Exemple de S<Glyphe :>
 
   {
-	"_id" : ObjectId("5978f3c37a7f460b407e2066"),
-	"lge" : 23,
-	"dh_cre" : "2017-07-26 19:55:47",
-	"xg" : 8.201086956521738,
-	"ind_blanc" : 0,
-	"data" : "iVBORw0KGgoAAAANSUhEUgAAABcAAAAWAQMAAAARuJVGAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAAN0lEQVQImWNgYGNgqH/fgMANDAw1DHJAbMdQAcQWDDYMMgw/GOTq\nH8BxDQMDGP8B4h9YcAEDAwAWcBYVXE6mZQAAAABJRU5ErkJggg==\n",
-	"num" : 1,
-	"nb_noir" : 184,
-	"car1" : "p",
-	"hte" : 22,
-	"yg" : 8.793478260869566,
-	"car" : "p",
-	"ind_noir" : 1
+        "_id" : ObjectId("5978f3c37a7f460b407e2066"),
+        "lge" : 23,
+        "dh_cre" : "2017-07-26 19:55:47",
+        "xg" : 8.201086956521738,
+        "ind_blanc" : 0,
+        "data" : "iVBORw0KGgoAAAANSUhEUgAAABcAAAAWAQMAAAARuJVGAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAAN0lEQVQImWNgYGNgqH/fgMANDAw1DHJAbMdQAcQWDDYMMgw/GOTq\nH8BxDQMDGP8B4h9YcAEDAwAWcBYVXE6mZQAAAABJRU5ErkJggg==\n",
+        "num" : 1,
+        "nb_noir" : 184,
+        "car1" : "p",
+        "hte" : 22,
+        "yg" : 8.793478260869566,
+        "car" : "p",
+        "ind_noir" : 1
   }
 
 Détail des champs
 
 Clé de l'enregistrement
 
-	"car" : "p",
-	"num" : 1,
+        "car" : "p",
+        "num" : 1,
 
 Clé alternative. Elle coïncide avec la clé C<car>, sauf pour les glyphes associés à l'espace.
 Pour les espaces, on a la valeur C<"SP"> dans C<car1>, pour une meilleure lisibilité dans
 les pages HTML. Évidemment, la clé (pour identifier le Glyphe) comporte aussi le champ C<num>,
 mais c'est la même valeur que pour la clé normale.
 
-	"car1" : "p",
+        "car1" : "p",
 
 Champ C<_id> automatiquement créé par MongoDB
 
-	"_id" : ObjectId("5978f3c37a7f460b407e2066"),
+        "_id" : ObjectId("5978f3c37a7f460b407e2066"),
 
 Le contenu du dessin, un bitmap au format PNG, encodé en MIME::Base64.
 
-	"data" : "iVBORw0KGgoAAAANSUhEUgAAABcAAAAWAQMAAAARuJVGAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAAN0lEQVQImWNgYGNgqH/fgMANDAw1DHJAbMdQAcQWDDYMMgw/GOTq\nH8BxDQMDGP8B4h9YcAEDAwAWcBYVXE6mZQAAAABJRU5ErkJggg==\n",
+        "data" : "iVBORw0KGgoAAAANSUhEUgAAABcAAAAWAQMAAAARuJVGAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAAN0lEQVQImWNgYGNgqH/fgMANDAw1DHJAbMdQAcQWDDYMMgw/GOTq\nH8BxDQMDGP8B4h9YcAEDAwAWcBYVXE6mZQAAAABJRU5ErkJggg==\n",
 
 Comment interpréter les valeurs renvoyées par C<GD:getPixel>
 
-	"ind_noir" : 1
-	"ind_blanc" : 0,
+        "ind_noir" : 1
+        "ind_blanc" : 0,
 
 Caractéristiques du S<dessin :> dimensions et nombre de pixels noirs.
 
-	"lge" : 23,
-	"hte" : 22,
-	"nb_noir" : 184,
+        "lge" : 23,
+        "hte" : 22,
+        "nb_noir" : 184,
 
 Coordonnées du centre de gravité des pixels noirs. Certes, 15 chiffres après la virgule,
 c'est un peu excessif. Mais c'est plus simple de laisser faire Perl et MongoDB.
 
-	"xg" : 8.201086956521738,
-	"yg" : 8.793478260869566,
+        "xg" : 8.201086956521738,
+        "yg" : 8.793478260869566,
 
 Date-heure de création, pour d'éventuels besoins techniques, on ne sait jamais. Fuseau 
 horaire UTC pour éviter les problèmes avec l'heure d'été.
 
-	"dh_cre" : "2017-07-26 19:55:47",
+        "dh_cre" : "2017-07-26 19:55:47",
 
 Dans la table des Glyphes, le tout premier enregistrement est généré 
 automatiquement. Il s'agit du Glyphe Espace. Lorsque l'utilisateur
@@ -1373,101 +1373,105 @@ Les autres Glyphes sont créés par copie d'une Cellule.
 =head3 Cellule
 
   {
-	"_id" : ObjectId("599f186e7a7f4608c805e3e1"),
-	"ind_blanc" : 0,
-	"ye" : 10,
-	"dh_assoc" : "2017-08-24 18:18:26",
-	"xc" : 42,
-	"glyphes" : [
-		{
-			"num" : 1,
-			"car" : "p"
-		}
-	],
-	"c" : 0,
-	"dh_cre" : "2017-08-24 18:18:18",
-	"nb_noir" : 184,
-	"nb_car" : 1,
-	"lge" : 23,
-	"yc" : 27,
-	"doc" : "ex1",
-	"l" : 0,
-	"yg" : 8.793478260869566,
-	"score" : 0,
-	"hte" : 22,
-	"voisin" : "iVBORw0KGgoAAAANSUhEUgAAAJoAAAD3AQMAAADfW9/QAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAACDElEQVRYhe3XwWrbMAAG4F8IrEuwrj2E6BUCu3hg7FfpI3g3D8zq\n2y4jfYGRvopO7bGP0EAPO85jFw/GNKmOJUdSkzWUQcE/iNhfkBXHkiwBc+bMsVlETD0AV99bKAV6\n7yHRyDyEh7pcJZf08QbcYo8cJTreMslbhw0E0UjlyrbeDShAdw4r1BDwMCMd9JlBYTFXckT28HLs\ndRlQ0k0EbTvEIts57I6jDJDdcnmx9pDq/7NQ8hCJ+uMQ5vJLXdTXCc55s1lHbFlHMI9iFcHfEXzq\ntX7o7qWYApc+UtWjjmHvI4viJnPVyWf59CmStcNxLioAV52qI2imis5e8zqCtvVtFsGbk0j2t5kW\nIZoRH0F+Hg6H9EuJ6s7q0BnotgH51h7HasAa5M7inLefixjm/4z/I1QP7YMw3cfZfQ+en41Cj47E\nx0IjTiLXuNRf+SgDZDEkO67P+bmI/lME9VQfYt4h+PEozZpHhCg2BRbNFIXG6x5pI6e31IJpXPlI\nDeY+6geXZlOcM+eVksBbn5AWFW/2r7xxX6JX3PWIP5XDPoadyD7IEPfL9h9yUn1E+4Zlz2DHA2yn\nKB2O1at30lUfUajjSCyWMbQje4rdCUSItF2HiLSO4KrpzKwYYLI/dLjI7KN0OGfOK4e2mdl6TEP0\nNr1G+l46Mp2WbZ/Djx7yRQn+y0Pz2j3YABnMB/wLn3MdnyG5fxsAAAAASUVORK5CYII=\n",
-	"xe" : 5,
-	"xg" : 8.201086956521738,
-	"cpt_car" : {
-		"p" : 1
-	},
-	"ind_noir" : 1,
-	"data" : "iVBORw0KGgoAAAANSUhEUgAAABcAAAAWAQMAAAARuJVGAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAAN0lEQVQImWNgYGNgqH/fgMANDAw1DHJAbMdQAcQWDDYMMgw/GOTq\nH8BxDQMDGP8B4h9YcAEDAwAWcBYVXE6mZQAAAABJRU5ErkJggg==\n"
+        "_id" : ObjectId("599f186e7a7f4608c805e3e1"),
+        "ind_blanc" : 0,
+        "ye" : 10,
+        "dh_assoc" : "2017-09-07 20:11:27",
+        "xc" : 42,
+        "glyphes" : [
+                {
+                        "xg_Gly" : 8,
+                        "xg_Cel" : 8,
+                        "num" : 1,
+                        "car" : "p",
+                        "yg_Cel" : 8,
+                        "yg_Gly" : 8
+                }
+        ],
+        "c" : 0,
+        "dh_cre" : "2017-08-24 18:18:18",
+        "nb_noir" : 184,
+        "nb_car" : 1,
+        "lge" : 23,
+        "yc" : 27,
+        "doc" : "ex1",
+        "l" : 0,
+        "yg" : 8.793478260869566,
+        "score" : 0,
+        "hte" : 22,
+        "voisin" : "iVBORw0KGgoAAAANSUhEUgAAAJoAAAD3AQMAAADfW9/QAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAACDElEQVRYhe3XwWrbMAAG4F8IrEuwrj2E6BUCu3hg7FfpI3g3D8zq\n2y4jfYGRvopO7bGP0EAPO85jFw/GNKmOJUdSkzWUQcE/iNhfkBXHkiwBc+bMsVlETD0AV99bKAV6\n7yHRyDyEh7pcJZf08QbcYo8cJTreMslbhw0E0UjlyrbeDShAdw4r1BDwMCMd9JlBYTFXckT28HLs\ndRlQ0k0EbTvEIts57I6jDJDdcnmx9pDq/7NQ8hCJ+uMQ5vJLXdTXCc55s1lHbFlHMI9iFcHfEXzq\ntX7o7qWYApc+UtWjjmHvI4viJnPVyWf59CmStcNxLioAV52qI2imis5e8zqCtvVtFsGbk0j2t5kW\nIZoRH0F+Hg6H9EuJ6s7q0BnotgH51h7HasAa5M7inLefixjm/4z/I1QP7YMw3cfZfQ+en41Cj47E\nx0IjTiLXuNRf+SgDZDEkO67P+bmI/lME9VQfYt4h+PEozZpHhCg2BRbNFIXG6x5pI6e31IJpXPlI\nDeY+6geXZlOcM+eVksBbn5AWFW/2r7xxX6JX3PWIP5XDPoadyD7IEPfL9h9yUn1E+4Zlz2DHA2yn\nKB2O1at30lUfUajjSCyWMbQje4rdCUSItF2HiLSO4KrpzKwYYLI/dLjI7KN0OGfOK4e2mdl6TEP0\nNr1G+l46Mp2WbZ/Djx7yRQn+y0Pz2j3YABnMB/wLn3MdnyG5fxsAAAAASUVORK5CYII=\n",
+        "xe" : 5,
+        "xg" : 8.201086956521738,
+        "cpt_car" : {
+                "p" : 1
+        },
+        "ind_noir" : 1,
+        "data" : "iVBORw0KGgoAAAANSUhEUgAAABcAAAAWAQMAAAARuJVGAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAAN0lEQVQImWNgYGNgqH/fgMANDAw1DHJAbMdQAcQWDDYMMgw/GOTq\nH8BxDQMDGP8B4h9YcAEDAwAWcBYVXE6mZQAAAABJRU5ErkJggg==\n"
   }
 
 Détail des champs
 
 Clé interne de MongoDB
 
-	"_id" : ObjectId("599f186e7a7f4608c805e3e1"),
+        "_id" : ObjectId("599f186e7a7f4608c805e3e1"),
 
 Clé logique : le Document et les coordonnées ligne-colonne.
 
-	"doc" : "ex1",
-	"l" : 0,
-	"c" : 0,
+        "doc" : "ex1",
+        "l" : 0,
+        "c" : 0,
 
 Coordonnées pixel de la Cellule
 
-	"xc" : 42,
-	"yc" : 27,
+        "xc" : 42,
+        "yc" : 27,
 
 Caractéristiques de l'enveloppe des pixels noirs. Le champ C<data>
 contient le graphique, un bitmap au format PNG, encodé en MIME::Base64.
 
-	"xe" : 5,
-	"ye" : 10,
-	"lge" : 23,
-	"hte" : 22,
-	"data" : "iVBORw0KGgoAAAANSUhEUgAAABcAAAAWAQMAAAARuJVGAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAAN0lEQVQImWNgYGNgqH/fgMANDAw1DHJAbMdQAcQWDDYMMgw/GOTq\nH8BxDQMDGP8B4h9YcAEDAwAWcBYVXE6mZQAAAABJRU5ErkJggg==\n",
-	"nb_noir" : 184,
+        "xe" : 5,
+        "ye" : 10,
+        "lge" : 23,
+        "hte" : 22,
+        "data" : "iVBORw0KGgoAAAANSUhEUgAAABcAAAAWAQMAAAARuJVGAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAAN0lEQVQImWNgYGNgqH/fgMANDAw1DHJAbMdQAcQWDDYMMgw/GOTq\nH8BxDQMDGP8B4h9YcAEDAwAWcBYVXE6mZQAAAABJRU5ErkJggg==\n",
+        "nb_noir" : 184,
 
 Comment interpréter les valeurs renvoyées par C<GD:getPixel>
 
-	"ind_noir" : 1,
-	"ind_blanc" : 0,
+        "ind_noir" : 1,
+        "ind_blanc" : 0,
 
 Coordonnées du centre de gravité des pixels noirs. Certes, 15 chiffres après la virgule,
 c'est un peu excessif. Mais c'est plus simple de laisser faire Perl et MongoDB.
 
-	"xg" : 8.201086956521738,
-	"yg" : 8.793478260869566,
+        "xg" : 8.201086956521738,
+        "yg" : 8.793478260869566,
 
 Purement esthétique : la Cellule et ses voisines. Juste pour
 améliorer l'affichage et afficher la Cellule dans son contexte.
 Encore une fois, c'est du PNG encodé par MIME::Base64.
 
-	"voisin" : "iVBORw0KGgoAAAANSUhEUgAAAJoAAAD3AQMAAADfW9/QAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAACDElEQVRYhe3XwWrbMAAG4F8IrEuwrj2E6BUCu3hg7FfpI3g3D8zq\n2y4jfYGRvopO7bGP0EAPO85jFw/GNKmOJUdSkzWUQcE/iNhfkBXHkiwBc+bMsVlETD0AV99bKAV6\n7yHRyDyEh7pcJZf08QbcYo8cJTreMslbhw0E0UjlyrbeDShAdw4r1BDwMCMd9JlBYTFXckT28HLs\ndRlQ0k0EbTvEIts57I6jDJDdcnmx9pDq/7NQ8hCJ+uMQ5vJLXdTXCc55s1lHbFlHMI9iFcHfEXzq\ntX7o7qWYApc+UtWjjmHvI4viJnPVyWf59CmStcNxLioAV52qI2imis5e8zqCtvVtFsGbk0j2t5kW\nIZoRH0F+Hg6H9EuJ6s7q0BnotgH51h7HasAa5M7inLefixjm/4z/I1QP7YMw3cfZfQ+en41Cj47E\nx0IjTiLXuNRf+SgDZDEkO67P+bmI/lME9VQfYt4h+PEozZpHhCg2BRbNFIXG6x5pI6e31IJpXPlI\nDeY+6geXZlOcM+eVksBbn5AWFW/2r7xxX6JX3PWIP5XDPoadyD7IEPfL9h9yUn1E+4Zlz2DHA2yn\nKB2O1at30lUfUajjSCyWMbQje4rdCUSItF2HiLSO4KrpzKwYYLI/dLjI7KN0OGfOK4e2mdl6TEP0\nNr1G+l46Mp2WbZ/Djx7yRQn+y0Pz2j3YABnMB/wLn3MdnyG5fxsAAAAASUVORK5CYII=\n",
+        "voisin" : "iVBORw0KGgoAAAANSUhEUgAAAJoAAAD3AQMAAADfW9/QAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAACDElEQVRYhe3XwWrbMAAG4F8IrEuwrj2E6BUCu3hg7FfpI3g3D8zq\n2y4jfYGRvopO7bGP0EAPO85jFw/GNKmOJUdSkzWUQcE/iNhfkBXHkiwBc+bMsVlETD0AV99bKAV6\n7yHRyDyEh7pcJZf08QbcYo8cJTreMslbhw0E0UjlyrbeDShAdw4r1BDwMCMd9JlBYTFXckT28HLs\ndRlQ0k0EbTvEIts57I6jDJDdcnmx9pDq/7NQ8hCJ+uMQ5vJLXdTXCc55s1lHbFlHMI9iFcHfEXzq\ntX7o7qWYApc+UtWjjmHvI4viJnPVyWf59CmStcNxLioAV52qI2imis5e8zqCtvVtFsGbk0j2t5kW\nIZoRH0F+Hg6H9EuJ6s7q0BnotgH51h7HasAa5M7inLefixjm/4z/I1QP7YMw3cfZfQ+en41Cj47E\nx0IjTiLXuNRf+SgDZDEkO67P+bmI/lME9VQfYt4h+PEozZpHhCg2BRbNFIXG6x5pI6e31IJpXPlI\nDeY+6geXZlOcM+eVksBbn5AWFW/2r7xxX6JX3PWIP5XDPoadyD7IEPfL9h9yUn1E+4Zlz2DHA2yn\nKB2O1at30lUfUajjSCyWMbQje4rdCUSItF2HiLSO4KrpzKwYYLI/dLjI7KN0OGfOK4e2mdl6TEP0\nNr1G+l46Mp2WbZ/Djx7yRQn+y0Pz2j3YABnMB/wLn3MdnyG5fxsAAAAASUVORK5CYII=\n",
 
 Les dates-heures de création et de calcul des associations. On utilise l'heure
 UTC, ce qui évite les problèmes de changement d'heure.
 
-	"dh_cre" : "2017-08-24 18:18:18",
-	"dh_assoc" : "2017-08-24 18:18:26",
+        "dh_cre" : "2017-08-24 18:18:18",
+        "dh_assoc" : "2017-09-07 20:11:27",
 
 Récapitulatf sur les coordonnées : 
 
 =for HTML
 <img src="Cellule-p.png" alt="Dessin de la Cellule p en gros pixels, pour mettre en valeur les différentes coordonnées" />
 
-	"xc" : 42,
-	"yc" : 27,
-	"xe" : 5,
-	"ye" : 10,
-	"lge" : 23,
-	"hte" : 22,
-	"xg" : 8.201086956521738,
-	"yg" : 8.793478260869566,
+        "xc" : 42,
+        "yc" : 27,
+        "xe" : 5,
+        "ye" : 10,
+        "lge" : 23,
+        "hte" : 22,
+        "xg" : 8.201086956521738,
+        "yg" : 8.793478260869566,
 
 Les coordonnées du centre de gravité sont relatives au coin en haut à
 gauche de l'enveloppe, pas à celui de la Cellule. Et les boucles sur
@@ -1480,41 +1484,61 @@ sélectionnés. Le champ C<cpt_car> contient l'histogramme par caractère
 de C<glyphes> et le champ C<cpt_car> contient le nombre de paires stockées
 dans le champ C<glyphes>.
 
-	"nb_car" : 1,
-	"cpt_car" : {
-		"p" : 1
-	}
-	"glyphes" : [
-		{
-			"car" : "p",
-			"num" : 1
-		}
-	]
-	"score" : 0,
+        "nb_car" : 1,
+        "cpt_car" : {
+                "p" : 1
+        }
+        "glyphes" : [
+                {
+                        "car" : "p",
+                        "num" : 1
+                        "xg_Gly" : 8,
+                        "yg_Gly" : 8,
+                        "xg_Cel" : 8,
+                        "yg_Cel" : 8,
+                }
+        ]
+        "score" : 0,
 
 Voici la relation Cellule-Glyphe pour une Cellule associée
-à deux Glyphes correspondant à deux Caractères différents,
+à trois Glyphes correspondant à deux Caractères différents,
 un S<« r »> et un espace. Vous pouvez constater que dans le 
 tableau C<glyphes> on utilise la clé normale de l'espace, 
 tandis que dans le hachage C<cpt_car> on prend la clé 
 affichable C<"SP">.
 
-	"nb_car" : 2,
-	"score" : 221,
-	"glyphes" : [
-		{
-			"car" : " ",
-			"num" : 1
-		},
-		{
-			"num" : 1,
-			"car" : "r"
-		}
-	],
-	"cpt_car" : {
-		"r" : 1,
-		"SP" : 1
-	},
+        "nb_car" : 2,
+        "score" : 221,
+        "glyphes" : [
+                {
+                        "car" : " ",
+                        "num" : 1
+                        "xg_Gly" : 8,
+                        "yg_Gly" : 9,
+                        "xg_Cel" : 8,
+                        "yg_Cel" : 8,
+                },
+                {
+                        "car" : "r"
+                        "num" : 1,
+                        "xg_Gly" : 8,
+                        "yg_Gly" : 8,
+                        "xg_Cel" : 7,
+                        "yg_Cel" : 8,
+                },
+                {
+                        "car" : "r"
+                        "num" : 3,
+                        "xg_Gly" : 8,
+                        "yg_Gly" : 8,
+                        "xg_Cel" : 7,
+                        "yg_Cel" : 7,
+                }
+        ],
+        "cpt_car" : {
+                "r" : 2,
+                "SP" : 1
+        },
 
 =head3 Coloriage
 
@@ -1522,149 +1546,149 @@ Cette fois-ci, le contenu est un peu abrégé, pour ne pas lister
 toutes les Cellules sélectionnées dans ce Coloriage.
 
   {
-	"_id" : ObjectId("59797b3b7a7f46119e01faf1"),
-	"doc" : "ex1",
-	"n" : 1,
-	"desc" : "Lima&#32;India&#32;Unite",
-	"dh_cre" : "2017-07-27 05:33:47",
-	"criteres" : [
-		{
-			"caract" : "l",
-			"seuil" : 0,
-			"selspace" : "",
-			"select" : "carac"
-		},
-		{
-			"caract" : "I",
-			"selspace" : "",
-			"seuil" : 0,
-			"select" : "carac"
-		},
-		{
-			"select" : "carac",
-			"caract" : "1",
-			"seuil" : 0,
-			"selspace" : ""
-		},
-		{
-			"select" : "",
-			"caract" : "",
-			"selspace" : "",
-			"seuil" : 0
-		},
-		{
-			"seuil" : 0,
-			"selspace" : "",
-			"caract" : "",
-			"select" : ""
-		},
-		{
-			"selspace" : "",
-			"seuil" : 0,
-			"caract" : "",
-			"select" : ""
-		}
-	],
-	"dh_maj" : "2017-07-27 05:44:26",
-	"cellules" : [
-		{
-			"select" : "carac",
-			"yc" : 30,
-			"xc" : 350,
-			"c" : 10,
-			"lge" : 16,
-			"crit" : 0,
-			"hte" : 30,
-			"l" : 0
-		},
-		{
-			"select" : "carac",
-			"yc" : 83,
-			"xc" : 719,
-			"c" : 22,
-			"lge" : 17,
-			"crit" : 0,
-			"hte" : 30,
-			"l" : 1
-		},
-		{
-			"l" : 1,
-			"crit" : 2,
-			"lge" : 17,
-			"hte" : 30,
-			"c" : 38,
-			"xc" : 1212,
-			"select" : "carac",
-			"yc" : 89
-		},
-	],
-	"fic" : "ex1-col1.png",
-	"dh_val" : "2017-07-27 05:44:58"
+        "_id" : ObjectId("59797b3b7a7f46119e01faf1"),
+        "doc" : "ex1",
+        "n" : 1,
+        "desc" : "Lima&#32;India&#32;Unite",
+        "dh_cre" : "2017-07-27 05:33:47",
+        "criteres" : [
+                {
+                        "caract" : "l",
+                        "seuil" : 0,
+                        "selspace" : "",
+                        "select" : "carac"
+                },
+                {
+                        "caract" : "I",
+                        "selspace" : "",
+                        "seuil" : 0,
+                        "select" : "carac"
+                },
+                {
+                        "select" : "carac",
+                        "caract" : "1",
+                        "seuil" : 0,
+                        "selspace" : ""
+                },
+                {
+                        "select" : "",
+                        "caract" : "",
+                        "selspace" : "",
+                        "seuil" : 0
+                },
+                {
+                        "seuil" : 0,
+                        "selspace" : "",
+                        "caract" : "",
+                        "select" : ""
+                },
+                {
+                        "selspace" : "",
+                        "seuil" : 0,
+                        "caract" : "",
+                        "select" : ""
+                }
+        ],
+        "dh_maj" : "2017-07-27 05:44:26",
+        "cellules" : [
+                {
+                        "select" : "carac",
+                        "yc" : 30,
+                        "xc" : 350,
+                        "c" : 10,
+                        "lge" : 16,
+                        "crit" : 0,
+                        "hte" : 30,
+                        "l" : 0
+                },
+                {
+                        "select" : "carac",
+                        "yc" : 83,
+                        "xc" : 719,
+                        "c" : 22,
+                        "lge" : 17,
+                        "crit" : 0,
+                        "hte" : 30,
+                        "l" : 1
+                },
+                {
+                        "l" : 1,
+                        "crit" : 2,
+                        "lge" : 17,
+                        "hte" : 30,
+                        "c" : 38,
+                        "xc" : 1212,
+                        "select" : "carac",
+                        "yc" : 89
+                },
+        ],
+        "fic" : "ex1-col1.png",
+        "dh_val" : "2017-07-27 05:44:58"
   }
 
 Comme toujours, la clé interne de MongoDB
 
-	"_id" : ObjectId("59797b3b7a7f46119e01faf1"),
+        "_id" : ObjectId("59797b3b7a7f46119e01faf1"),
 
 La clé pour les besoins de l'application.
 
-	"doc" : "ex1",
-	"n" : 1,
+        "doc" : "ex1",
+        "n" : 1,
 
 Informations diverses : un libellé explicatif, le nom du fichier
 où les Cellules sont coloriées et les dates-heures de création,
 de mise à jour des critères et de validation (examen et sélection
 des Cellules avec constitution du fichier graphique).
 
-	"desc" : "Lima&#32;India&#32;Unite",
-	"fic" : "ex1-col1.png",
-	"dh_cre" : "2017-07-27 05:33:47",
-	"dh_maj" : "2017-07-27 05:44:26",
-	"dh_val" : "2017-07-27 05:44:58"
+        "desc" : "Lima&#32;India&#32;Unite",
+        "fic" : "ex1-col1.png",
+        "dh_cre" : "2017-07-27 05:33:47",
+        "dh_maj" : "2017-07-27 05:44:26",
+        "dh_val" : "2017-07-27 05:44:58"
 
 Liste des Critères du Coloriage, liste incluse dans l'enregistrement
 Coloriage. Même si l'on n'utilise que trois Critères sur les six
 disponibles, le tableau contient six postes, les trois derniers
 étant vides.
 
-	"criteres" : [
-		{
-			"caract" : "l",
-			"seuil" : 0,
-			"selspace" : "",
-			"select" : "carac"
-		},
-		{
-			"caract" : "I",
-			"selspace" : "",
-			"seuil" : 0,
-			"select" : "carac"
-		},
-		{
-			"select" : "carac",
-			"caract" : "1",
-			"seuil" : 0,
-			"selspace" : ""
-		},
-		{
-			"select" : "",
-			"caract" : "",
-			"selspace" : "",
-			"seuil" : 0
-		},
-		{
-			"seuil" : 0,
-			"selspace" : "",
-			"caract" : "",
-			"select" : ""
-		},
-		{
-			"selspace" : "",
-			"seuil" : 0,
-			"caract" : "",
-			"select" : ""
-		}
-	],
+        "criteres" : [
+                {
+                        "caract" : "l",
+                        "seuil" : 0,
+                        "selspace" : "",
+                        "select" : "carac"
+                },
+                {
+                        "caract" : "I",
+                        "selspace" : "",
+                        "seuil" : 0,
+                        "select" : "carac"
+                },
+                {
+                        "select" : "carac",
+                        "caract" : "1",
+                        "seuil" : 0,
+                        "selspace" : ""
+                },
+                {
+                        "select" : "",
+                        "caract" : "",
+                        "selspace" : "",
+                        "seuil" : 0
+                },
+                {
+                        "seuil" : 0,
+                        "selspace" : "",
+                        "caract" : "",
+                        "select" : ""
+                },
+                {
+                        "selspace" : "",
+                        "seuil" : 0,
+                        "caract" : "",
+                        "select" : ""
+                }
+        ],
 
 Les valeurs possibles de C<select> S<sont :>
 
@@ -1701,38 +1725,38 @@ Relation Glyphes-Critère. C'est inclus directement dans le Coloriage,
 pas dans le sous-document Critère. Du coup, on stocke le numéro de critère
 pour pouvoir reconstituer la clé complète du Critère.
 
-	"cellules" : [
-		{
-			"select" : "carac",
-			"yc" : 30,
-			"xc" : 350,
-			"c" : 10,
-			"lge" : 16,
-			"crit" : 0,
-			"hte" : 30,
-			"l" : 0
-		},
-		{
-			"select" : "carac",
-			"yc" : 83,
-			"xc" : 719,
-			"c" : 22,
-			"lge" : 17,
-			"crit" : 0,
-			"hte" : 30,
-			"l" : 1
-		},
-		{
-			"l" : 1,
-			"crit" : 2,
-			"lge" : 17,
-			"hte" : 30,
-			"c" : 38,
-			"xc" : 1212,
-			"select" : "carac",
-			"yc" : 89
-		},
-	],
+        "cellules" : [
+                {
+                        "select" : "carac",
+                        "yc" : 30,
+                        "xc" : 350,
+                        "c" : 10,
+                        "lge" : 16,
+                        "crit" : 0,
+                        "hte" : 30,
+                        "l" : 0
+                },
+                {
+                        "select" : "carac",
+                        "yc" : 83,
+                        "xc" : 719,
+                        "c" : 22,
+                        "lge" : 17,
+                        "crit" : 0,
+                        "hte" : 30,
+                        "l" : 1
+                },
+                {
+                        "l" : 1,
+                        "crit" : 2,
+                        "lge" : 17,
+                        "hte" : 30,
+                        "c" : 38,
+                        "xc" : 1212,
+                        "select" : "carac",
+                        "yc" : 89
+                },
+        ],
 
 =head2 L'architecture des traitements
 
