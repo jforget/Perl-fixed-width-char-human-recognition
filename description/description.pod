@@ -867,7 +867,77 @@ en plusieurs Grilles, lesquelles se découpent en Cellules. Le modèle de donné
   .                                     Cellule (1,n)---(0,n) Glyphe
 
 
+=head3 Découpage en plusieurs grilles
 
+Un document est scindé en plusieurs grilles. Chaque grille possède comme
+attributs les valeurs permettant de découper les Cellules comme dans
+la version initiale du schéma de S<données :>
+coordonnées pixels du coin en haut à gauche, largeur et hauteur des Cellules
+en pixels, cisaillement. En plus, il y a les coordonnées ligne-colonne du coin
+en haut à gauche, puisque la Grille ne couvre plus la totalité du Document.
+Et il y a un facteur de priorité, pour régler le cas où une Cellule pourrait
+être obtenue avec les paramètres de deux Grilles différentes.
+Le fichier graphique obtenu par la mise à jour du Document et de ses Grilles
+mettra en valeur les coins en haut à gauche de chaque Grille.
+
+Il y a un cas particulier, la Grille avec la Cellule C<l = 0, c = 0> en haut à gauche.
+Cette Grille a automatiquement le coefficient de priorité le plus faible. Cette Grille
+est créée automatiquement avec le Document et il n'y a pas moyen de la supprimer.
+Il y a néanmoins la possibilité de modifier ses paramètres (coordonnées pixels, 
+largeur, hauteur, cisaillement).
+
+Pour les autres Grilles, la création se fait en saisissant les coordonnées C<l, c> du 
+coin en haut à gauche et la priorité. Puis l'utilisateur choisit entre saisir tous les
+autres paramètres manuellement, ou laisser le programme les calculer. Avec le calcul automatique,
+les paramètres sont recopiés à partir de la Grille de priorité inférieure qui aurait permis
+de générer la Cellule en haut à gauche. Évidemment, cela veut dire que la nouvelle grille ne
+sert à rien pour l'instant puisque les paramètres sont les mêmes que pour la Grille de priorité
+intférieure. Mais l'utilisateur peut modifier les paramètres manuellement ensuite, jusqu'à obtenir
+des valeurs correctes. Le calcul automatique permet d'éviter que l'utilisateur tatonne trop
+pour obtenir les valeurs finales.
+
+Reprenons l'exemple de la copie d'écran précédente, en omettant les cisaillements pour simplifier.
+Au début, puis par tatonnements successifs, et en faisant l'impasse sur le mot
+S<« gregorien »>, l'utilisateur a déterminé que la Grille par défaut S<est :>
+
+  l   c  prio    x    y  lg  ht action
+  0   0    0    42   27  30  49
+
+L'utilisateur décide de créer une deuxième Grille pour le mot S<« gregorien »>. Le numéro de ligne
+est à coup sûr 3, mais combien vaut le numéro de S<colonne ?> Il essaie au S<pif :>
+
+  l   c  prio    x    y  lg  ht action
+  0   0    0    42   27  30  49
+  3  58    1                    calcul automatique
+
+Le programme réaffiche
+
+  l   c  prio    x    y  lg  ht action
+  0   0    0    42   27  30  49
+  3  58    1  1827  194  30  49 saisie manuelle
+
+Mais le fichier graphique montre qu'en colonne 58, il y a l'esperluette. L'utilisateur corrige alors S<avec :>
+
+  l   c  prio    x    y  lg  ht action
+  0   0    0    42   27  30  49
+  3  60    1  1827  194  30  49 calcul automatique
+
+Le programme réaffiche S<alors :>
+
+  l   c  prio    x    y  lg  ht action
+  0   0    0    42   27  30  49
+  3  60    1  1889  195  30  49 saisie manuelle
+
+L'utilisateur constate qu'il n'y a pas de problème dans le découpage vertical, mais qu'il faut 
+décaler le découpage horizontal de quatre pixels vers la gauche, tout en réduisant la largeur
+des Cellules. Il saisit S<donc :>
+
+  l   c  prio    x    y  lg  ht action
+  0   0    0    42   27  30  49
+  3  60    1  1885  195  29  49 saisie manuelle
+
+Et il peut procéder à d'autres ajustements progressifs, voire créer une troisième Grille, puis
+une quatrième, et ainsi de suite.
 
 =head2 Relation entre Cellules et Glyphes
 
