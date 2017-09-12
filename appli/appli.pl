@@ -1556,16 +1556,17 @@ sub img_cel_gly {
   my $htg     = $info_glyphe->{hte};
   my $xgg     = $info_rel->{xg_Gly};
   my $ygg     = $info_rel->{yg_Gly};
-  $deltax     = 2 * ($ecart + $echelle * $dx) + $echelle *($xe + $xg - $xgg);
+  $deltax     = 2 * ($ecart + $echelle * $dx) + $echelle * ($xe + $xg - $xgg);
   my $deltay  = $echelle * ($ye + $yg - $ygg);
   $image->rectangle($deltax + $echelle * $xe,              $deltay,
                     $deltax + $echelle * ($xe + $lgg) - 1, $deltay + $echelle * $htg - 1, $vert);
 
   # centre de gravité du Glyphe
+  my $fin_ligne = max($dx, $xe + $lgg);
   $image->line     ($deltax                          , $deltay + $echelle * ($ygg + 0.5),
-                    $deltax + $echelle * $lgg - 1    , $deltay + $echelle * ($ygg + 0.5), $vert);
-  $image->line     ($deltax + $echelle * ($xgg + 0.5), 0,
-                    $deltax + $echelle * ($xgg + 0.5), $echelle * $dy - 1     , $vert);
+                    $deltax + $echelle * $fin_ligne - 1    , $deltay + $echelle * ($ygg + 0.5), $vert);
+  $image->line     ($deltax + $echelle * ($xe + $xgg + 0.5), 0,
+                    $deltax + $echelle * ($xe + $xgg + 0.5), $echelle * $dy - 1     , $vert);
 
   for my $y (0 .. $htg - 1) {
     for my $x (0 .. $lgg - 1) {
