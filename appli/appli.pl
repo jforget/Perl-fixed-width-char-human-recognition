@@ -1497,7 +1497,7 @@ sub img_cel_gly {
   my $ecart   = 10;
   my $dx      = int($info_doc->{dx});
   my $dy      = int($info_doc->{dy});
-  my $largeur = 3 * $echelle * $dx + 2 * $ecart;
+  my $largeur = 4 * $echelle * $dx + 2 * $ecart; # * 4 pour avoir de la marge si le Glyphe déborde de la Cellule
   my $hauteur =     $echelle * $dy;
   my $image   = GD::Image->new($largeur, $hauteur);
   my $blanc   = $image->colorAllocate(255, 255, 255);
@@ -1556,17 +1556,22 @@ sub img_cel_gly {
   my $htg     = $info_glyphe->{hte};
   my $xgg     = $info_rel->{xg_Gly};
   my $ygg     = $info_rel->{yg_Gly};
-  $deltax     = 2 * ($ecart + $echelle * $dx);
-  $image->rectangle($deltax + $echelle * $xe, $echelle * $ye, $deltax + $echelle * ($xe + $lgg) - 1, $echelle * ($ye + $htg) - 1, $vert);
+  $deltax     = 2 * ($ecart + $echelle * $dx) + $echelle *($xe + $xg - $xgg);
+  my $deltay  = $echelle * ($ye + $yg - $ygg);
+  $image->rectangle($deltax + $echelle * $xe,              $deltay,
+                    $deltax + $echelle * ($xe + $lgg) - 1, $deltay + $echelle * $htg - 1, $vert);
 
   # centre de gravité du Glyphe
-  $image->line     ($deltax                         , $echelle * ($ye + $ygg + 0.5), $deltax + $echelle * $dx - 1     , $echelle * ($ye + $ygg + 0.5), $vert);
-  $image->line     ($deltax + $echelle * ($xe + $xgg + 0.5), 0                     , $deltax + $echelle * ($xe + $xgg + 0.5), $echelle * $dy - 1     , $vert);
+  $image->line     ($deltax                          , $deltay + $echelle * ($ygg + 0.5),
+                    $deltax + $echelle * $lgg - 1    , $deltay + $echelle * ($ygg + 0.5), $vert);
+  $image->line     ($deltax + $echelle * ($xgg + 0.5), 0,
+                    $deltax + $echelle * ($xgg + 0.5), $echelle * $dy - 1     , $vert);
 
   for my $y (0 .. $htg - 1) {
     for my $x (0 .. $lgg - 1) {
       if ($info_glyphe->{ind_noir} == $im_gly->getPixel($x, $y)) {
-        $image->filledRectangle($deltax + $echelle * ($xe + $x), $echelle * ($ye + $y), $deltax + $echelle * ($xe + $x + 1) - 2, $echelle * ($ye + $y + 1) - 2, $noir);
+        $image->filledRectangle($deltax + $echelle * ($xe + $x),         $deltay + $echelle *  $y,
+                                $deltax + $echelle * ($xe + $x + 1) - 2, $deltay + $echelle * ($y + 1) - 2, $noir);
       }
     }
   }
