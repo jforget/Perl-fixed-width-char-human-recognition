@@ -578,8 +578,7 @@ sub maj_grille {
   my $info_doc = get_doc($appli, $mdp, $doc);
   #say YAML::Dump( $info_doc );
 
-  my $fichier = $info_doc->{fic};
-  $fichier =~ s/\.png$/-grille.png/;
+  my $fichier = "$doc-grille.png";
   $ref_param->{grille} = $fichier;
 
   purge_cellule    ($appli, $mdp, $doc);
@@ -662,26 +661,40 @@ sub construire_grille {
         else {
           $couleur = $vert;
         }
-        for my $x1 (0,   $dx) {
-          for my $y1 (0 .. $dy) {
-            my $pixel = $image->getPixel($x +$x1, $y + $y1);
-            if ($pixel == $noir) {
-              $image->setPixel($x + $x1, $y + $y1, $rouge);
-            }
-            else {
-              $image->setPixel($x + $x1, $y + $y1, $couleur);
-            }
+        for my $y1 (0 .. $dy) {
+          my $pixel = $image->getPixel($x, $y + $y1);
+          if ($pixel == $noir) {
+            $image->setPixel($x, $y + $y1, $rouge);
+          }
+          else {
+            $image->setPixel($x, $y + $y1, $couleur);
+          }
+        }
+        for my $y1 (0 .. $dy) {
+          my $pixel = $image->getPixel($x +$dx, $y + $y1);
+          if ($pixel == $noir) {
+            $image->setPixel($x + $dx, $y + $y1, $rouge);
+          }
+          else {
+            $image->setPixel($x + $dx, $y + $y1, $couleur);
           }
         }
         for my $x1 (0 .. $dx) {
-          for my $y1 (0,   $dy) {
-            my $pixel = $image->getPixel($x +$x1, $y + $y1);
-            if ($pixel == $noir) {
-              $image->setPixel($x + $x1, $y + $y1, $rouge);
-            }
-            else {
-              $image->setPixel($x + $x1, $y + $y1, $couleur);
-            }
+          my $pixel = $image->getPixel($x +$x1, $y);
+          if ($pixel == $noir) {
+            $image->setPixel($x + $x1, $y, $rouge);
+          }
+          else {
+            $image->setPixel($x + $x1, $y, $couleur);
+          }
+        }
+        for my $x1 (0 .. $dx) {
+          my $pixel = $image->getPixel($x +$x1, $y + $dy);
+          if ($pixel == $noir) {
+            $image->setPixel($x + $x1, $y + $dy, $rouge);
+          }
+          else {
+            $image->setPixel($x + $x1, $y + $dy, $couleur);
           }
         }
       }
@@ -693,8 +706,8 @@ sub construire_grille {
         my $nb_noir = 0;  
         my ($xmin, $xmax, $ymin, $ymax) = ($dx, 0, $dy, 0);
         my ($xx, $yy) = (0,0);
-        for my $x1 (0 .. $dx) {
-          for my $y1 (0 .. $dy) {
+        for my $x1 (0 .. $dx - 1) {
+          for my $y1 (0 .. $dy - 1) {
             my $pixel = $image->getPixel($x +$x1, $y + $y1);
             if ($pixel == $noir) {
               $nb_noir++;
@@ -718,22 +731,26 @@ sub construire_grille {
           my $ind_noir = $cellule->colorExact(  0,   0,   0),
 
           # Le voisinage : la cellule et les 24 cellules environnantes
-          my $x25 = $x - 2 * $dx;
-          my $y25 = $y - 2 * $dy;
-          if ($x25 < 0) {
-            $x25 = 0;
+          my $x_dep = $x - 2 * $dx;
+          my $y_dep = $y - 2 * $dy;
+          my $x_arr = 0;
+          my $y_arr = 0;
+          if ($x_dep < 0) {
+            $x_arr = - $x_dep;
+            $x_dep = 0;
           }
-          elsif ($x25 > $info_doc->{taille_x}) {
-            $x25 = $info_doc->{taille_x};
+          elsif ($x_dep > $info_doc->{taille_x}) {
+            $x_dep = $info_doc->{taille_x};
           }
-          if ($y25 < 0) {
-            $y25 = 0;
+          if ($y_dep < 0) {
+            $y_arr = - $y_dep;
+            $y_dep = 0;
           }
-          elsif ($y25 > $info_doc->{taille_y}) {
-            $y25 = $info_doc->{taille_y};
+          elsif ($y_dep > $info_doc->{taille_y}) {
+            $y_dep = $info_doc->{taille_y};
           }
           my $voisinage = GD::Image->new(5 * $dx, 5 * $dy); 
-          $voisinage->copy($image, 0, 0, $x25, $y25, 5 * $dx, 5 * $dy); 
+          $voisinage->copy($image, $x_arr, $y_arr, $x_dep, $y_dep, 5 * $dx, 5 * $dy); 
 
           my $info_cellule = { doc     => $info_doc->{doc},
                                dh_cre  => horodatage(),
@@ -747,7 +764,7 @@ sub construire_grille {
                                ye        => $ymin,
                                lge       => $lg_env,
                                hte       => $ht_env,
-                               # centre de gravité (relatif au coin en haut à gauche)
+                               # centre de gravité (relatif au coin en haut à gauche de l'enveloppe)
                                xg        => $xx / $nb_noir - $xmin,
                                yg        => $yy / $nb_noir - $ymin,
                                # graphisme
