@@ -566,6 +566,18 @@ sub credoc {
   $obj{x0}       = $xmin[$obj{ind_noir}];
   $obj{y0}       = $ymin[$obj{ind_noir}];
   $obj{dh_cre}   = horodatage();
+  $obj{grille}   = [ { l    => 0,
+                       c    => 0,
+                       prio => 0,
+                       x0   => $obj{x0},
+                       y0   => $obj{y0},
+                       dx   => $obj{dx},
+                       dy   => $obj{dy},
+                       cish => 0,
+                       dirh => '',
+                       cisv => 0,
+                       dirv => '',
+                     } ];
 
   ins_doc($appli, $mdp, { %obj });
   return '';
