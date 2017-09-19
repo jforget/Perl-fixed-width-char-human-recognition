@@ -1061,6 +1061,29 @@ sub aff_doc {
     when ('haut'  ) { $haut   = "checked='1'"; }
     when ('bas'   ) { $bas    = "checked='1'"; }
   }
+  # Table des Grilles
+  my $table = '';
+  my $num_lig = 0;
+  for my $grille (@{$info->{grille}}) {
+    my $l = sprintf "<td>%d <input name='l%d' type='hidden' value='%d /'></td>\n", $grille->{l}, $num_lig, $grille->{l};
+    my $c = sprintf "<td>%d <input name='c%d' type='hidden' value='%d' /></td>\n", $grille->{c}, $num_lig, $grille->{c};
+    my $action;
+    my $prio;
+    if ($grille->{l} == 0 && $grille->{c} == 0) {
+      $action = "<td><select name='action0' size='1'><option>rien</option><option>saisie</option></select></td>\n";
+      $prio = "<td>0<input name='prio0' type='hidden' value='0'></td>\n";
+    }
+    else {
+      $action = "<td><select name='action$num_lig' size='3'><option>rien</option><option>saisie</option><option>calcul</option><option>suppression</option></select></td>\n";
+      $prio = sprintf "<td><input name='prio%d' value='%d'></td>\n", $num_lig, $grille->{prio};
+    }
+    my $x0 = sprintf "<td><input name='x0%d' value='%d' /></td>\n", $num_lig, $grille->{x0};
+    my $y0 = sprintf "<td><input name='y0%d' value='%d' /></td>\n", $num_lig, $grille->{y0};
+    my $dx = sprintf "<td><input name='dx%d' value='%d' /></td>\n", $num_lig, $grille->{dx};
+    my $dy = sprintf "<td><input name='dy%d' value='%d' /></td>\n", $num_lig, $grille->{dy};
+    $table .= "<tr>$l$c$action$prio$x0$y0$dx$dy</tr>\n";
+    $num_lig ++;
+  }
 
   # Quel fichier graphique faut-il afficher ?
   my $fichier;
@@ -1156,6 +1179,11 @@ Origine&nbsp;: x = <input type='text' name='x0' value='$info->{x0}' />, y = <inp
                                                     <input type='radio' name='dirh' value='droite' $droite >droite toutes les <input type='text' name='cish' value='$info->{cish}' /> lignes
 <br />Cisaillement vertical&nbsp: 1 pixel vers le <input type='radio' name='dirv' value='haut' $haut >haut
                                                   <input type='radio' name='dirv' value='bas'  $bas  >bas tous les <input type='text' name='cisv' value='$info->{cisv}' /> caractères
+<table border='1'>
+<tr><th colspan='2'>En haut à gauche</th><th></th><th></th><th colspan='2'>Coordonnées pixel</th><th colspan='2'>Décalage</th></tr>
+<tr><th>ligne</th><th>colonne</th><th>Action</th><th>priorité</th><th>x0</th><th>y0</th><th>dx</th><th>dy</th></tr>
+$table
+</table>
 <br /><input type='submit' value='grille' />
 </form>
 $maj_grille
