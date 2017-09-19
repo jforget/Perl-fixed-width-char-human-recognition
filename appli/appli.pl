@@ -1104,7 +1104,19 @@ sub aff_doc {
     $table .= "<tr>$l$c$action$prio" . (join '', @case{ qw/x0 y0 dx dy dirh cish dirv cisv/ }) . "</tr>\n";
     $num_lig ++;
   }
-
+  $table .= <<"EOF";
+<tr><td><input name='l$num_lig' size='3' /></td><td><input name='c$num_lig' size='3' /></td>
+    <td><select name='action$num_lig' size='1'><option selected='1'>rien</option><option>saisie</option><option>calcul</option></<select></td>
+    <td><input name='prio$num_lig' size='3' /></td>
+    <td><input name='x0$num_lig' size='3' /></td>
+    <td><input name='y0$num_lig' size='3' /></td>
+    <td><input name='dx$num_lig' size='3' /></td>
+    <td><input name='dy$num_lig' size='3' /></td>
+    <td><select name='dirh$num_lig' size='1'><option>gauche</option><option>droite</option></<select></td>
+    <td><input name='cish$num_lig' size='3' /></td>
+    <td><select name='dirv$num_lig' size='1'><option>haut</option><option>bas</option></<select></td>
+    <td><input name='cisv$num_lig' size='3' /></td>
+EOF
   # Quel fichier graphique faut-il afficher ?
   my $fichier;
   given ($variante) {
