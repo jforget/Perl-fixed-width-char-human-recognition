@@ -1065,6 +1065,7 @@ sub aff_doc {
   my $table = '';
   my $num_lig = 0;
   for my $grille (@{$info->{grille}}) {
+    my %case;
     my $l = sprintf "<td>%d <input name='l%d' type='hidden' value='%d /'></td>\n", $grille->{l}, $num_lig, $grille->{l};
     my $c = sprintf "<td>%d <input name='c%d' type='hidden' value='%d' /></td>\n", $grille->{c}, $num_lig, $grille->{c};
     my $action;
@@ -1074,14 +1075,33 @@ sub aff_doc {
       $prio = "<td>0<input name='prio0' type='hidden' value='0'></td>\n";
     }
     else {
-      $action = "<td><select name='action$num_lig' size='3'><option>rien</option><option>saisie</option><option>calcul</option><option>suppression</option></select></td>\n";
+      $action = "<td><select name='action$num_lig' size='1'><option>rien</option><option>saisie</option><option>calcul</option><option>suppression</option></select></td>\n";
       $prio = sprintf "<td><input name='prio%d' value='%d'></td>\n", $num_lig, $grille->{prio};
     }
-    my $x0 = sprintf "<td><input name='x0%d' value='%d' /></td>\n", $num_lig, $grille->{x0};
-    my $y0 = sprintf "<td><input name='y0%d' value='%d' /></td>\n", $num_lig, $grille->{y0};
-    my $dx = sprintf "<td><input name='dx%d' value='%d' /></td>\n", $num_lig, $grille->{dx};
-    my $dy = sprintf "<td><input name='dy%d' value='%d' /></td>\n", $num_lig, $grille->{dy};
-    $table .= "<tr>$l$c$action$prio$x0$y0$dx$dy</tr>\n";
+    for my $param (qw/x0 y0 dx dy cish cisv/) {
+      $case{$param} = sprintf "<td><input name='%s%d' value='%d' size='5' /></td>", $param, $num_lig, $grille->{$param};
+    }
+
+    if ($grille->{dirh} eq 'gauche') {
+      $case{dirh} = "<td><select name='dirh$num_lig'><option selected='1'>gauche</option><option>droite</option></select></td>";
+    }
+    elsif ($grille->{dirh} eq 'droite') {
+      $case{dirh} = "<td><select name='dirh$num_lig'><option>gauche</option><option selected='1'>droite</option></select></td>";
+    }
+    else {
+      $case{dirh} = "<td><select name='dirh$num_lig'><option>gauche</option><option>droite</option></select></td>";
+    }
+
+    if ($grille->{dirv} eq 'haut') {
+      $case{dirv} = "<td><select name='dirv$num_lig'><option selected='1'>haut</option><option>bas</option></select></td>";
+    }
+    elsif ($grille->{dirv} eq 'bas') {
+      $case{dirv} = "<td><select name='dirv$num_lig'><option>haut</option><option selected='1'>bas</option></select></td>";
+    }
+    else {
+      $case{dirv} = "<td><select name='dirv$num_lig'><option>haut</option><option>bas</option></select></td>";
+    }
+    $table .= "<tr>$l$c$action$prio" . (join '', @case{ qw/x0 y0 dx dy dirh cish dirv cisv/ }) . "</tr>\n";
     $num_lig ++;
   }
 
@@ -1180,8 +1200,18 @@ Origine&nbsp;: x = <input type='text' name='x0' value='$info->{x0}' />, y = <inp
 <br />Cisaillement vertical&nbsp: 1 pixel vers le <input type='radio' name='dirv' value='haut' $haut >haut
                                                   <input type='radio' name='dirv' value='bas'  $bas  >bas tous les <input type='text' name='cisv' value='$info->{cisv}' /> caractères
 <table border='1'>
-<tr><th colspan='2'>En haut à gauche</th><th></th><th></th><th colspan='2'>Coordonnées pixel</th><th colspan='2'>Décalage</th></tr>
-<tr><th>ligne</th><th>colonne</th><th>Action</th><th>priorité</th><th>x0</th><th>y0</th><th>dx</th><th>dy</th></tr>
+<tr><th colspan='2'>En haut à gauche</th>
+    <th></th><th></th>
+    <th colspan='2'>Coordonnées pixel</th>
+    <th colspan='2'>Décalage</th>
+    <th colspan='2'>Cisaillement horizontal</th>
+    <th colspan='2'>Cisaillement vertical</th></tr>
+<tr><th>ligne</th><th>colonne</th>
+    <th>Action</th><th>priorité</th>
+    <th>x0</th><th>y0</th>
+    <th>dx</th><th>dy</th>
+    <th>1 pixel <br />vers la</th><th>toutes les <br /><var>n</var> lignes</th>
+    <th>1 pixel <br />vers le</th><th>toutes les <br /><var>n</var> colonnes</th></tr>
 $table
 </table>
 <br /><input type='submit' value='grille' />
