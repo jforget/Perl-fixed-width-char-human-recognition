@@ -120,7 +120,7 @@ post '/majgrille/:doc' => sub {
       $grille->{$par} = body_parameters->get("$par$i") // '';
     }
     for my $par (qw/l c prio x0 y0 dx dy cish cisv/) {
-      $grille->{$par} = 0 + $grille->{$par};
+      $grille->{$par} = 0 + ($grille->{$par} || 0);
     }
     push @grille, $grille;
   }
@@ -610,7 +610,7 @@ sub maj_grille {
 
   purge_cellule    ($appli, $mdp, $doc);
 
-  $ref_param->{grille} = maj_liste_grilles($ref_param);
+  $ref_param->{grille} = maj_liste_grilles($info_doc, $ref_param);
   construire_grille($appli, $mdp, $info_doc, $ref_param, 0);
 
   $ref_param->{dh_grille}  = horodatage();
@@ -637,7 +637,7 @@ sub val_grille {
 }
 
 sub maj_liste_grilles {
-  my ($ref_param) = @_;
+  my ($info_doc, $ref_param) = @_;
   my @grille = @{$ref_param->{grille}};
 
   # pas de création si la dernière ligne n'a pas d'action
@@ -651,6 +651,22 @@ sub maj_liste_grilles {
   my $prio = 0;
   for (@grille) {
     $_->{prio} = $prio ++;
+  }
+
+  for my $grille (@grille) {
+    if ($grille->{action} eq 'rien') {
+      # Implémentation de l'opération "rien" : on récupère les valeurs de la base de données
+      # pour écraser celles saisies sur le formulaire
+      # Cette boucle repose sur le fait que $grille est un alias des éléments de @grille
+      for my $ancienne (@{$info_doc->{grille}}) {
+        if ($grille->{l} == $ancienne->{l} && $grille->{c} == $ancienne->{c}) {
+          for my $par (qw/x0 y0 dx dy cish cisv dirh dirv/) {
+            $grille->{$par} = $ancienne->{$par};
+          }
+          last; # plus besoin de chercher
+        }
+      }
+    }
   }
   return [ @grille ];
 }
@@ -1112,10 +1128,14 @@ sub aff_doc {
     }
     else {
       $action = "<td><select name='action$num_gr' size='1'><option>rien</option><option>saisie</option><option>calcul</option><option>suppression</option></select></td>\n";
-      $prio = sprintf "<td><input name='prio%d' value='%d'></td>\n", $num_gr, $grille->{prio};
+      $prio = sprintf "<td><input name='prio%d' value='%d' size='6'></td>\n", $num_gr, $grille->{prio};
     }
     for my $param (qw/x0 y0 dx dy cish cisv/) {
-      $case{$param} = sprintf "<td><input name='%s%d' value='%d' size='5' /></td>", $param, $num_gr, $grille->{$param};
+      my $valeur = sprintf("%.2f", $grille->{$param});
+      # suppression des zéros de droite de la partie décimale
+      $valeur =~ s/0+$//;
+      $valeur =~ s/\.$//;
+      $case{$param} = sprintf "<td><input name='%s%d' value='%s' size='6' /></td>", $param, $num_gr, $valeur;
     }
 
     if ($grille->{dirh} eq 'gauche') {
