@@ -98,7 +98,7 @@ get '/grille/:doc' => sub {
     redirect '/';
   }
   my $doc   = route_parameters->get('doc');
-  #say "get doc $doc (appli $appli, mdp $mdp)";
+  #say "/grille/:doc -> get doc $doc (appli $appli, mdp $mdp)";
   return aff_doc($appli, $mdp, $doc, 'grille');
 };
 
@@ -109,9 +109,24 @@ post '/majgrille/:doc' => sub {
   unless ($appli) {
     redirect '/';
   }
-  for my $par (qw/x0 y0 dx dy dirh cish dirv cisv/) {
+  for my $par (qw/x0 y0 dx dy dirh cish dirv cisv num_gr/) {
     $param{$par} = body_parameters->get($par);
   }
+
+  my @grille = ();
+  for my $i (0..$param{num_gr}) {
+    my $grille = {};
+    for my $par (qw/l c action prio x0 y0 dx dy cish cisv dirh dirv/) {
+      $grille->{$par} = body_parameters->get("$par$i") // '';
+    }
+    for my $par (qw/l c prio x0 y0 dx dy cish cisv/) {
+      $grille->{$par} = 0 + $grille->{$par};
+    }
+    push @grille, $grille;
+  }
+  #say YAML::Dump([ @grille ]);
+  $param{grille} = [ @grille ];
+
   my $doc   = route_parameters->get('doc');
   $param{doc} = $doc;
   #say YAML::Dump({ %param });
@@ -591,14 +606,14 @@ sub maj_grille {
   #say YAML::Dump( $info_doc );
 
   my $fichier = "$doc-grille.png";
-  $ref_param->{grille} = $fichier;
+  $ref_param->{fic_grille} = $fichier;
 
   purge_cellule    ($appli, $mdp, $doc);
   construire_grille($appli, $mdp, $info_doc, $ref_param, 0);
 
-  $ref_param->{dh_grille} = horodatage();
-  $ref_param->{grille}    = $fichier;
-  $ref_param->{etat}      = 2;
+  $ref_param->{dh_grille}  = horodatage();
+  $ref_param->{fic_grille} = $fichier;
+  $ref_param->{etat}       = 2;
   my $result = maj_doc($appli, $mdp, $doc, $ref_param);
 
   return '';
@@ -800,7 +815,7 @@ sub construire_grille {
     }
   }
   if ($flag == 0) {
-    my $fichier = $ref_param->{grille};
+    my $fichier = $ref_param->{fic_grille};
     open my $im, '>', $fichier
       or die "Ouverture $fichier $!";
     print $im $image->png;
@@ -1120,8 +1135,8 @@ EOF
   # Quel fichier graphique faut-il afficher ?
   my $fichier;
   given ($variante) {
-    when ('base'  ) { $fichier = $info->{fic}   ; }
-    when ('grille') { $fichier = $info->{grille}; }
+    when ('base'  ) { $fichier = $info->{fic}       ; }
+    when ('grille') { $fichier = $info->{fic_grille}; }
   }
   my $image = GD::Image->newFromPng($fichier);
   my $data  = encode_base64($image->png);
