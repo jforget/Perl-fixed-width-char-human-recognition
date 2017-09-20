@@ -609,6 +609,8 @@ sub maj_grille {
   $ref_param->{fic_grille} = $fichier;
 
   purge_cellule    ($appli, $mdp, $doc);
+
+  $ref_param->{grille} = maj_liste_grilles($ref_param);
   construire_grille($appli, $mdp, $info_doc, $ref_param, 0);
 
   $ref_param->{dh_grille}  = horodatage();
@@ -632,6 +634,25 @@ sub val_grille {
   maj_doc         ($appli, $mdp, $doc, $ref_param);
   purge_cellule   ($appli, $mdp, $doc);
   ins_many_cellule($appli, $mdp, [ @cellule ] );
+}
+
+sub maj_liste_grilles {
+  my ($ref_param) = @_;
+  my @grille = @{$ref_param->{grille}};
+
+  # pas de création si la dernière ligne n'a pas d'action
+  if ($grille[-1]{action} eq 'rien') {
+    pop @grille;
+  }
+  # Les autres suppressions
+  @grille = sort { $a->{prio} cmp $b->{prio} } grep { $_->{action} ne 'suppression'} @grille;
+
+  # Renuméroter les priorités
+  my $prio = 0;
+  for (@grille) {
+    $_->{prio} = $prio ++;
+  }
+  return [ @grille ];
 }
 
 sub construire_grille {
@@ -1081,7 +1102,7 @@ sub aff_doc {
   my $num_gr = 0;
   for my $grille (@{$info->{grille}}) {
     my %case;
-    my $l = sprintf "<td>%d <input name='l%d' type='hidden' value='%d /'></td>\n", $grille->{l}, $num_gr, $grille->{l};
+    my $l = sprintf "<td>%d <input name='l%d' type='hidden' value='%d' /></td>\n", $grille->{l}, $num_gr, $grille->{l};
     my $c = sprintf "<td>%d <input name='c%d' type='hidden' value='%d' /></td>\n", $grille->{c}, $num_gr, $grille->{c};
     my $action;
     my $prio;
