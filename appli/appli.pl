@@ -1063,11 +1063,11 @@ sub aff_doc {
   }
   # Table des Grilles
   my $table = '';
-  my $num_lig = 0;
+  my $num_gr = 0;
   for my $grille (@{$info->{grille}}) {
     my %case;
-    my $l = sprintf "<td>%d <input name='l%d' type='hidden' value='%d /'></td>\n", $grille->{l}, $num_lig, $grille->{l};
-    my $c = sprintf "<td>%d <input name='c%d' type='hidden' value='%d' /></td>\n", $grille->{c}, $num_lig, $grille->{c};
+    my $l = sprintf "<td>%d <input name='l%d' type='hidden' value='%d /'></td>\n", $grille->{l}, $num_gr, $grille->{l};
+    my $c = sprintf "<td>%d <input name='c%d' type='hidden' value='%d' /></td>\n", $grille->{c}, $num_gr, $grille->{c};
     my $action;
     my $prio;
     if ($grille->{l} == 0 && $grille->{c} == 0) {
@@ -1075,47 +1075,47 @@ sub aff_doc {
       $prio = "<td>0<input name='prio0' type='hidden' value='0'></td>\n";
     }
     else {
-      $action = "<td><select name='action$num_lig' size='1'><option>rien</option><option>saisie</option><option>calcul</option><option>suppression</option></select></td>\n";
-      $prio = sprintf "<td><input name='prio%d' value='%d'></td>\n", $num_lig, $grille->{prio};
+      $action = "<td><select name='action$num_gr' size='1'><option>rien</option><option>saisie</option><option>calcul</option><option>suppression</option></select></td>\n";
+      $prio = sprintf "<td><input name='prio%d' value='%d'></td>\n", $num_gr, $grille->{prio};
     }
     for my $param (qw/x0 y0 dx dy cish cisv/) {
-      $case{$param} = sprintf "<td><input name='%s%d' value='%d' size='5' /></td>", $param, $num_lig, $grille->{$param};
+      $case{$param} = sprintf "<td><input name='%s%d' value='%d' size='5' /></td>", $param, $num_gr, $grille->{$param};
     }
 
     if ($grille->{dirh} eq 'gauche') {
-      $case{dirh} = "<td><select name='dirh$num_lig'><option selected='1'>gauche</option><option>droite</option></select></td>";
+      $case{dirh} = "<td><select name='dirh$num_gr'><option selected='1'>gauche</option><option>droite</option></select></td>";
     }
     elsif ($grille->{dirh} eq 'droite') {
-      $case{dirh} = "<td><select name='dirh$num_lig'><option>gauche</option><option selected='1'>droite</option></select></td>";
+      $case{dirh} = "<td><select name='dirh$num_gr'><option>gauche</option><option selected='1'>droite</option></select></td>";
     }
     else {
-      $case{dirh} = "<td><select name='dirh$num_lig'><option>gauche</option><option>droite</option></select></td>";
+      $case{dirh} = "<td><select name='dirh$num_gr'><option>gauche</option><option>droite</option></select></td>";
     }
 
     if ($grille->{dirv} eq 'haut') {
-      $case{dirv} = "<td><select name='dirv$num_lig'><option selected='1'>haut</option><option>bas</option></select></td>";
+      $case{dirv} = "<td><select name='dirv$num_gr'><option selected='1'>haut</option><option>bas</option></select></td>";
     }
     elsif ($grille->{dirv} eq 'bas') {
-      $case{dirv} = "<td><select name='dirv$num_lig'><option>haut</option><option selected='1'>bas</option></select></td>";
+      $case{dirv} = "<td><select name='dirv$num_gr'><option>haut</option><option selected='1'>bas</option></select></td>";
     }
     else {
-      $case{dirv} = "<td><select name='dirv$num_lig'><option>haut</option><option>bas</option></select></td>";
+      $case{dirv} = "<td><select name='dirv$num_gr'><option>haut</option><option>bas</option></select></td>";
     }
     $table .= "<tr>$l$c$action$prio" . (join '', @case{ qw/x0 y0 dx dy dirh cish dirv cisv/ }) . "</tr>\n";
-    $num_lig ++;
+    $num_gr ++;
   }
   $table .= <<"EOF";
-<tr><td><input name='l$num_lig' size='3' /></td><td><input name='c$num_lig' size='3' /></td>
-    <td><select name='action$num_lig' size='1'><option selected='1'>rien</option><option>saisie</option><option>calcul</option></<select></td>
-    <td><input name='prio$num_lig' size='3' /></td>
-    <td><input name='x0$num_lig' size='3' /></td>
-    <td><input name='y0$num_lig' size='3' /></td>
-    <td><input name='dx$num_lig' size='3' /></td>
-    <td><input name='dy$num_lig' size='3' /></td>
-    <td><select name='dirh$num_lig' size='1'><option>gauche</option><option>droite</option></<select></td>
-    <td><input name='cish$num_lig' size='3' /></td>
-    <td><select name='dirv$num_lig' size='1'><option>haut</option><option>bas</option></<select></td>
-    <td><input name='cisv$num_lig' size='3' /></td>
+<tr><td><input name='l$num_gr' size='3' /></td><td><input name='c$num_gr' size='3' /></td>
+    <td><select name='action$num_gr' size='1'><option selected='1'>rien</option><option>saisie</option><option>calcul</option></select></td>
+    <td><input name='prio$num_gr' size='3' /></td>
+    <td><input name='x0$num_gr' size='3' /></td>
+    <td><input name='y0$num_gr' size='3' /></td>
+    <td><input name='dx$num_gr' size='3' /></td>
+    <td><input name='dy$num_gr' size='3' /></td>
+    <td><select name='dirh$num_gr' size='1'><option>gauche</option><option>droite</option></select></td>
+    <td><input name='cish$num_gr' size='3' /></td>
+    <td><select name='dirv$num_gr' size='1'><option>haut</option><option>bas</option></select></td>
+    <td><input name='cisv$num_gr' size='3' /></td>
 EOF
   # Quel fichier graphique faut-il afficher ?
   my $fichier;
@@ -1207,10 +1207,11 @@ Appli&nbsp;: $appli
 <form action='/majgrille/$info->{doc}' method='post'>
 Origine&nbsp;: x = <input type='text' name='x0' value='$info->{x0}' />, y = <input type='text' name='y0' value='$info->{y0}' />
 <br />Taille des cellules&nbsp;: largeur <input type='text' name='dx' value='$info->{dx}' /> hauteur <input type='text' name='dy' value='$info->{dy}' />
-<br />Cisaillement horizontal&nbsp: 1 pixel vers la <input type='radio' name='dirh' value='gauche' $gauche >gauche
+<br />Cisaillement horizontal&nbsp;: 1 pixel vers la <input type='radio' name='dirh' value='gauche' $gauche >gauche
                                                     <input type='radio' name='dirh' value='droite' $droite >droite toutes les <input type='text' name='cish' value='$info->{cish}' /> lignes
-<br />Cisaillement vertical&nbsp: 1 pixel vers le <input type='radio' name='dirv' value='haut' $haut >haut
+<br />Cisaillement vertical&nbsp;: 1 pixel vers le <input type='radio' name='dirv' value='haut' $haut >haut
                                                   <input type='radio' name='dirv' value='bas'  $bas  >bas tous les <input type='text' name='cisv' value='$info->{cisv}' /> caractères
+<input name='num_gr' value='$num_gr' type='hidden' />
 <table border='1'>
 <tr><th colspan='2'>En haut à gauche</th>
     <th></th><th></th>
