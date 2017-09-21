@@ -730,6 +730,8 @@ sub construire_grille {
       my @grille_ref = grep {  $_->{l} <= $l && $_->{c} <= $c } @grille;
       my $grille_ref = pop @grille_ref;
       my ($x, $y) = calcul_xy($grille_ref, $l, $c);
+      my $dx = $grille_ref->{dx};
+      my $dy = $grille_ref->{dy};
       my $couleur;
 
       # Dessin de la cellule dans la grille
@@ -742,7 +744,7 @@ sub construire_grille {
         }
         for my $y1 (0 .. $dy) {
           my $pixel = $image->getPixel($x, $y + $y1);
-          if ($pixel == $noir) {
+          if ($pixel == $noir || $pixel == $rouge) {
             $image->setPixel($x, $y + $y1, $rouge);
           }
           else {
@@ -751,7 +753,7 @@ sub construire_grille {
         }
         for my $y1 (0 .. $dy) {
           my $pixel = $image->getPixel($x +$dx, $y + $y1);
-          if ($pixel == $noir) {
+          if ($pixel == $noir || $pixel == $rouge) {
             $image->setPixel($x + $dx, $y + $y1, $rouge);
           }
           else {
@@ -766,7 +768,7 @@ sub construire_grille {
         }
         for my $x1 (0 .. $dx) {
           my $pixel = $image->getPixel($x +$x1, $y);
-          if ($pixel == $noir) {
+          if ($pixel == $noir || $pixel == $rouge) {
             $image->setPixel($x + $x1, $y, $rouge);
           }
           else {
@@ -775,7 +777,7 @@ sub construire_grille {
         }
         for my $x1 (0 .. $dx) {
           my $pixel = $image->getPixel($x +$x1, $y + $dy);
-          if ($pixel == $noir) {
+          if ($pixel == $noir || $pixel == $rouge) {
             $image->setPixel($x + $x1, $y + $dy, $rouge);
           }
           else {
