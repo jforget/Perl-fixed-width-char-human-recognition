@@ -1157,13 +1157,13 @@ sub aff_doc {
     else {
       $case{dirv} = "<td><select name='dirv$num_gr'><option>haut</option><option>bas</option></select></td>";
     }
-    $table .= "<tr>$l$c$action$prio" . (join '', @case{ qw/x0 y0 dx dy dirh cish dirv cisv/ }) . "</tr>\n";
+    $table .= "<tr>$l$c$prio$action" . (join '', @case{ qw/x0 y0 dx dy dirh cish dirv cisv/ }) . "</tr>\n";
     $num_gr ++;
   }
   $table .= <<"EOF";
 <tr><td><input name='l$num_gr' size='3' /></td><td><input name='c$num_gr' size='3' /></td>
-    <td><select name='action$num_gr' size='1'><option selected='1'>rien</option><option>saisie</option><option>calcul</option></select></td>
     <td><input name='prio$num_gr' size='3' /></td>
+    <td><select name='action$num_gr' size='1'><option selected='1'>rien</option><option>saisie</option><option>calcul</option></select></td>
     <td><input name='x0$num_gr' size='3' /></td>
     <td><input name='y0$num_gr' size='3' /></td>
     <td><input name='dx$num_gr' size='3' /></td>
@@ -1276,7 +1276,7 @@ Origine&nbsp;: x = <input type='text' name='x0' value='$info->{x0}' />, y = <inp
     <th colspan='2'>Cisaillement horizontal</th>
     <th colspan='2'>Cisaillement vertical</th></tr>
 <tr><th>ligne</th><th>colonne</th>
-    <th>Action</th><th>priorité</th>
+    <th>priorité</th><th>Action</th>
     <th>x0</th><th>y0</th>
     <th>dx</th><th>dy</th>
     <th>1 pixel <br />vers la</th><th>toutes les <br /><var>n</var> lignes</th>
