@@ -945,49 +945,7 @@ Voici ce que cela donne S<avec :>
 
 =begin HTML
 
-<form action='/majgrille/ex1bis' method='post'>
-</table><table border='1'>
-<tr><th colspan='2'>En haut à gauche</th>
-    <th></th><th></th>
-    <th colspan='2'>Coordonnées pixel</th>
-    <th colspan='2'>Décalage</th>
-    <th colspan='2'>Cisaillement horizontal</th>
-    <th colspan='2'>Cisaillement vertical</th></tr>
-<tr><th>ligne</th><th>colonne</th>
-    <th>priorité</th><th>Action</th>
-    <th>x0</th><th>y0</th>
-    <th>dx</th><th>dy</th>
-    <th>1 pixel <br />vers la</th><th>toutes les <br /><var>n</var> lignes</th>
-    <th>1 pixel <br />vers le</th><th>toutes les <br /><var>n</var> colonnes</th></tr>
-<tr><td>0 <input name='l0' type='hidden' value='0' /></td>
-<td>0 <input name='c0' type='hidden' value='0' /></td>
-<td>0<input name='prio0' type='hidden' value='0'></td>
-<td><select name='action0' size='1'><option>rien</option><option>saisie</option></select></td>
-<td><input name='x00' value='42' size='6' /></td><td><input name='y00' value='27' size='6' /></td><td><input name='dx0' value='30.8' size='6' /></td><td><input name='dy0' value='49.5' size='6' /></td><td><select name='dirh0'><option selected='1'>gauche</option><option>droite</option></select></td><td><input name='cish0' value='3' size='6' /></td><td><select name='dirv0'><option>haut</option><option selected='1'>bas</option></select></td><td><input name='cisv0' value='3' size='6' /></td></tr>
-<tr><td>3 <input name='l1' type='hidden' value='3' /></td>
-<td>60 <input name='c1' type='hidden' value='60' /></td>
-<td><input name='prio1' value='1' size='6'></td>
-<td><select name='action1' size='1'><option>rien</option><option>saisie</option><option>calcul</option><option>suppression</option></select></td>
-<td><input name='x01' value='1884' size='6' /></td><td><input name='y01' value='195' size='6' /></td><td><input name='dx1' value='28.5' size='6' /></td><td><input name='dy1' value='49.5' size='6' /></td><td><select name='dirh1'><option selected='1'>gauche</option><option>droite</option></select></td><td><input name='cish1' value='3' size='6' /></td><td><select name='dirv1'><option>haut</option><option selected='1'>bas</option></select></td><td><input name='cisv1' value='3' size='6' /></td></tr>
-<tr><td>3 <input name='l2' type='hidden' value='3' /></td>
-<td>67 <input name='c2' type='hidden' value='67' /></td>
-<td><input name='prio2' value='2' size='6'></td>
-<td><select name='action2' size='1'><option>rien</option><option>saisie</option><option>calcul</option><option>suppression</option></select></td>
-<td><input name='x02' value='2086' size='6' /></td><td><input name='y02' value='197' size='6' /></td><td><input name='dx2' value='28.5' size='6' /></td><td><input name='dy2' value='49.5' size='6' /></td><td><select name='dirh2'><option selected='1'>gauche</option><option>droite</option></select></td><td><input name='cish2' value='3' size='6' /></td><td><select name='dirv2'><option>haut</option><option selected='1'>bas</option></select></td><td><input name='cisv2' value='3' size='6' /></td></tr>
-<tr><td><input name='l3' size='3' /></td><td><input name='c3' size='3' /></td>
-    <td><input name='prio3' size='3' /></td>
-    <td><select name='action3' size='1'><option selected='1'>rien</option><option>saisie</option><option>calcul</option></select></td>
-    <td><input name='x03' size='3' /></td>
-    <td><input name='y03' size='3' /></td>
-    <td><input name='dx3' size='3' /></td>
-    <td><input name='dy3' size='3' /></td>
-    <td><select name='dirh3' size='1'><option>gauche</option><option>droite</option></select></td>
-    <td><input name='cish3' size='3' /></td>
-    <td><select name='dirv3' size='1'><option>haut</option><option>bas</option></select></td>
-    <td><input name='cisv3' size='3' /></td>
-
-</table>
-</form>
+<img src="Liste-des-Grilles.png" alt="Liste des Grilles" />
 
 <img src="recalage-grille.png" alt="Recalage des Cellules en fin de ligne" />
 
