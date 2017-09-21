@@ -945,6 +945,7 @@ Voici ce que cela donne S<avec :>
 
 =begin HTML
 
+<form action='/majgrille/ex1bis' method='post'>
 </table><table border='1'>
 <tr><th colspan='2'>En haut à gauche</th>
     <th></th><th></th>
@@ -986,6 +987,7 @@ Voici ce que cela donne S<avec :>
     <td><input name='cisv3' size='3' /></td>
 
 </table>
+</form>
 
 <img src="recalage-grille.png" alt="Recalage des Cellules en fin de ligne" />
 
