@@ -667,6 +667,19 @@ sub maj_liste_grilles {
         }
       }
     }
+    if ($grille->{action} eq 'calcul') {
+      # Implémentation de l'opération "calcul" : on cherche une Grille de priorité inférieure
+      # contenant la Grille en cours de calcul. Les paramètres x0 et y0 sont calculés d'après
+      # les paramètres de cette Grille de référence et les autres sont recopiés.
+      my @grille_ref = grep { $_->{prio} < $grille->{prio} && $_->{l} <= $grille->{l} && $_->{c} <= $grille->{c} } @grille;
+      my $grille_ref = pop @grille_ref;
+      for my $par (qw/dx dy cish cisv dirh dirv/) {
+        $grille->{$par} = $grille_ref->{$par};
+      }
+      my ($x, $y) = calcul_xy($grille_ref, $grille->{l}, $grille->{c});
+      $grille->{x0} = $x;
+      $grille->{y0} = $y;
+    }
   }
   return [ @grille ];
 }
@@ -1789,6 +1802,37 @@ sub img_cel_gly {
   }
              
   return $image;
+}
+
+sub calcul_xy {
+  my ($ref_param, $l, $c) = @_;
+  my $l0      = $ref_param->{l};
+  my $c0      = $ref_param->{c};
+  my $x0      = $ref_param->{x0};
+  my $y0      = $ref_param->{y0};
+  my $coef_cx = $ref_param->{dx};
+  my $coef_ly = $ref_param->{dy};
+  my $coef_lx = 0;
+  my $coef_cy = 0;
+  if ($ref_param->{cish}) {
+    if ($ref_param->{dirh} eq 'gauche') {
+      $coef_lx = -1 / $ref_param->{cish};
+    }
+    else {
+      $coef_lx = 1 / $ref_param->{cish};
+    }
+  }
+  if ($ref_param->{cisv}) {
+    if ($ref_param->{dirv} eq 'haut') {
+      $coef_cy = -1 / $ref_param->{cisv};
+    }
+    else {
+      $coef_cy = 1 / $ref_param->{cisv};
+    }
+  }
+  my $x = int($x0 + $coef_cx * ($c - $c0) + $coef_lx * ($l - $l0));
+  my $y = int($y0 + $coef_cy * ($c - $c0) + $coef_ly * ($l - $l0));
+  return ($x, $y);
 }
 
 sub palette {
