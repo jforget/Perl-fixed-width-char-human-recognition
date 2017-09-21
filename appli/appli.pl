@@ -719,6 +719,7 @@ sub construire_grille {
       $coef_cy = 1 / $ref_param->{cisv};
     }
   }
+  my @grille = @{$ref_param->{grille}};
   #say "horizontal $ref_param->{cish}, vertical $ref_param->{cisv}";
   #say "coef lx = $coef_lx, ly = $coef_ly, cx = $coef_cx, cy = $coef_cy";
 
@@ -726,13 +727,14 @@ sub construire_grille {
   my $c_max = int(($info_doc->{taille_x} - $x0) / $coef_cx);
   for my $l (0..$l_max) {
     for my $c (0..$c_max) {
-      my $x = int($x0 + $coef_cx * $c + $coef_lx * $l);
-      my $y = int($y0 + $coef_cy * $c + $coef_ly * $l);
+      my @grille_ref = grep {  $_->{l} <= $l && $_->{c} <= $c } @grille;
+      my $grille_ref = pop @grille_ref;
+      my ($x, $y) = calcul_xy($grille_ref, $l, $c);
       my $couleur;
 
       # Dessin de la cellule dans la grille
       if ($flag == 0) {
-        if (($l + $c) % 2) {
+        if ($c == $grille_ref->{c}) {
           $couleur = $bleu;
         }
         else {
@@ -753,8 +755,14 @@ sub construire_grille {
             $image->setPixel($x + $dx, $y + $y1, $rouge);
           }
           else {
-            $image->setPixel($x + $dx, $y + $y1, $couleur);
+            $image->setPixel($x + $dx, $y + $y1, $vert);
           }
+        }
+        if ($l == $grille_ref->{l}) {
+          $couleur = $bleu;
+        }
+        else {
+          $couleur = $vert;
         }
         for my $x1 (0 .. $dx) {
           my $pixel = $image->getPixel($x +$x1, $y);
@@ -771,7 +779,7 @@ sub construire_grille {
             $image->setPixel($x + $x1, $y + $dy, $rouge);
           }
           else {
-            $image->setPixel($x + $x1, $y + $dy, $couleur);
+            $image->setPixel($x + $x1, $y + $dy, $vert);
           }
         }
       }
