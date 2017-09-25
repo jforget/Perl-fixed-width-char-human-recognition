@@ -109,7 +109,7 @@ post '/majgrille/:doc' => sub {
   unless ($appli) {
     redirect '/';
   }
-  for my $par (qw/x0 y0 dx dy dirh cish dirv cisv num_gr/) {
+  for my $par (qw/dx dy num_gr/) {
     $param{$par} = body_parameters->get($par);
   }
 
@@ -563,7 +563,7 @@ sub credoc {
   if ($fic !~ /^\w+\.png$/) {
     return "Le nom de fichier contient des caractères interdits. Seuls les caractères alphanumériques sont autorisés, ainsi qu'un point pour délimiter l'extension.";
   }
-  my %obj = ( doc => $doc, fic => $fic, dx => 30, dy => 50, cish => 0, cisv => 0, etat => 1 );
+  my %obj = ( doc => $doc, fic => $fic, dx => 30, dy => 50, etat => 1 );
 
   my $image = GD::Image->newFromPng($fic);
   my ($l, $h) = $image->getBounds();
@@ -591,14 +591,12 @@ sub credoc {
     $obj{ind_noir}  = 1;
   }
   $obj{nb_noirs} = $cpt[$obj{ind_noir}];
-  $obj{x0}       = $xmin[$obj{ind_noir}];
-  $obj{y0}       = $ymin[$obj{ind_noir}];
   $obj{dh_cre}   = horodatage();
   $obj{grille}   = [ { l    => 0,
                        c    => 0,
                        prio => 0,
-                       x0   => $obj{x0},
-                       y0   => $obj{y0},
+                       x0   => $xmin[$obj{ind_noir}],
+                       y0   => $ymin[$obj{ind_noir}],
                        dx   => $obj{dx},
                        dy   => $obj{dy},
                        cish => 0,
@@ -715,36 +713,12 @@ sub construire_grille {
   my $bleu  = $image->colorAllocate(  0,   0, 255);
 
   my $noir    = $info_doc->{ind_noir};
-  my $x0      = $ref_param->{x0};
-  my $y0      = $ref_param->{y0};
   my $dx      = $ref_param->{dx};
   my $dy      = $ref_param->{dy};
-  my $coef_cx = $ref_param->{dx};
-  my $coef_ly = $ref_param->{dy};
-  my $coef_lx = 0;
-  my $coef_cy = 0;
-  if ($ref_param->{cish}) {
-    if ($ref_param->{dirh} eq 'gauche') {
-      $coef_lx = -1 / $ref_param->{cish};
-    }
-    else {
-      $coef_lx = 1 / $ref_param->{cish};
-    }
-  }
-  if ($ref_param->{cisv}) {
-    if ($ref_param->{dirv} eq 'haut') {
-      $coef_cy = -1 / $ref_param->{cisv};
-    }
-    else {
-      $coef_cy = 1 / $ref_param->{cisv};
-    }
-  }
   my @grille = @{$ref_param->{grille}};
-  #say "horizontal $ref_param->{cish}, vertical $ref_param->{cisv}";
-  #say "coef lx = $coef_lx, ly = $coef_ly, cx = $coef_cx, cy = $coef_cy";
 
-  my $l_max = int(($info_doc->{taille_y} - $y0) / $coef_ly);
-  my $c_max = int(($info_doc->{taille_x} - $x0) / $coef_cx);
+  my $l_max = int($info_doc->{taille_y} / $dy);
+  my $c_max = int($info_doc->{taille_x} / $dx);
   for my $l (0..$l_max) {
     for my $c (0..$c_max) {
       my @grille_ref = grep {  $_->{l} <= $l && $_->{c} <= $c } @grille;
@@ -1304,12 +1278,7 @@ Appli&nbsp;: $appli
 
 <h2>Grille</h2>
 <form action='/majgrille/$info->{doc}' method='post'>
-Origine&nbsp;: x = <input type='text' name='x0' value='$info->{x0}' />, y = <input type='text' name='y0' value='$info->{y0}' />
-<br />Taille des cellules&nbsp;: largeur <input type='text' name='dx' value='$info->{dx}' /> hauteur <input type='text' name='dy' value='$info->{dy}' />
-<br />Cisaillement horizontal&nbsp;: 1 pixel vers la <input type='radio' name='dirh' value='gauche' $gauche >gauche
-                                                    <input type='radio' name='dirh' value='droite' $droite >droite toutes les <input type='text' name='cish' value='$info->{cish}' /> lignes
-<br />Cisaillement vertical&nbsp;: 1 pixel vers le <input type='radio' name='dirv' value='haut' $haut >haut
-                                                  <input type='radio' name='dirv' value='bas'  $bas  >bas tous les <input type='text' name='cisv' value='$info->{cisv}' /> caractères
+Taille des cellules&nbsp;: largeur <input type='text' name='dx' value='$info->{dx}' /> hauteur <input type='text' name='dy' value='$info->{dy}' />
 <input name='num_gr' value='$num_gr' type='hidden' />
 <table border='1'>
 <tr><th colspan='2'>En haut à gauche</th>
