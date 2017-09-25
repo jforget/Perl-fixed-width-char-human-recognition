@@ -665,7 +665,7 @@ sub maj_liste_grilles {
     pop @grille;
   }
   # Les autres suppressions
-  @grille = sort { $a->{prio} cmp $b->{prio} } grep { $_->{action} ne 'suppression'} @grille;
+  @grille = sort { $a->{prio} cmp $b->{prio} } grep { $_->{action} ne 'suppr'} @grille;
 
   # Renuméroter les priorités
   my $prio = 0;
@@ -1170,7 +1170,7 @@ sub aff_doc {
       $prio = "<td>0<input name='prio0' type='hidden' value='0'></td>\n";
     }
     else {
-      $action = "<td><select name='action$num_gr' size='1'><option>rien</option><option>saisie</option><option>calcul</option><option>suppression</option></select></td>\n";
+      $action = "<td><select name='action$num_gr' size='1'><option>rien</option><option>saisie</option><option>calcul</option><option>suppr</option></select></td>\n";
       $prio = sprintf "<td><input name='prio%d' value='%d' size='6'></td>\n", $num_gr, $grille->{prio};
     }
     for my $param (qw/x0 y0 dx dy cish cisv/) {
