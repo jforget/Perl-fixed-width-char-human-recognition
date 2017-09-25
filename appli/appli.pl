@@ -450,8 +450,15 @@ sub liste_coloriage {
   my ($appli, $mdp, $doc) = @_;
   my $coll   = collection($appli, $mdp, "Coloriage");
   my $iter   = $coll->find({ doc => $doc });
-  my @liste   = $iter->all();
+  my @liste  = $iter->all();
   return [ @liste ];
+}
+
+sub iter_coloriage {
+  my ($appli, $mdp, $doc) = @_;
+  my $coll   = collection($appli, $mdp, "Coloriage");
+  my $iter   = $coll->find({ doc => $doc });
+  return $iter;
 }
 
 sub get_coloriage {
@@ -615,6 +622,13 @@ sub maj_grille {
   $ref_param->{fic_grille} = $fichier;
 
   purge_cellule    ($appli, $mdp, $doc);
+  my $iter_coloriage = iter_coloriage($appli, $mdp, $doc);
+  while (my $info_col = $iter_coloriage->next) {
+    my $n = $info_col->{n};
+    maj_coloriage($appli, $mdp, $doc, $n, { cellules => [ ],
+                                            dh_val   => horodatage(),
+                                          } );
+  }
 
   $ref_param->{grille} = maj_liste_grilles($info_doc, $ref_param);
   construire_grille($appli, $mdp, $info_doc, $ref_param, 0);
