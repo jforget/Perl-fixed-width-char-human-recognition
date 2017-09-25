@@ -533,7 +533,13 @@ sub copie_cel_gly {
                            } );
   my $result = maj_cellule($appli, $mdp, $doc, $l, $c, { score    => 0,
                                                          nb_car   => 1,
-                                                         glyphes  => [ { car => $car, num => $num } ],
+                                                         glyphes  => [ { car    => $car,
+                                                                         num    => $num,
+                                                                         xg_Cel => $info_cellule->{xg},
+                                                                         yg_Cel => $info_cellule->{yg},
+                                                                         xg_Gly => $info_cellule->{xg},
+                                                                         yg_Gly => $info_cellule->{yg},
+                                                                     } ],
                                                          cpt_car  => { $car1 => 1 },
                                                          dh_assoc => horodatage(),
                                                        });
