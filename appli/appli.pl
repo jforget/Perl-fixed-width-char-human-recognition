@@ -521,7 +521,7 @@ sub copie_cel_gly {
   }
   else {
     $car  = $car1;
-    $car1 = $conv_car_car1{$car};
+    $car1 = $conv_car_car1{$car} // $car;
   }
 
   my $info_cellule = get_cellule($appli, $mdp, $doc, $l, $c);
