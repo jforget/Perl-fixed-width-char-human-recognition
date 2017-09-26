@@ -22,6 +22,9 @@ use DateTime;
 use List::Util qw/min max/;
 use experimental qw/switch/;
 
+my %conv_car_car1 = ( ' ' => 'SP', '$' => 'DL', '.' => => 'PT', q(') => 'AP' );
+my %conv_car1_car = reverse %conv_car_car1;
+
 set 'session' => 'Simple';
 
 get '/' => sub {
@@ -490,7 +493,6 @@ sub verif_glyphe_espace {
   my ($appli, $mdp) = @_;
   my $obj = get_glyphe_1($appli, $mdp, 'SP', 1);
   unless ($obj) {
-    #$obj = { car => ' ', car1 => 'SP', num => 1, dh_cre = horodatage() };
     my $image = GD::Image->new(3,3);
     my $blanc = $image->colorAllocate(255, 255, 255);
     ins_glyphe($appli, $mdp, { car       => ' ',
@@ -514,11 +516,12 @@ sub copie_cel_gly {
   my $info_doc = get_doc($appli, $mdp, $doc);
 
   my $car;
-  if ($car1 eq 'SP') {
-    $car = ' ';
+  if (length($car1) == 2) {
+    $car = $conv_car1_car{$car1};
   }
   else {
-    $car = $car1;
+    $car  = $car1;
+    $car1 = $conv_car_car1{$car};
   }
 
   my $info_cellule = get_cellule($appli, $mdp, $doc, $l, $c);
@@ -1373,7 +1376,16 @@ $centre_G
 <p><img src='data:image/png;base64,$png' alt='comparaison cellule glyphe'/></p>
 EOF
     }
-    my $caract_assoc = join ', ', map { sprintf "&#%d; U+00%X", ord($_), ord($_) } keys %{$info_cellule->{cpt_car}};
+    my @caract_assoc;
+    for (keys %{$info_cellule->{cpt_car}}) {
+      if (length($_) == 2) {
+        push @caract_assoc, sprintf("%s U+00%X", $_, ord($conv_car1_car{$_}));
+      }
+      else {
+        push @caract_assoc, sprintf("&#%d; U+00%X", ord($_), ord($_));
+      }
+    }
+    my $caract_assoc = join ', ', @caract_assoc;
     my $centre_g = sprintf("<p>Centre de gravité en %.2f, %.2f par rapport à l'enveloppe, en %.2f, %.2f par rapport à la cellule</p>",
                            $info_cellule->{xg}, $info_cellule->{yg},
                            $info_cellule->{xe} + $info_cellule->{xg}, $info_cellule->{ye} + $info_cellule->{yg});

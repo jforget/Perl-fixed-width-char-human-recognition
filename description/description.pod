@@ -2148,6 +2148,16 @@ alors que la Cellule contenait (entre autres) :
 Heureusement d'une part que j'ai feuilleté le livre à la bonne page et d'autre part que je me
 souvenais d'un problème évoqué par Sébastien lors d'une L<réunion de Paris.PM|http://paris.mongueurs.net/meetings/2013/0515.html#t>.
 
+Une autre mauvaise surprise, mais que je n'ai pas vu venir, est le fait que
+certaines chaînes ou certains caractères sont interdits dans les clés des hachages
+stockés dans MongoDB. Dans mon cas, cela s'est produit avec l'histogramme C<cpt_car>
+de la collection Cellule. J'ai voulu stocker un hachage contenant une clé réduite à un point.
+C'est interdit par MongoDB. J'ai voulu stocker un hachage contenant une clé réduite à une
+simple quote. C'était peut-être autorisé, mais de la façon dont j'ai codé, cela n'a pas réussi.
+J'ai donc étendu la visualisation par digramme de l'espace à ces deux caractères C<PT> pour le
+point et C<AP> pour l'apostrophe. Et bien que mon programme Pascal n'utilise aucun dollar (ou peso),
+j'ai ajouté un digramme C<DL> pour ce caractère.
+
 
 =head2 Bonnes Surprises
 
