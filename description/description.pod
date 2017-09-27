@@ -715,24 +715,26 @@ saisir les critères, cliquer sur un bouton et lire le résultat.
 Je pense qu'il est préférable d'en faire une entité permanente.
 Mais comme la notion de requête est plus associée à la notion de processus éphémère
 qu'à la notion de S<« quelque-chose> qui peut se stocker dans une base de 
-S<données »>, j'ai préféré adopter un autre nom pour cette table, le 
-nom S<« Coloriage »>
+S<données »>, j'ai préféré adopter un autre nom pour cette table; Le 
+nom adopté est S<« Coloriage »>, parce que le résultat de la requête comporte un fichier
+graphique où toutes les Cellules sélectionnées sont représentées sur
+un fond coloré.
 
-  .                                    Document             Caractère
-  .                               (1,n)  (1,n)                (0,n)
-  .                              /         |                    |
-  .                             /          |                    |
-  .                         (1,1)          |                    |
-  .                 Coloriage              |                    |
-  .                   (1,n)                |                    |
-  .                     |                  |                    |
-  .                   (1,1)                |                    |
-  .                  Critère               |                    |
-  .                         (0,n)          |                    |
-  .                             \          |                    |
-  .                              \         |                    |
-  .                               (0,n)  (1,1)                (1,1)
-  .                                     Cellule (1,n)---(0,n) Glyphe
+  .                        Document             Caractère
+  .                   (1,n)  (1,n)                (0,n)
+  .                  /         |                    |
+  .                 /          |                    |
+  .             (1,1)          |                    |
+  .     Coloriage              |                    |
+  .       (1,n)                |                    |
+  .         |                  |                    |
+  .       (1,1)                |                    |
+  .      Critère               |                    |
+  .             (0,n)          |                    |
+  .                 \          |                    |
+  .                  \         |                    |
+  .                   (0,n)  (1,1)                (1,1)
+  .                         Cellule (1,n)---(0,n) Glyphe
 
 L'utilisateur saisit les critères et on les sauvegarde en base de données.
 Puis il clique sur un bouton S<« Recherche »> et le programme applique les critères
@@ -1496,9 +1498,13 @@ Clé de l'enregistrement
         "car" : "p",
         "num" : 1,
 
-Clé alternative. Elle coïncide avec la clé C<car>, sauf pour les glyphes associés à l'espace.
+Clé alternative. Elle coïncide avec la clé C<car>, sauf pour les glyphes associés à certains
+caractères S<spéciaux :> espace, point, dollar et apostrophe.
 Pour les espaces, on a la valeur C<"SP"> dans C<car1>, pour une meilleure lisibilité dans
-les pages HTML. Évidemment, la clé (pour identifier le Glyphe) comporte aussi le champ C<num>,
+les pages HTML. Quant aux trois autres caractères, c'est parce que la valeur
+peut être utilisée comme clé d'un hachage stocké dans MongoDB et la valeur 
+brute est refusée par MongoDB.
+Évidemment, la clé (pour identifier le Glyphe) comporte aussi le champ C<num>,
 mais c'est la même valeur que pour la clé normale.
 
         "car1" : "p",
