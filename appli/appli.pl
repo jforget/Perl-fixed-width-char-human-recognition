@@ -24,6 +24,8 @@ use experimental qw/switch/;
 
 my %conv_car_car1 = ( ' ' => 'SP', '$' => 'DL', '.' => => 'PT', q(') => 'AP' );
 my %conv_car1_car = reverse %conv_car_car1;
+my $dx_defaut = 30;
+my $dy_defaut = 50;
 
 set 'session' => 'Simple';
 
@@ -600,8 +602,8 @@ sub credoc {
                        prio => 0,
                        x0   => $xmin[$obj{ind_noir}],
                        y0   => $ymin[$obj{ind_noir}],
-                       dx   => $obj{dx},
-                       dy   => $obj{dy},
+                       dx   => $dx_defaut,
+                       dy   => $dy_defaut,
                        cish => 0,
                        dirh => '',
                        cisv => 0,
@@ -716,12 +718,21 @@ sub construire_grille {
   my $bleu  = $image->colorAllocate(  0,   0, 255);
 
   my $noir    = $info_doc->{ind_noir};
-  my $dx      = $ref_param->{dx};
-  my $dy      = $ref_param->{dy};
+  my $dx_min  = 2 * $dx_defaut; # Valeur fortement majorée
+  my $dy_min  = 2 * $dy_defaut; # idem
   my @grille = @{$ref_param->{grille}};
 
-  my $l_max = int($info_doc->{taille_y} / $dy);
-  my $c_max = int($info_doc->{taille_x} / $dx);
+  for my $grille (@grille) {
+    if ($grille->{dx} < $dx_min) {
+      $dx_min = $grille->{dx};
+    }
+    if ($grille->{dy} < $dy_min) {
+      $dy_min = $grille->{dy};
+    }
+  }
+
+  my $l_max = int($info_doc->{taille_y} / $dy_min);
+  my $c_max = int($info_doc->{taille_x} / $dx_min);
   for my $l (0..$l_max) {
     for my $c (0..$c_max) {
       my @grille_ref = grep {  $_->{l} <= $l && $_->{c} <= $c } @grille;
@@ -729,6 +740,10 @@ sub construire_grille {
       my ($x, $y) = calcul_xy($grille_ref, $l, $c);
       my $dx = $grille_ref->{dx};
       my $dy = $grille_ref->{dy};
+
+      # Déborde-t-on de la feuille ?
+      last if $x + $dx > $info_doc->{taille_x};
+
       my $couleur;
 
       # Dessin de la cellule dans la grille
