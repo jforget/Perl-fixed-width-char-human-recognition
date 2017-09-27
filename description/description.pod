@@ -1298,63 +1298,100 @@ L'entité Caractère n'ayant aucune information à part sa clé, elle ne donne p
 Exemple de S<Document :>
 
   {
-        "_id" : ObjectId("592dc0087a7f462801253963"),
-        "y0" : "298",
-        "ind_noir" : 1,
-        "cisv" : "0",
-        "taille_x" : 2550,
-        "taille_y" : 3509,
-        "x0" : "225",
-        "dy" : "49.5",
-        "nb_noirs" : 174920,
-        "etat" : 3,
-        "fic" : "ex2.png",
+        "_id" : ObjectId("59cb36537a7f4608a2293a61"),
         "ind_blanc" : 0,
-        "cish" : 3,
-        "doc" : "ex2",
-        "dx" : "31",
-        "dh_cre" : "2017-05-30 18:55:04",
-        "grille" : "ex2-grille.png",
-        "dh_grille" : "2017-06-06 19:50:34",
-        "dirh" : "gauche",
-        "dirv" : null,
-        "dh_valid" : "2017-06-06 19:51:22"
+        "ind_noir" : 1,
+        "taille_x" : 2328,
+        "dh_cre" : "2017-09-27 05:25:39",
+        "dx" : "30",
+        "taille_y" : 1071,
+        "fic" : "ex1.png",
+        "doc" : "ex1",
+        "nb_noirs" : 53089,
+        "grille" : [
+                {
+                        "cish" : 3,
+                        "dy" : 49.5,
+                        "dirv" : "bas",
+                        "l" : 0,
+                        "prio" : 0,
+                        "c" : 0,
+                        "cisv" : 3,
+                        "dirh" : "gauche",
+                        "x0" : 42,
+                        "dx" : 30.85,
+                        "y0" : 27,
+                        "action" : "rien"
+                },
+                {
+                        "x0" : 1884,
+                        "dx" : 28.5,
+                        "y0" : 195,
+                        "action" : "rien",
+                        "cisv" : 3,
+                        "dirh" : "gauche",
+                        "dirv" : "bas",
+                        "dy" : 49.5,
+                        "c" : 60,
+                        "prio" : 1,
+                        "l" : 3,
+                        "cish" : 3
+                },
+                {
+                        "x0" : 2086,
+                        "dx" : 28.5,
+                        "y0" : 197,
+                        "action" : "saisie",
+                        "cisv" : 3,
+                        "dirh" : "gauche",
+                        "dirv" : "bas",
+                        "dy" : 49.5,
+                        "l" : 3,
+                        "prio" : 2,
+                        "c" : 67,
+                        "cish" : 3
+                }
+        ],
+        "etat" : 3,
+        "dy" : "50",
+        "fic_grille" : "ex1-grille.png",
+        "dh_grille" : "2017-09-27 05:27:49",
+        "num_gr" : 2,
+        "dh_valid" : "2017-09-27 05:29:03"
   }
-
-(avant mise en place de l'entité Grille).
 
 Détail des champs
 
 Clé du document
 
-        "doc" : "ex2",
+        "doc" : "ex1",
 
 Champ C<_id> automatiquement créé par MongoDB
 
-        "_id" : ObjectId("592dc0087a7f462801253963"),
+        "_id" : ObjectId("59cb36537a7f4608a2293a61"),
 
 Informations diverses, comme le nom du fichier graphique origine
 et celui du fichier où la grille est matérialisée, la taille
 en pixels dudit fichier, le nombre de pixels noirs.
 
-        "fic" : "ex2.png",
-        "grille" : "ex2-grille.png",
-        "taille_x" : 2550,
-        "taille_y" : 3509,
-        "nb_noirs" : 174920,
+        "fic" : "ex1.png",
+        "fic_grille" : "ex1-grille.png",
+        "taille_x" : 2328,
+        "taille_y" : 1071,
+        "nb_noirs" : 53089,
 
 Comment interpréter les valeurs renvoyées par C<GD:getPixel>
 
-        "ind_noir" : 1,
         "ind_blanc" : 0,
+        "ind_noir" : 1,
 
 À  quel point du traitement est-on arrivé, ainsi que les dates-heures
 où l'on est arrivé aux différents états.
 
         "etat" : 3,
-        "dh_cre" : "2017-05-30 18:55:04",
-        "dh_grille" : "2017-06-06 19:50:34",
-        "dh_valid" : "2017-06-06 19:51:22"
+        "dh_cre" : "2017-09-27 05:25:39",
+        "dh_grille" : "2017-09-27 05:27:49",
+        "dh_valid" : "2017-09-27 05:29:03"
 
 Les différents états possible S<sont :>
 
@@ -1384,7 +1421,53 @@ Le fichier texte final a été généré.
 
 =back
 
-À compléter lorsque l'entité Grille sera mise en place.
+Taille approximative des Cellules
+
+        "dx" : "30",
+        "dy" : "50",
+
+Liste des Grilles et numéro de la dernière
+
+        "num_gr" : 2,
+        "grille" : [
+            { ... },
+            { ... },
+            { ... },
+        ],
+
+Les Grilles sont numérotées à partir de zéro, donc
+dans ce cas il y a trois grilles. Voici l'une d'elles
+
+Priorité, qui tient lieu de clé (numéro séquentiel)
+
+        "prio" : 0,
+
+Coordonnées ligne-colonne de la Cellule en haut à gauche de la Grille
+
+        "l" : 0,
+        "c" : 0,
+
+Coordonnées pixels de la Cellule en haut à gauche de la Grille
+
+        "x0" : 42,
+        "y0" : 27,
+
+Décalage d'une Cellule à sa voisine. La partie entière de ces deux
+nombres donne la largeur et la hauteur des Cellules de cette Grille
+
+        "dx" : 30.85,
+        "dy" : 49.5,
+
+Valeurs déterminant le cisaillement horizontal et le cisaillement vertical
+
+        "dirh" : "gauche",
+        "cish" : 3,
+        "dirv" : "bas",
+        "cisv" : 3,
+
+Reliquat du formulaire de création, je devrais le supprimer.
+
+        "action" : "rien"
 
 =head3 Glyphe
 
