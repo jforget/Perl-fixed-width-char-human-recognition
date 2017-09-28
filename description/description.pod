@@ -2418,6 +2418,126 @@ du cosinus) et on retombe sur l'équation de la rotation.
 Mais j'ai préféré parlé de S<« combinaison »> que de S<« composition »,> pour faire disparaître
 d'emblée le terme en a².
 
+=head2 Mon environnement de développement
+
+Voici les outils que j'utilise. Évidemment, ils reflètent mes préférences
+ergonomiques, qui ne sont pas forcément les vôtres.
+
+=head3 xterm
+
+Lorsque je travaille sur ce projet, je commence par ouvrir une fenêtre C<xterm>
+et je lance les deux S<commandes :>
+
+  cd Documents/prog/Perl-fixed-width-char-human-recognition/
+  emacs &
+
+Et je laisse de côté la fenêtre C<xterm>, sauf de temps en temps pour
+taper des commandes du S<genre :>
+
+  git status
+  git diff --no-color
+  git add appli/appli.pl 
+  git add description/description.pod 
+  git commit
+  git push -u --tags origin master
+
+Lors d'un C<commit>, Git ouvre une fenêtre dans C<vi> (pas Vim)
+et je tape le message dans cette fenêtre. Je n'éprouve pas le besoin d'utiliser
+les fonctionnalités avancées d'Emacs ou de Vim.
+
+=head3 Emacs
+
+J'utilise Emacs en mode C<viper>. Mais si vous préférez Emacs S<« à> la S<vanille »>,
+la description qui suit s'applique également.
+
+Dans Emacs, j'ouvre un premier buffer, la liste des fichiers et des sous-répertoires
+en mode C<dired>. C'est plus une habitude qu'un besoin.
+
+J'ouvre également une fenêtre d'édition sur le fichier source F<appli/appli.pl>
+et une autre sur le fichier de documentation F<description/description.pod>.
+
+J'ouvre une fenêtre shell avec C<M-x shell>. Dans cette fenêtre shell, je lance
+Dancer2 en S<tapant :>
+
+  cd fichiers
+  perl ../appli/appli.pl
+
+S<Rappel :> pour  simplifier les contrôles de sécurité, je n'autorise que des noms de fichiers
+sans aucun slash, donc placés dans le répertoire courant. C'est pour cela que l'application
+doit être lancée depuis le sous-répertoire F<fichiers>.
+
+J'ouvre une deuxième fenêtre shell avec C<C-u M-x shell>, que je nomme S<« mongo »>.
+Compte tenu de la façon dont fonctionne C<C-u> en mode viper, il faut être en mode
+vi-insertion plutôt qu'en mode vi-commande lorsque l'on tape C<C-u M-x shell>.
+Cela ne vous concerne pas si vous être en mode Emacs standard.
+Et dans cette fenêtre, je S<tape  :>
+
+  mongo
+  use exemple
+  db.auth('exemple','s3kr3t')
+
+De la sorte, je suis en prise directe avec la base MongoDB, je peux lancer des requêtes
+et copier-coller le résultat vers le fichier F<description/description.pod>.
+
+=head3 Firefox
+
+Je lance Firefox à partir des menus déroulants de ma machine.  J'aurais pu le faire depuis
+la fenêtre xterm, mais j'ai l'habitude d'utiliser les menus déroulants.
+Et je demande L<http://localhost:3000> pour avoir la fenêtre de connexion.
+Une fois le code application et le mot de passe saisis, j'arrive sur la liste
+des Documents. Sur cette page, j'accède aux documents avec un clic droit, puis
+S<« ouvrir> dans un nouvel S<onglet »>. La raison sera expliquée dans le paragraphe 
+suivant.
+
+=head3 Modification du programme
+
+Chaque fois que je veux prendre en compte les modifications effectuées sur le
+programme F<appli/appli.pl>, voici les actions effectuées.
+
+=over 4
+
+=item 1
+
+Dans la fenêtre C<*Shell*> d'Emacs, je tape C<C-c C-c> (contrôle C deux fois) pour
+arrêter le serveur Dancer2.
+
+=item 2
+
+Dans la même fenêtre, je remonte jusqu'à trouver une ligne de commande
+
+  perl ../appli/appli.pl
+
+et je la réexécute.
+
+=item 3
+
+Dans le premier onglet de Firefox, qui donne la liste des documents, 
+j'utilise l'action S<« retour »> (Alt-flèche gauche) pour revenir à l'écran de connexion.
+
+=item 4
+
+Je retape le code appli et le mot de passe pour me connecter à la nouvelle
+instance du serveur Dancer2.
+
+=item 5
+
+Dans les autres onglets de Firefox, je fais C<F5> pour réafficher la page 
+avec la nouvelle instance du serveur et continuer là où je m'étais arrêté.
+
+=back
+
+=head3 Débugage
+
+Comme vous pouvez le constater en lisant le source de F<appli/appli.pl>,
+je suis un adepte du débugage S<par :>
+
+  say YAML::Dump($ma_variable);
+
+Et comme le serveur Dancer2 s'exécute dans une fenêtre Emacs, c'est très facile
+de s'y retrouver dans les nombreux messages de débugage.
+
+Peut-être devrais-je tenter d'utiliser l'outil C<perldb> d'Emacs...
+
 =head1 LICENCE
 
 Texte diffusé sous la licence CC-BY-NC-ND : Creative Commons avec clause de paternité, excluant l'utilisation commerciale et excluant la modification. 
