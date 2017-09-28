@@ -715,7 +715,7 @@ saisir les critères, cliquer sur un bouton et lire le résultat.
 Je pense qu'il est préférable d'en faire une entité permanente.
 Mais comme la notion de requête est plus associée à la notion de processus éphémère
 qu'à la notion de S<« quelque-chose> qui peut se stocker dans une base de 
-S<données »>, j'ai préféré adopter un autre nom pour cette table; Le 
+S<données »>, j'ai préféré adopter un autre nom pour cette table. Le 
 nom adopté est S<« Coloriage »>, parce que le résultat de la requête comporte un fichier
 graphique où toutes les Cellules sélectionnées sont représentées sur
 un fond coloré.
@@ -957,6 +957,11 @@ On remarquera que dans l'ancienne version, j'utilisais le bleu et le vert pour
 faire comme sur un damier, ne pas avoir deux cases adjacentes de la même couleur.
 Avec la nouvelle version, je préfère utiliser le bleu pour mettre en évidence
 les limites des Grilles.
+
+On remarquera également qu'il reste des pixels rouges dans S<« gregorien »>. Ce n'est
+pas dû à la nouvelle Grille, celle qui chapeaute le caractère S<« g »>, mais à l'ancienne
+avec le recouvrement entre les deux Grilles sur quelques pixels de large. Donc, 
+ne pas se formaliser pour ces pixels rouges.
 
 =head2 Relation entre Cellules et Glyphes
 
@@ -1261,21 +1266,21 @@ On va se contenter d'illustrer quatre tentatives pour que le tableau reste lisib
 
 S<Rappel :> le modèle logique des données S<est :>
 
-  .                                    Document             Caractère
-  .                               (1,n)  (1,n)                (0,n)
-  .                              /         |                    |
-  .                             /          |                    |
-  .                         (1,1)          |                    |
-  .                 Coloriage            (1,1)                  |
-  .                   (1,n)             Grille                  |
-  .                     |                (1,n)                  |
-  .                   (1,1)                |                    |
-  .                  Critère               |                    |
-  .                         (0,n)          |                    |
-  .                             \          |                    |
-  .                              \         |                    |
-  .                               (0,n)  (1,1)                (1,1)
-  .                                     Cellule (1,n)---(0,n) Glyphe
+  .                       Document             Caractère
+  .                  (1,n)  (1,n)                (0,n)
+  .                 /         |                    |
+  .                /          |                    |
+  .            (1,1)          |                    |
+  .    Coloriage            (1,1)                  |
+  .      (1,n)             Grille                  |
+  .        |                (1,n)                  |
+  .      (1,1)                |                    |
+  .     Critère               |                    |
+  .            (0,n)          |                    |
+  .                \          |                    |
+  .                 \         |                    |
+  .                  (0,n)  (1,1)                (1,1)
+  .                        Cellule (1,n)---(0,n) Glyphe
 
 Aucune des relations hiérarchiques (c'est-à-dire avec un C<(1,1)> d'un côté)
 n'est porteuse de données. Elles sont donc matérialisées par le fait que la clé
@@ -2112,6 +2117,17 @@ Le modèle de sécurité est très simple. C'est la même personne (moi)
 qui écrit les programmes, gère la base de données, utilise l'application
 et exploite le résultat. En d'autres termes, le malfaiteur potentiel
 et la victime potentielle sont la même personne.
+
+Un exemple S<flagrant :> certains formulaires reposent sur l'inclusion
+de champs cachés C<hidden> pour mémoriser certaines valeurs sans permettre
+à l'utilisateur de les modifier. Si vous programmez un site d'achat en ligne
+et si vous utilisez de tels champs pour stocker, par exemple, les prix unitaires,
+c'est une grossière S<erreur !> Elle permet à un utilisateur averti de
+sauvegarder le source HTML, d'y modifier les champs cachés contenant les prix,
+puis de renvoyer le fichier modifié au site de la boutique en ligne.
+Mais ici, comme c'est la même personne du côté serveur et du côté client, moi,
+je ne vois aucun intérêt à m'escroquer. J'ai donc adopté la solution simple
+et rapide plutôt qu'une solution évoluée, mais longue à mettre en œuvre.
 
 Retour du S<balancier :>
 j'ai quand même activé l'authentification pour la base
