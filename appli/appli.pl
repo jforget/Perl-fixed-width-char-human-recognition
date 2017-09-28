@@ -329,6 +329,7 @@ sub collection {
   }
   return $client->ns("$appli.$coll");
 }
+
 sub liste_doc {
   my ($appli, $mdp) = @_;
   my $coll   = collection($appli, $mdp, "Document");
@@ -733,6 +734,7 @@ sub construire_grille {
 
   my $l_max = int($info_doc->{taille_y} / $dy_min);
   my $c_max = int($info_doc->{taille_x} / $dx_min);
+ EXT_GR:
   for my $l (0..$l_max) {
     for my $c (0..$c_max) {
       my @grille_ref = grep {  $_->{l} <= $l && $_->{c} <= $c } @grille;
@@ -742,7 +744,31 @@ sub construire_grille {
       my $dy = $grille_ref->{dy};
 
       # Déborde-t-on de la feuille ?
-      last if $x + $dx > $info_doc->{taille_x};
+
+      # on arrête de traiter la ligne si la Cellule 
+      # empiète sur le bord droit de la feuille
+      # et on passe à la ligne suivante
+      if ($x + $dx > $info_doc->{taille_x}) {
+	#say "fin de la ligne, l=$l, c=$c / $c_max, x=$x, y=$y";
+	last;
+      }
+
+      # Si la Cellule est entièrement en dehors de la feuille,
+      # au-delà du bord inférieur, on arrête l'extraction.
+      if ($y > $info_doc->{taille_y}) {
+        #say "Sortie par le bas, l=$l / $l_max, c=$c, x=$x, y=$y";
+	last EXT_GR;
+      }
+
+      # Si la Cellule empiète sur le bord inférieur de la feuille,
+      # on ne la traite pas, mais on passe à la Cellule suivante
+      # sur la même ligne. En effet, avec un changement de Grille
+      # ou avec un cisaillement vers le haut, la Cellule suivante
+      # peut se retrouver complètement dans la feuille.
+      if ($y + $dy > $info_doc->{taille_y}) {
+	#say "cellule suivante, l=$l / $l_max, c=$c, x=$x, y=$y";
+	next;
+      }
 
       my $couleur;
 
