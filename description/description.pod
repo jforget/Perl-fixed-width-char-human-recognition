@@ -1262,6 +1262,11 @@ On va se contenter d'illustrer quatre tentatives pour que le tableau reste lisib
   Plage combinée Cellule     ( 0..15,  0..28)  ( 0..15,  0..29)  ( 1..16,  0..28)  ( 1..16,  0..29)
   Plage combinée Glyphe      ( 0..15,  1..29)  ( 0..15,  0..29)  ( 0..15,  1..29)  ( 0..15,  0..29)
 
+S<Exception :> lors que l'on compare une Cellule avec le Glyphe-Espace, qui ne contient aucun
+pixel noir, les neuf façons de faire varier les arrondis donneront toutes le même S<score :>
+le nombre de pixels noirs de la Cellule. C'est inutile de faire varier les arrondis dans
+ce cas.
+
 =head2 Modèle physique des données
 
 S<Rappel :> le modèle logique des données S<est :>

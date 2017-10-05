@@ -1658,20 +1658,28 @@ sub comp_images {
                        car    =>     $gly->{car},
                        num    =>     $gly->{num},
                       );
-  for (0..8) {
-    $essai[$_] = { %essai_de_base };
+  if ($gly->{nb_noir} == 0) {
+    # Pas besoin de faire varier les arrondis pour le Glyphe-espace
+    $essai[0] = {%essai_de_base };
   }
-  for (3, 4, 5) {
-    $essai[$_]{xg_Cel}++;
-  }
-  for (6, 7, 8) {
-    $essai[$_]{xg_Gly}++;
-  }
-  for (1, 4, 7) {
-    $essai[$_]{yg_Cel}++;
-  }
-  for (2, 5, 8) {
-    $essai[$_]{yg_Gly}++;
+  else {
+    # Par contre, dès qu'il y a des pixels noirs dans le Glyphe, il faut
+    # faire varier les arrondis.
+    for (0..8) {
+      $essai[$_] = { %essai_de_base };
+    }
+    for (3, 4, 5) {
+      $essai[$_]{xg_Cel}++;
+    }
+    for (6, 7, 8) {
+      $essai[$_]{xg_Gly}++;
+    }
+    for (1, 4, 7) {
+      $essai[$_]{yg_Cel}++;
+    }
+    for (2, 5, 8) {
+      $essai[$_]{yg_Gly}++;
+    }
   }
   #say join ' ', ($cel->{xg}, $cel->{yg}, $gly->{xg}, $gly->{yg});
   #say YAML::Dump([ @essai ]);
