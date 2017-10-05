@@ -275,7 +275,7 @@ post '/majcolor/:doc/:n' => sub {
   my @critere = ();
   for my $i (0..5) {
     my $critere = {};
-    for my $par (qw/select seuil caract selspace/) {
+    for my $par (qw/couleur select seuil caract selspace/) {
       $critere->{$par} = body_parameters->get("$par$i") // '';
     }
     $critere->{seuil} = 0 + $critere->{seuil};
@@ -1017,10 +1017,11 @@ sub valid_color  {
 
   my $image = GD::Image->newFromPng($info_doc->{fic});
   my $noir    = $info_doc->{ind_noir};
-  my @coul;
-  for (palette()) {
-    my $coul = $image->colorAllocate(@$_);
-    push @coul, $coul;
+  my @coul = palette('liste');
+  my %rgb  = palette('hachage');
+  for (@coul) {
+    my @valeurs = @{$rgb{$_}};
+    my $coul = $image->colorAllocate(@valeurs);
   }
 
   my @cellules = ();
@@ -1509,7 +1510,9 @@ EOF
   my $html;
   my $dessins = '';
   my $html_crit= '';
-  my @coul = palette();
+  my @coul = palette('liste');
+  my %rgb  = palette('hachage');
+  my $choix = join "", map { "<option>$_</option>" } @coul;
   for my $i (0..5) {
     my $critere = $info_coloriage->{criteres}[$i];
     $critere->{select} //= '';
@@ -1521,11 +1524,12 @@ EOF
     $carac =~ s/(\W)/sprintf("&#%d", ord($1))/ge;
     my $espace    = $critere->{selspace} ? "checked='1'" : "";
     my $couleur   = $coul[$i];
-    my $rouge     = $couleur->[0] // 255;
-    my $vert      = $couleur->[1] // 255;
-    my $bleu      = $couleur->[2] // 255;
+    my $rouge     = $rgb{$couleur}->[0] // 255;
+    my $vert      = $rgb{$couleur}->[1] // 255;
+    my $bleu      = $rgb{$couleur}->[2] // 255;
     $html_crit .= <<"EOF";
 <li style='background-color: rgb($rouge, $vert, $bleu)'>
+    <select name='couleur$i'>$choix</select>
     <input type='radio' name='select$i' value='multiple' $sel_mult  >cellule reliée à plusieurs caractères
  OU <input type='radio' name='select$i' value='score'    $sel_score >score ≥ <input type='text' name='seuil$i' value='$score'>
  OU <input type='radio' name='select$i' value='carac'    $sel_carac >associé à l'un des caractères <input type='text' name='caract$i' value='$carac'>
@@ -1889,18 +1893,27 @@ sub calcul_xy {
 
 sub palette {
   my ($variante) = @_;
-  my @coul = ( [255, 192, 192],
-               [192, 255, 192],   
-               [192, 192, 255],   
-               [255, 255, 192],   
-               [192, 255, 255],   
-               [255, 192, 255],   
+  my @palette = (
+          [ 'violet', 192, 192, 255, ],   
+          [ 'rose'  , 255, 192, 255, ],
+          [ 'orange', 255, 192, 192, ],
+          [ 'jaune' , 255, 255, 192, ],
+          [ 'vert'  , 192, 255, 192, ],   
+          [ 'cyan'  , 192, 255, 255, ],   
       );
-  #if ($variante eq 'html') {
-  #  for (@coul) {
-  #  }
-  #}
-  return @coul;
+  given ($variante) {
+    when ('liste') {
+      return map { $_->[0] } @palette;
+    }
+    when ('hachage') {
+      my %resultat;
+      for (@palette) {
+        my ($coul, $r, $g, $b) = @$_;
+        $resultat{$coul} = [$r, $g, $b];
+      }
+      return %resultat;
+    }
+  }
 }
 
 sub frac {
