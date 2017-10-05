@@ -744,12 +744,12 @@ Par la suite, l'utilisateur peut consulter à plusieurs reprises le résultat de
 ce Coloriage (le fichier graphique déjà constitué) et enchaîner vers les
 Cellules sélectionnées grâce à une I<imagemap>.
 
-Un critère est une entité logique distincte du Coloriage, mais dans le schéma
-physique, tous les critères dépendant d'un Coloriage seront stockés dans un 
+Un Critère est une entité logique distincte du Coloriage, mais dans le schéma
+physique, tous les Critères dépendant d'un Coloriage seront stockés dans un 
 tableau de l'enregistrement Coloriage.
 
 Certes, avec la création de nouveaux Glyphes, le résultat du Coloriage devient
-de plus en plus obsolète, car certaines Cellules ne vérifient plus les critères et
+de plus en plus obsolète, car certaines Cellules ne vérifient plus les Critères et
 d'autres se mettent à les vérifier. Il reste encore utilisable pour consulter les Cellules.
 Et l'utilisateur peut de nouveau cliquer sur le bouton S<« Recherche »> pour rafraîchir
 le résultat de la requête du Coloriage. C'est à l'utilisateur de décider quand il est souhaitable de déclencher
@@ -1453,6 +1453,14 @@ dans ce cas il y a trois grilles. Voici l'une d'elles
 Priorité, qui tient lieu de clé (numéro séquentiel)
 
         "prio" : 0,
+
+On pourrait considérer que ce champ est redondant avec la position
+de la Grille dans le tableau des Grilles. En effet, comme on renumérote
+les priorités après avoir trié les Grille en fonction de cette priorité,
+la Grille de priorité 0 est nécessairement en position 0 du tableau,
+la Grille de priorité 1 est nécessairement en position 1 du tableau,
+et ainsi de site. Mais j'ai utilisé la valeur de l'attribut C<prio>
+pour une recherche, donc je conserve cet attribut dans la Grille.
 
 Coordonnées ligne-colonne de la Cellule en haut à gauche de la Grille
 
