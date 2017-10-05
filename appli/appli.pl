@@ -1015,13 +1015,15 @@ sub valid_color  {
   my $iter     = iter_cellule ($appli, $mdp, { doc => $doc });
   my @criteres = @{$info_col->{criteres}};
 
-  my $image = GD::Image->newFromPng($info_doc->{fic});
-  my $noir    = $info_doc->{ind_noir};
-  my @coul = palette('liste');
-  my %rgb  = palette('hachage');
-  for (@coul) {
+  my $image     = GD::Image->newFromPng($info_doc->{fic});
+  my $noir      = $info_doc->{ind_noir};
+  my @couleurs  = palette('liste');
+  my %rgb       = palette('hachage');
+  my %index;
+  for (@couleurs) {
     my @valeurs = @{$rgb{$_}};
     my $coul = $image->colorAllocate(@valeurs);
+    $index{$_} = $coul;
   }
 
   my @cellules = ();
@@ -1036,16 +1038,18 @@ sub valid_color  {
       given ($critere->{select}) {
         when ('multiple') {
           if ($info_cellule->{nb_car} > 1) {
-            $cell->{crit}   = $i;
-            $cell->{select} = $critere->{select};
+            $cell->{crit}    = $i;
+            $cell->{select}  = $critere->{select};
+            $cell->{couleur} = $critere->{couleur};
             push @cellules, $cell;
             last CRIT;
           }
         }
         when ('score') {
           if ($info_cellule->{score} >= $critere->{seuil}) {
-            $cell->{crit}   = $i;
-            $cell->{select} = $critere->{select};
+            $cell->{crit}    = $i;
+            $cell->{select}  = $critere->{select};
+            $cell->{couleur} = $critere->{couleur};
             push @cellules, $cell;
             last CRIT;
           }
@@ -1060,8 +1064,9 @@ sub valid_color  {
             $ok = 1;
           }
           if ($ok) {
-            $cell->{crit}   = $i;
-            $cell->{select} = $critere->{select};
+            $cell->{crit}    = $i;
+            $cell->{select}  = $critere->{select};
+            $cell->{couleur} = $critere->{couleur};
             push @cellules, $cell;
             last CRIT;
           }
@@ -1075,7 +1080,7 @@ sub valid_color  {
         for (my $dy = 0; $dy < $info_doc->{dy}; $dy++) {
           my $pixel = $image->getPixel($xc +$dx, $yc + $dy);
           if ($pixel != $noir) {
-            $image->setPixel($xc + $dx, $yc + $dy, $coul[$cell->{crit}]);
+            $image->setPixel($xc + $dx, $yc + $dy, $index{$cell->{couleur}});
           }
         }
       }
@@ -1508,11 +1513,11 @@ EOF
   }
   #say YAML::Dump($info_coloriage);
   my $html;
-  my $dessins = '';
-  my $html_crit= '';
-  my @coul = palette('liste');
-  my %rgb  = palette('hachage');
-  my $choix = join "", map { "<option>$_</option>" } @coul;
+  my $dessins   = '';
+  my $html_crit = '';
+  my @coul      = palette('liste');
+  my %rgb       = palette('hachage');
+  my $option_0  = join "", map { "<option>$_</option>" } @coul;
   for my $i (0..5) {
     my $critere = $info_coloriage->{criteres}[$i];
     $critere->{select} //= '';
@@ -1523,13 +1528,21 @@ EOF
     my $carac     = $critere->{caract} // '';
     $carac =~ s/(\W)/sprintf("&#%d", ord($1))/ge;
     my $espace    = $critere->{selspace} ? "checked='1'" : "";
-    my $couleur   = $coul[$i];
+    my $couleur;
+    if ($n eq 'nouveau') {
+      $couleur   = $coul[$i];
+    }
+    else {
+      $couleur   = $critere->{couleur};
+    }
+    my $option = $option_0;
+    $option =~ s/>$couleur/ selected='1'>$couleur/;
     my $rouge     = $rgb{$couleur}->[0] // 255;
     my $vert      = $rgb{$couleur}->[1] // 255;
     my $bleu      = $rgb{$couleur}->[2] // 255;
     $html_crit .= <<"EOF";
 <li style='background-color: rgb($rouge, $vert, $bleu)'>
-    <select name='couleur$i'>$choix</select>
+    <select name='couleur$i'>$option</select>
     <input type='radio' name='select$i' value='multiple' $sel_mult  >cellule reliée à plusieurs caractères
  OU <input type='radio' name='select$i' value='score'    $sel_score >score ≥ <input type='text' name='seuil$i' value='$score'>
  OU <input type='radio' name='select$i' value='carac'    $sel_carac >associé à l'un des caractères <input type='text' name='caract$i' value='$carac'>
