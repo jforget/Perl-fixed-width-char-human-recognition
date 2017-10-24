@@ -603,6 +603,14 @@ avec des règles de transition différentes.
 
 La variabilité des glyphes est réduite, mais elle existe encore.
 
+=head2 Conclusion partielle
+
+Après coup, je me rends compte que le lissage des glyphes ne sert à rien. Comme vous pouvez le voir
+sur l'exemple ci-dessus, cela permet de changer un nombre très réduit de S<pixels :> 4 dans l'exemple
+ci-dessus à 4 voisins, une vingtaine dans l'exemple du lissage à 8 voisins. Alors que comme on le
+verra ci-dessous, le nombre de pixels différents entre deux variantes du même caractères peut 
+atteindre la centaine. Donc, I<a posteriori>, le jeu n'en valait pas la chandelle.
+
 =head1 Reconnaissance à proprement parler
 
 Bien que j'utilise une base no-SQL, je continue, dans le cadre
@@ -2518,6 +2526,21 @@ Cela dit, du côté de SQL, S<« ils »> sont en train de revenir à des pratiqu
 à autoriser des colonnes de base de données de type C<JSON>, donc avec la possibilité de définir
 des tableaux et de les emboîter.
 
+=head2 Bilan
+
+Mes trois listings Pascal ont à peine plus de 500 lignes, soit un total de S<1 500>. Mon programme Dancer2 + MongoDB
+fait plus de S<1 900 lignes>, auxquelles il faut ajouter une centaine de lignes pour le programme
+de conversion bleu -> noir + orange -> blanc. Et le programme Dancer2 + MongoDB n'est pas
+maintenable s'il n'est pas accompagné du présent document, qui dépasse les 2500 lignes
+(je ne compte pas les compléments ci-dessous). Écrire S<4 500 lignes> de Perl et de POD
+pour s'éviter la saisie de S<1 500 lignes> de Pascal, est-ce S<rentable ?>
+
+Oui c'est rentable, parce qu'en même temps, j'ai pu avoir un aperçu de Dancer2,
+j'ai pu apprendre la manipulation de MongoDB et j'ai rafraîchi ma connaissance
+des formulaires HTML et des manipulations de pixels dans L<GD>. Certes, je ne peux
+pas prétendre connaître Dancer2, loin de là, très loin de là. Mais j'ai au moins un
+aperçu, c'est toujours mieux qu'une opinion basée sur aucune expérience concrète.
+
 =head1 Compléments
 
 =head2 Lissage des fichiers graphiques
@@ -2773,6 +2796,10 @@ Et comme le serveur Dancer2 s'exécute dans une fenêtre Emacs, c'est très faci
 de s'y retrouver dans les nombreux messages de débugage.
 
 Peut-être devrais-je tenter d'utiliser l'outil C<perldb> d'Emacs...
+D'un autre côté, en lisant la documentation Emacs de C<perldb>, je m'aperçois
+que le répertoire courant est, au début, le répertoire où se trouve
+le programme à débuguer. Il faudrait que j'ajoute le changement de répertoire
+dans le programme Perl au lieu de le faire dans la ligne de commande.
 
 =head1 LICENCE
 
