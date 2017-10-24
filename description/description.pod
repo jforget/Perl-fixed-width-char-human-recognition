@@ -2210,6 +2210,10 @@ Si le Coloriage est validé, la page affiche l'imagemap du Coloriage permettant
 de choisir une Cellule répondant à un critère et d'enchaîner 
 vers sa page.
 
+Adresse : L<http://localhost:3000/coloriage/exemple1/2> pour le deuxième
+Coloriage du Document C<exemple1>, ou L<http://localhost:3000/coloriage/exemple1/nouveau>
+pour créer un nouveau Coloriage pour ce même Document.
+
 =head4 Formulaire : Critères
 
 Ce formulaire permet de créer ou de modifier un Coloriage, en spécifiant les
@@ -2219,6 +2223,20 @@ le numéro servant de clé n'étant pas très descriptif.
 La mise à jour se contente de modifier les Critères (et le libellé descriptif).
 Elle ne déroule pas la collection des Cellules pour savoir lesquelles correspondent
 à tel ou tel Critère.
+
+Ce formulaire est nettement plus simple que le formulaire des Grilles d'un Document.
+Quoiqu'il arrive, il y a toujours six Critères pour un Coloriage. Aucune création
+ni aucune suppression n'est possible. Et les valeurs saisies font toujours foi, il n'y
+a pas de calcul automatique ni de bouton pour ignorer les valeurs saisies sur telle
+ou telle ligne.
+
+Pourquoi six S<critères ?> Parce qu'à l'origine, je n'avais pas prévu de donner le choix
+des couleurs à l'utilisateur. Chaque Critère avait sa couleur, fixée une bonne fois pour
+toutes dans le programme. Et comme j'avais choisi une palette de six couleurs, cela imposait
+une liste de six Critères par Coloriage. Ultérieurement, j'ai décidé de permettre à l'utilisateur
+de choisir la couleur pour chaque Critère, en lui permettant de choisir la même couleur pour
+deux Critères ou plus du même Coloriage. Du coup, la justification de la limite à six Critères
+ne tient plus. Mais tant pis, elle reste en vigueur.
 
 =head4 Formulaire : Validation
 
@@ -2230,15 +2248,22 @@ de données, pour associer les Cellules à tel ou tel Critère.
 Sur la page associée à une Cellule, on a le dessin en gros pixels de
 la Cellule et celui du ou des Glyphes associés à la Cellule.
 
+Adresse : L<http://localhost:3000/cellule/exemple1/0/3> pour la Cellule en ligne
+0 et en colonne 3 du document C>exemple1>.
+
+=head4 Variante : top 10
+
 Cette page a une variante, S<« top10 »>, qui reprend la recherche du meilleur
 Glyphe, mais ne s'arrête pas au meilleur d'entre eux. Il prend les dix
 meilleurs et les affiche tous.
+
+Adresse : L<http://localhost:3000/top10/exemple1/0/3>
 
 =head4 Formulaire : Création de Glyphe
 
 Ce formulaire n'apparaît que si le score de la Cellule n'est pas zéro.
 Il est alors possible de créer un Glyphe en recopiant les informations de
-la Cellule. La seule information manquante est le Caractère dont dépend
+la Cellule. La seule information manquante à renseigner est le Caractère dont dépend
 le Glyphe.
 
 =head4 Formulaire : Association aux Glyphes
