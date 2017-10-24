@@ -2077,6 +2077,8 @@ La première fonction donne la liste des documents.
 De cette page, on enchaîne vers une page consacrée à un
 seul document.
 
+Adresse : L<http://localhost:3000/listedoc>.
+
 =head4 Formulaire : ajout de document
 
 La liste des Documents contient un formulaire destiné à créer
@@ -2092,9 +2094,19 @@ C<« nouveau »>, qui permet d'enchaîner vers la page des Coloriages,
 mais pour créer un nouveau Coloriage au lieu d'afficher et de modifier
 un Coloriage existant.
 
+Adresse pour un document C<exemple1> : L<http://localhost:3000/doc/exemple1>.
+
+=head4 Variante : Grille
+
 La page de base affiche le fichier PNG d'où est tiré le Document,
 tandis que la variante S<« grille »> affiche un dessin où les 
 bords des Cellules sont matérialisés. 
+
+Adresse pour un document C<exemple1> : L<http://localhost:3000/grille/exemple1>.
+
+Ici le mot S<« grille »> est au singulier, car j'ai choisi ce schéma
+d'adresse avant la mauvaise surprise qui m'a conduit à isoler l'entité
+logique Grille de l'entité Document.
 
 =head4 Formulaire: grille
 
@@ -2103,6 +2115,62 @@ permettant de découper le document en cellules. Cela genère un fichier
 graphique matérialisant ce découpage, mais sans
 pour autant créer les enregistrements dans la table
 S<« Cellule ».>
+
+=for HTML
+<img src="Liste-des-Grilles.png" alt="Liste des Grilles" />
+
+S<Fonctionnement :> le formulaire est constitué des I<S<n - 1>> premières
+lignes pour les Grilles déjà existantes et de la dernière ligne pour
+la création d'une éventuelle nouvelle Grille. 
+
+Les coordonnées ligne et colonne ne sont saisissables que pour la Grille
+en cours de création sur la dernière ligne. Tous les autres champs sont saisissables,
+sauf la priorité de la Grille de base, qui reste à zéro.
+
+Le champ S<« Action »> prend les valeurs S<suivantes :>
+
+=over 4
+
+=item rien
+
+Pour une Grille existante, cela signifie qu'il faut ignorer toutes les valeurs
+saisies sur la ligne (sauf la priorité) et les remplacer par les valeurs stockées
+dans la base de données. Pour la dernière ligne, cela signifie que l'on choisit de ne
+pas créer de nouvelle Grille.
+
+=item saisie
+
+Cela signifie que la Grille est mise à jour avec les valeurs saisies.
+
+=item calcul
+
+Il faut ignorer les valeurs saisies dans les champs de la ligne (sauf encore une fois
+la priorité) et les remplacer par des valeurs calculées à partir de la Grille englobante.
+Les valeurs de C<dx>, C<dy> et des cisaillements sont simplement reprises telles quelles
+de la Grille englobante, sans modification. Quant aux valeurs de C<x0> et C<y0>, elles sont calculées 
+à partir des valeurs de la Grille englobante, avec les mêmes calculs que lors de la 
+validation des grilles.
+
+Ce choix n'est pas disponible pour la Grille de base, car il n'y a pas de Grille englobante
+pour alimenter les valeurs.
+
+=item suppr
+
+Supression de la Grille. Ce choix n'est pas disponible sur la Grille de base, qui doit
+rester à demeure dans le Document. Il n'est pas disponible non plus pour la dernière ligne,
+car cette ligne est réservée pour la création d'une nouvelle Grille, donc il n'y a rien à supprimer.
+J'ai utilisé l'abréviation S<« suppr »> au lieu du mot entier S<« suppression »>
+parce que sinon, la largeur du champ aurait été très différente entre la première et dernière lignes,
+qui n'ont pas ce choix, et les lignes intermédiaires qui l'ont.
+
+=back
+
+Une erreur de manipulation fréquente est de saisir des valeurs numériques dans une ligne
+et de laisser le champ Action à S<« rien »>. Dans ce cas, les valeurs saisies sont ignorées
+et l'utilisateur (moi) se demande pourquoi la saisie n'a pas été prise en compte.
+
+Un point particulier à signaler : même si l'action est S<« rien »>, la valeur saisie dans le
+champ Priorité est prise en compte.
 
 =head4 Formulaire : validation de la grille
 
@@ -2117,6 +2185,14 @@ S<« Validation »>.
 Ce troisième formulaire ne comporte également qu'un bouton
 d'action. Il permet de lancer l'analyse des Cellules du Document pour
 leur associer le ou les Glyphes les plus ressemblants.
+
+=head4 Pseudo-formulaire : liste des Coloriages
+
+La liste des Coloriages est simplement une liste de liens hypertextes
+vers la page d'affichage et de mise à jour des Coloriages. Notons qu'il
+y a une ligne supplémentaire, pour créer un nouveau Coloriage. Cliquer
+sur ce lien ne donne lieu à aucune mise à jour de la base de données, la création
+ne sera effective que sur la page d'affichage et de mise à jour des Coloriages.
 
 =head4 Formulaire : Génération du fichier texte
 
