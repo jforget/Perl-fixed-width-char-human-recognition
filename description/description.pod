@@ -1737,151 +1737,210 @@ affichable C<"SP">.
 
 =head3 Coloriage
 
-Cette fois-ci, le contenu est un peu abrégé, pour ne pas lister
-toutes les Cellules sélectionnées dans ce Coloriage.
+J'ai créé un Coloriage très sélectif, pour abréger la description
+ci-dessous. Voici le contenu complet de ce Coloriage.
 
   {
-        "_id" : ObjectId("59797b3b7a7f46119e01faf1"),
-        "doc" : "ex1",
-        "n" : 1,
-        "desc" : "Lima&#32;India&#32;Unite",
-        "dh_cre" : "2017-07-27 05:33:47",
+        "_id" : ObjectId("59ef77347a7f46082142bdc1"),
+        "dh_cre" : "2017-10-24 17:24:04",
+        "desc" : "Coloriage&#32;minimal",
+        "doc" : "ex1bis",
         "criteres" : [
                 {
-                        "caract" : "l",
+                        "couleur" : "violet",
                         "seuil" : 0,
+                        "select" : "multiple",
                         "selspace" : "",
-                        "select" : "carac"
+                        "caract" : ""
                 },
                 {
-                        "caract" : "I",
+                        "caract" : "",
                         "selspace" : "",
-                        "seuil" : 0,
-                        "select" : "carac"
+                        "couleur" : "rose",
+                        "seuil" : 93,
+                        "select" : "score"
                 },
                 {
+                        "couleur" : "orange",
+                        "seuil" : 0,
                         "select" : "carac",
-                        "caract" : "1",
+                        "selspace" : "",
+                        "caract" : "{}"
+                },
+                {
+                        "caract" : "",
+                        "selspace" : "on",
+                        "couleur" : "jaune",
                         "seuil" : 0,
+                        "select" : "carac"
+                },
+                {
+                        "couleur" : "vert",
+                        "seuil" : 0,
+                        "select" : "",
+                        "caract" : "",
                         "selspace" : ""
                 },
                 {
+                        "caract" : "",
+                        "selspace" : "",
                         "select" : "",
-                        "caract" : "",
-                        "selspace" : "",
-                        "seuil" : 0
-                },
-                {
                         "seuil" : 0,
-                        "selspace" : "",
-                        "caract" : "",
-                        "select" : ""
-                },
-                {
-                        "selspace" : "",
-                        "seuil" : 0,
-                        "caract" : "",
-                        "select" : ""
+                        "couleur" : "cyan"
                 }
         ],
-        "dh_maj" : "2017-07-27 05:44:26",
+        "n" : 3,
+        "dh_maj" : "2017-10-24 17:25:57",
+        "dh_val" : "2017-10-24 17:26:03",
+        "fic" : "ex1bis-col3.png",
         "cellules" : [
                 {
+                        "couleur" : "orange",
                         "select" : "carac",
-                        "yc" : 30,
-                        "xc" : 350,
-                        "c" : 10,
-                        "lge" : 16,
-                        "crit" : 0,
-                        "hte" : 30,
-                        "l" : 0
-                },
-                {
-                        "select" : "carac",
-                        "yc" : 83,
-                        "xc" : 719,
-                        "c" : 22,
-                        "lge" : 17,
-                        "crit" : 0,
-                        "hte" : 30,
-                        "l" : 1
-                },
-                {
-                        "l" : 1,
                         "crit" : 2,
-                        "lge" : 17,
-                        "hte" : 30,
-                        "c" : 38,
-                        "xc" : 1212,
-                        "select" : "carac",
-                        "yc" : 89
+                        "xc" : 873,
+                        "lge" : 24,
+                        "c" : 27,
+                        "yc" : 234,
+                        "hte" : 31,
+                        "l" : 4
                 },
-        ],
-        "fic" : "ex1-col1.png",
-        "dh_val" : "2017-07-27 05:44:58"
+                {
+                        "l" : 15,
+                        "hte" : 22,
+                        "yc" : 775,
+                        "lge" : 23,
+                        "crit" : 1,
+                        "xc" : 561,
+                        "c" : 17,
+                        "select" : "score",
+                        "couleur" : "rose"
+                },
+                {
+                        "c" : 51,
+                        "lge" : 2,
+                        "crit" : 3,
+                        "xc" : 1609,
+                        "select" : "carac",
+                        "couleur" : "jaune",
+                        "l" : 19,
+                        "hte" : 2,
+                        "yc" : 984
+                },
+                {
+                        "l" : 19,
+                        "yc" : 987,
+                        "hte" : 4,
+                        "crit" : 3,
+                        "xc" : 1935,
+                        "lge" : 9,
+                        "c" : 62,
+                        "couleur" : "jaune",
+                        "select" : "carac"
+                },
+                {
+                        "hte" : 30,
+                        "yc" : 76,
+                        "l" : 1,
+                        "select" : "carac",
+                        "couleur" : "orange",
+                        "c" : 0,
+                        "lge" : 23,
+                        "crit" : 2,
+                        "xc" : 41
+                },
+                {
+                        "yc" : 188,
+                        "hte" : 30,
+                        "l" : 3,
+                        "couleur" : "rose",
+                        "select" : "score",
+                        "c" : 38,
+                        "crit" : 1,
+                        "xc" : 1213,
+                        "lge" : 23
+                },
+                {
+                        "xc" : 1861,
+                        "crit" : 3,
+                        "lge" : 6,
+                        "c" : 59,
+                        "couleur" : "jaune",
+                        "select" : "carac",
+                        "l" : 3,
+                        "yc" : 195,
+                        "hte" : 22
+                }
+        ]
   }
 
 Comme toujours, la clé interne de MongoDB
 
-        "_id" : ObjectId("59797b3b7a7f46119e01faf1"),
+        "_id" : ObjectId("59ef77347a7f46082142bdc1"),
 
 La clé pour les besoins de l'application.
 
-        "doc" : "ex1",
-        "n" : 1,
+        "doc" : "ex1bis",
+        "n" : 3,
 
 Informations diverses : un libellé explicatif, le nom du fichier
 où les Cellules sont coloriées et les dates-heures de création,
 de mise à jour des critères et de validation (examen et sélection
 des Cellules avec constitution du fichier graphique).
 
-        "desc" : "Lima&#32;India&#32;Unite",
-        "fic" : "ex1-col1.png",
-        "dh_cre" : "2017-07-27 05:33:47",
-        "dh_maj" : "2017-07-27 05:44:26",
-        "dh_val" : "2017-07-27 05:44:58"
+        "desc" : "Coloriage&#32;minimal",
+        "fic" : "ex1bis-col3.png",
+        "dh_cre" : "2017-10-24 17:24:04",
+        "dh_maj" : "2017-10-24 17:25:57",
+        "dh_val" : "2017-10-24 17:26:03",
 
 Liste des Critères du Coloriage, liste incluse dans l'enregistrement
-Coloriage. Même si l'on n'utilise que trois Critères sur les six
-disponibles, le tableau contient six postes, les trois derniers
+Coloriage. Même si l'on n'utilise que quatre Critères sur les six
+disponibles, le tableau contient six postes, les deux derniers
 étant vides.
 
         "criteres" : [
                 {
-                        "caract" : "l",
+                        "couleur" : "violet",
                         "seuil" : 0,
+                        "select" : "multiple",
                         "selspace" : "",
-                        "select" : "carac"
+                        "caract" : ""
                 },
                 {
-                        "caract" : "I",
+                        "caract" : "",
                         "selspace" : "",
-                        "seuil" : 0,
-                        "select" : "carac"
+                        "couleur" : "rose",
+                        "seuil" : 93,
+                        "select" : "score"
                 },
                 {
+                        "couleur" : "orange",
+                        "seuil" : 0,
                         "select" : "carac",
-                        "caract" : "1",
+                        "selspace" : "",
+                        "caract" : "{}"
+                },
+                {
+                        "caract" : "",
+                        "selspace" : "on",
+                        "couleur" : "jaune",
                         "seuil" : 0,
+                        "select" : "carac"
+                },
+                {
+                        "couleur" : "vert",
+                        "seuil" : 0,
+                        "select" : "",
+                        "caract" : "",
                         "selspace" : ""
                 },
                 {
+                        "caract" : "",
+                        "selspace" : "",
                         "select" : "",
-                        "caract" : "",
-                        "selspace" : "",
-                        "seuil" : 0
-                },
-                {
                         "seuil" : 0,
-                        "selspace" : "",
-                        "caract" : "",
-                        "select" : ""
-                },
-                {
-                        "selspace" : "",
-                        "seuil" : 0,
-                        "caract" : "",
-                        "select" : ""
+                        "couleur" : "cyan"
                 }
         ],
 
@@ -1922,36 +1981,83 @@ pour pouvoir reconstituer la clé complète du Critère.
 
         "cellules" : [
                 {
+                        "couleur" : "orange",
                         "select" : "carac",
-                        "yc" : 30,
-                        "xc" : 350,
-                        "c" : 10,
-                        "lge" : 16,
-                        "crit" : 0,
-                        "hte" : 30,
-                        "l" : 0
-                },
-                {
-                        "select" : "carac",
-                        "yc" : 83,
-                        "xc" : 719,
-                        "c" : 22,
-                        "lge" : 17,
-                        "crit" : 0,
-                        "hte" : 30,
-                        "l" : 1
-                },
-                {
-                        "l" : 1,
                         "crit" : 2,
-                        "lge" : 17,
-                        "hte" : 30,
-                        "c" : 38,
-                        "xc" : 1212,
-                        "select" : "carac",
-                        "yc" : 89
+                        "xc" : 873,
+                        "lge" : 24,
+                        "c" : 27,
+                        "yc" : 234,
+                        "hte" : 31,
+                        "l" : 4
                 },
-        ],
+                {
+                        "l" : 15,
+                        "hte" : 22,
+                        "yc" : 775,
+                        "lge" : 23,
+                        "crit" : 1,
+                        "xc" : 561,
+                        "c" : 17,
+                        "select" : "score",
+                        "couleur" : "rose"
+                },
+                {
+                        "c" : 51,
+                        "lge" : 2,
+                        "crit" : 3,
+                        "xc" : 1609,
+                        "select" : "carac",
+                        "couleur" : "jaune",
+                        "l" : 19,
+                        "hte" : 2,
+                        "yc" : 984
+                },
+                {
+                        "l" : 19,
+                        "yc" : 987,
+                        "hte" : 4,
+                        "crit" : 3,
+                        "xc" : 1935,
+                        "lge" : 9,
+                        "c" : 62,
+                        "couleur" : "jaune",
+                        "select" : "carac"
+                },
+                {
+                        "hte" : 30,
+                        "yc" : 76,
+                        "l" : 1,
+                        "select" : "carac",
+                        "couleur" : "orange",
+                        "c" : 0,
+                        "lge" : 23,
+                        "crit" : 2,
+                        "xc" : 41
+                },
+                {
+                        "yc" : 188,
+                        "hte" : 30,
+                        "l" : 3,
+                        "couleur" : "rose",
+                        "select" : "score",
+                        "c" : 38,
+                        "crit" : 1,
+                        "xc" : 1213,
+                        "lge" : 23
+                },
+                {
+                        "xc" : 1861,
+                        "crit" : 3,
+                        "lge" : 6,
+                        "c" : 59,
+                        "couleur" : "jaune",
+                        "select" : "carac",
+                        "l" : 3,
+                        "yc" : 195,
+                        "hte" : 22
+                }
+        ]
 
 =head2 L'architecture des traitements
 
