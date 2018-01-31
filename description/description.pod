@@ -2222,6 +2222,24 @@ Adresse : L<http://localhost:3000/coloriage/exemple1/2> pour le deuxième
 Coloriage du Document C<exemple1>, ou L<http://localhost:3000/coloriage/exemple1/nouveau>
 pour créer un nouveau Coloriage pour ce même Document.
 
+=head4 Formulaire : Suppression
+
+Juste un bouton d'action pour demander la suppression du Coloriage courant.
+Le réaffichage se fait avec la grille du document.
+
+=head4 Formulaire : Copie
+
+Ce formulaire permet de copier le Coloriage courant vers un autre Document,
+ou vers le Document courant, pourquoi pas après tout. Le nouveau Coloriage
+n'est pas validé, même si le Coloriage d'origine l'est.
+
+Le réaffichage se fait sur le nouveau Coloriage. Vous pouvez alors
+modifier les Critères ou valider le Coloriage avec les critères tels quels.
+
+Pourquoi copier un Coloriage sans changer de Document ? Si vous voulez 
+créer un coloriage avec des Critères simplement analogues, au lieu
+de Critères identiques.
+
 =head4 Formulaire : Critères
 
 Ce formulaire permet de créer ou de modifier un Coloriage, en spécifiant les

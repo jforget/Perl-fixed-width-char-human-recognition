@@ -315,6 +315,33 @@ post '/valcolor/:doc/:n' => sub {
   redirect "/coloriage/$doc/$n";
 };
 
+post '/delcolor/:doc/:n' => sub {
+  my $appli = setting('username');
+  my $mdp   = setting('password');
+  unless ($appli) {
+    redirect '/';
+  }
+
+  my $doc = route_parameters->get('doc');
+  my $n   = route_parameters->get('n');
+  my $msg = purge_coloriage($appli, $mdp, $doc, 0 + $n);
+  redirect "/grille/$doc";
+};
+
+post '/copcolor/:doc/:n' => sub {
+  my $appli = setting('username');
+  my $mdp   = setting('password');
+  unless ($appli) {
+    redirect '/';
+  }
+
+  my $doc      = route_parameters->get('doc');
+  my $n        = route_parameters->get('n');
+  my $nouv_doc = body_parameters->get('nouvdoc');
+  my ($msg, $nouv_n) = copie_color($appli, $mdp, $doc, $n, $nouv_doc);
+  redirect "/coloriage/$nouv_doc/$nouv_n";
+};
+
 start;
 
 sub collection {
@@ -489,6 +516,13 @@ sub maj_coloriage {
   my ($appli, $mdp, $doc, $n, $val) = @_;
   my $coll   = collection($appli, $mdp, "Coloriage");
   my $result = $coll->update({ doc => $doc, n => 0 + $n }, { '$set' => $val });
+  return $result;
+}
+
+sub purge_coloriage {
+  my ($appli, $mdp, $doc, $n) = @_;
+  my $coll   = collection($appli, $mdp, "Coloriage");
+  my $result = $coll->remove({ doc => $doc, n => 0 + $n });
   return $result;
 }
 
@@ -1103,6 +1137,27 @@ sub valid_color  {
                                         } );
 }
 
+sub copie_color  {
+  my($appli, $mdp, $doc, $n, $nouv_doc) = @_;
+  my $info_doc = get_doc      ($appli, $mdp, $nouv_doc);
+  my $info_col = get_coloriage($appli, $mdp, $doc, $n);
+  my @criteres = @{$info_col->{criteres}};
+  my $liste = liste_coloriage($appli, $mdp, $nouv_doc);
+  my $nouv_n = 0;
+  for my $col (@$liste) {
+    $nouv_n = $col->{n} if $nouv_n <= $col->{n};
+  }
+  $nouv_n++;
+  my %nouv_col;
+  $nouv_col{doc}      = $nouv_doc;
+  $nouv_col{n}        = 0 + $nouv_n;
+  $nouv_col{desc}     = $info_col->{desc};
+  $nouv_col{criteres} = [ @criteres ];
+  $nouv_col{dh_cre}   = horodatage();
+  my $msg = ins_coloriage($appli, $mdp, $nouv_doc, $nouv_n, { %nouv_col });
+  return ($msg, $nouv_n);
+}
+
 sub aff_liste {
   my ($appli, $mdp, $doc, $fic, $msg, $liste_ref) = @_;
 
@@ -1289,8 +1344,9 @@ EOF
 
   my $coloriage = '';
   if ($info->{etat} >= 3) {
-    my $liste  =liste_coloriage($appli, $mdp, $doc);
-    $coloriage = join ' ', map { sprintf "<a href='/coloriage/$doc/%d'>%d %s</a><br />", $_->{n}, $_->{n}, $_->{desc} } @$liste;
+    my $liste  = liste_coloriage($appli, $mdp, $doc);
+    $coloriage = join ' ', map { sprintf "<a href='/coloriage/$doc/%d'>%d %s</a><br />", $_->{n}, $_->{n}, $_->{desc} }
+                           sort { $a->{n} <=> $b->{n} } @$liste;
     $coloriage = <<"EOF";
 <h2>Coloriages</h2>
 <p>$coloriage <a href='/coloriage/$doc/nouveau'>nouveau</a></p>
@@ -1482,7 +1538,7 @@ sub aff_coloriage {
 
   my $info_coloriage;
   my $desc;
-  my ($dates, $action, $libelle, $validation);
+  my ($dates, $action, $libelle, $validation, $operations);
   if ($n eq 'nouveau') {
     my @criteres = ( { } ) x 6;
     $info_coloriage = { criteres => [ @criteres ] };
@@ -1490,6 +1546,7 @@ sub aff_coloriage {
     $action         = 'majcolor';
     $libelle        = 'Création';
     $validation     = '';
+    $operations     = '';
     $desc           = '';
   }
   else {
@@ -1508,6 +1565,26 @@ sub aff_coloriage {
 <h3>Validation</h3>
 <form action='/valcolor/$doc/$n' method='post'>
 <input type='submit' value='Validation' />
+</form>
+EOF
+    my $liste_ref = liste_doc($appli, $mdp);
+    my $liste_doc = '';
+    for (sort { $a->{doc} cmp $b->{doc} } @$liste_ref) {
+      #say YAML::Dump($_);
+      #my $info = get_doc($appli, $mdp, $_->{doc});
+      if ($_->{etat} >= 3) {
+        $liste_doc .= "<option>$_->{doc}</option>";
+      }
+    }
+    $operations = <<"EOF";
+<h3>Suppression</h3>
+<form action='/delcolor/$doc/$n' method='post'>
+<input type='submit' value='Suppression' />
+</form>
+<h3>Copie</h3>
+<form action='/copcolor/$doc/$n' method='post'>
+<select name='nouvdoc' size='1'>$liste_doc</select>
+<input type='submit' value='Copie' />
 </form>
 EOF
   }
@@ -1575,6 +1652,7 @@ EOF
   $html = <<"EOF";
 <h1>Coloriage</h1>
 $dates
+$operations
 <h3>Critères</h3>
 <form action='/$action/$doc/$n' method='post'>
 <input type='text' name='desc' $desc />
