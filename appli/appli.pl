@@ -749,8 +749,10 @@ sub construire_grille {
 
   my $image = GD::Image->newFromPng($info_doc->{fic});
   my $rouge = $image->colorAllocate(255,   0,   0);
-  my $vert  = $image->colorAllocate(  0, 255,   0);
+  my $vertc = $image->colorAllocate(  0, 255,   0); # vert clair
   my $bleu  = $image->colorAllocate(  0,   0, 255);
+  my $vertf = $image->colorAllocate(  0, 127,   0); # vert foncé
+  my $pas   = 10;
 
   my $noir    = $info_doc->{ind_noir};
   my $dx_min  = 2 * $dx_defaut; # Valeur fortement majorée
@@ -808,11 +810,15 @@ sub construire_grille {
 
       # Dessin de la cellule dans la grille
       if ($flag == 0) {
+        # côté gauche
         if ($c == $grille_ref->{c}) {
           $couleur = $bleu;
         }
+        elsif ($c % $pas == 0) {
+          $couleur = $vertf;
+        }
         else {
-          $couleur = $vert;
+          $couleur = $vertc;
         }
         for my $y1 (0 .. $dy) {
           my $pixel = $image->getPixel($x, $y + $y1);
@@ -823,20 +829,31 @@ sub construire_grille {
             $image->setPixel($x, $y + $y1, $couleur);
           }
         }
+        # côté droit
+        if ($c % $pas == $pas - 1) {
+          $couleur = $vertf;
+        }
+        else {
+          $couleur = $vertc;
+        }
         for my $y1 (0 .. $dy) {
           my $pixel = $image->getPixel($x +$dx, $y + $y1);
           if ($pixel == $noir || $pixel == $rouge) {
             $image->setPixel($x + $dx, $y + $y1, $rouge);
           }
           else {
-            $image->setPixel($x + $dx, $y + $y1, $vert);
+            $image->setPixel($x + $dx, $y + $y1, $couleur);
           }
         }
+        # côté supérieur
         if ($l == $grille_ref->{l}) {
           $couleur = $bleu;
         }
+        elsif ($l % $pas == 0) {
+          $couleur = $vertf;
+        }
         else {
-          $couleur = $vert;
+          $couleur = $vertc;
         }
         for my $x1 (0 .. $dx) {
           my $pixel = $image->getPixel($x +$x1, $y);
@@ -847,13 +864,20 @@ sub construire_grille {
             $image->setPixel($x + $x1, $y, $couleur);
           }
         }
+        # côté inférieur
+        if ($l % $pas == $pas - 1) {
+          $couleur = $vertf;
+        }
+        else {
+          $couleur = $vertc;
+        }
         for my $x1 (0 .. $dx) {
           my $pixel = $image->getPixel($x +$x1, $y + $dy);
           if ($pixel == $noir || $pixel == $rouge) {
             $image->setPixel($x + $x1, $y + $dy, $rouge);
           }
           else {
-            $image->setPixel($x + $x1, $y + $dy, $vert);
+            $image->setPixel($x + $x1, $y + $dy, $couleur);
           }
         }
       }
