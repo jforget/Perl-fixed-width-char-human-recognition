@@ -696,7 +696,7 @@ avatars successifs. Chaque listing a été scanné en huit fichiers graphiques
 environ, donc donnera lieu à huit Documents.
 
 La deuxième table est la table S<« Cellule ».>
-Elle représente les cellules obtenues en découpant le Document. Les informations de cette table
+Elle représente les Cellules obtenues en découpant le Document. Les informations de cette table
 sont, entre autres, les coordonnées de la Cellule
 dans le Document, aussi bien exprimées en
 ligne-colonne qu'en coordonnées pixel.
@@ -806,7 +806,7 @@ Toutes les N lignes, décaler d'un pixel vers la gauche / la droite.
 Et de même pour le cisaillement vertical. Dans le cas présent, j'ai
 opté pour "toutes les N lignes" et "tous les N caractères".
 
-Comme pour la taille des cellules, on admet des valeurs
+Comme pour la taille des Cellules, on admet des valeurs
 avec partie décimale. D'autre part, comme ces deux cisaillements
 simulent une rotation, leurs paramètres sont liés.
 Si le cisaillement horizontal se fait vers la droite,
@@ -822,7 +822,7 @@ en haut à gauche de la Cellule. Les côtés de la Cellule extraite
 sont purement verticaux ou horizontaux.
 
 Voici un exemple volontairement exagéré de cisaillement horizontal. Vous remarquez que les côtés
-verticaux des cellules restent verticaux, même si les cellules ne sont pas
+verticaux des Cellules restent verticaux, même si les Cellules ne sont pas
 alignées verticalement entre elles.
 
 =for HTML
@@ -841,7 +841,7 @@ donne une rotation.
 
 Et voici un exemple réel, en gros S<plan :>  décalage d'un pixel à gauche toutes les trois lignes,
 décalage d'un pixel vers le bas tous les trois caractères. Vous pouvez voir le léger décalage
-entre la cellule du S<« o »> et la cellule du S<« g »>, ainsi qu'entre le S<« a »> et le S<« m »>.
+entre la Cellule du S<« o »> et la Cellule du S<« g »>, ainsi qu'entre le S<« a »> et le S<« m »>.
 
 =for HTML
 <img src="gros-plan-cisaillement.png" alt="Exemple de cisaillements combinés" />
@@ -879,7 +879,7 @@ en plusieurs Grilles, lesquelles se découpent en Cellules. Le modèle de donné
 
 =head3 Découpage en plusieurs grilles
 
-Un document est scindé en plusieurs grilles. Chaque grille possède comme
+Un Document est scindé en plusieurs Grilles. Chaque Grille possède comme
 attributs les valeurs permettant de découper les Cellules comme dans
 la version initiale du schéma de S<données :>
 coordonnées pixels du coin en haut à gauche, largeur et hauteur des Cellules
@@ -900,9 +900,9 @@ Pour les autres Grilles, la création se fait en saisissant les coordonnées C<l
 coin en haut à gauche et la priorité. Puis l'utilisateur choisit entre saisir tous les
 autres paramètres manuellement, ou laisser le programme les calculer. Avec le calcul automatique,
 les paramètres sont recopiés à partir de la Grille de priorité inférieure qui aurait permis
-de générer la Cellule en haut à gauche. Évidemment, cela veut dire que la nouvelle grille ne
+de générer la Cellule en haut à gauche. Évidemment, cela veut dire que la nouvelle Grille ne
 sert à rien pour l'instant puisque les paramètres sont les mêmes que pour la Grille de priorité
-intférieure. Mais l'utilisateur peut modifier les paramètres manuellement ensuite, jusqu'à obtenir
+inférieure. Mais l'utilisateur peut modifier les paramètres manuellement ensuite, jusqu'à obtenir
 des valeurs correctes. Le calcul automatique permet d'éviter que l'utilisateur tatonne trop
 pour obtenir les valeurs finales.
 
@@ -950,7 +950,7 @@ des Cellules. Il saisit S<donc :>
   3  60    1  1885  195  29  49 saisie manuelle
 
 Et il peut procéder à d'autres ajustements progressifs, voire créer une troisième Grille, puis
-une quatrième, et ainsi de suite. En fait, dans ce cas je n'ai eu besoin que de trois grilles.
+une quatrième, et ainsi de suite. En fait, dans ce cas je n'ai eu besoin que de trois Grilles.
 Voici ce que cela donne S<avec :>
 
 =begin HTML
@@ -1382,7 +1382,7 @@ Exemple de S<Document :>
 
 Détail des champs
 
-Clé du document
+Clé du Document
 
         "doc" : "ex1",
 
@@ -1524,7 +1524,7 @@ Clé de l'enregistrement
         "car" : "p",
         "num" : 1,
 
-Clé alternative. Elle coïncide avec la clé C<car>, sauf pour les glyphes associés à certains
+Clé alternative. Elle coïncide avec la clé C<car>, sauf pour les Glyphes associés à certains
 caractères S<spéciaux :> espace, point, dollar et apostrophe.
 Pour les espaces, on a la valeur C<"SP"> dans C<car1>, pour une meilleure lisibilité dans
 les pages HTML. Quant aux trois autres caractères, c'est parce que la valeur
@@ -2079,11 +2079,11 @@ Voici l'arborescence des pages et des
 traitements, dans un ordre  correspondant à peu
 près à la chronologie des opérations.
 
-=head3 Page : liste des documents
+=head3 Page : liste des Documents
 
-La première fonction donne la liste des documents.
+La première fonction donne la liste des Documents.
 De cette page, on enchaîne vers une page consacrée à un
-seul document.
+seul Document.
 
 Adresse : L<http://localhost:3000/listedoc>.
 
@@ -2102,15 +2102,15 @@ C<« nouveau »>, qui permet d'enchaîner vers la page des Coloriages,
 mais pour créer un nouveau Coloriage au lieu d'afficher et de modifier
 un Coloriage existant.
 
-Adresse pour un document C<exemple1> : L<http://localhost:3000/doc/exemple1>.
+Adresse pour un Document C<exemple1> : L<http://localhost:3000/doc/exemple1>.
 
 =head4 Variante : Grille
 
 La page de base affiche le fichier PNG d'où est tiré le Document,
 tandis que la variante S<« grille »> affiche un dessin où les 
-bords des Cellules sont matérialisés. 
+bords des Cellules sont matérialisés.
 
-Adresse pour un document C<exemple1> : L<http://localhost:3000/grille/exemple1>.
+Adresse pour un Document C<exemple1> : L<http://localhost:3000/grille/exemple1>.
 
 Ici le mot S<« grille »> est au singulier, car j'ai choisi ce schéma
 d'adresse avant la mauvaise surprise qui m'a conduit à isoler l'entité
@@ -2119,7 +2119,7 @@ logique Grille de l'entité Document.
 =head4 Formulaire: grille
 
 Dans cette formulaire, on peut spécifier les paramètres
-permettant de découper le document en cellules. Cela genère un fichier
+permettant de découper le Document en Cellules. Cela genère un fichier
 graphique matérialisant ce découpage, mais sans
 pour autant créer les enregistrements dans la table
 S<« Cellule ».>
@@ -2180,7 +2180,7 @@ et l'utilisateur (moi) se demande pourquoi la saisie n'a pas été prise en comp
 Un point particulier à signaler : même si l'action est S<« rien »>, la valeur saisie dans le
 champ Priorité est prise en compte.
 
-=head4 Formulaire : validation de la grille
+=head4 Formulaire : validation de la Grille
 
 Ce deuxième formulaire ne comporte qu'un bouton d'action. Il permet
 de valider le découpage, avec création des
@@ -2225,7 +2225,7 @@ pour créer un nouveau Coloriage pour ce même Document.
 =head4 Formulaire : Suppression
 
 Juste un bouton d'action pour demander la suppression du Coloriage courant.
-Le réaffichage se fait avec la grille du document.
+Le réaffichage se fait avec la grille du Document.
 
 =head4 Formulaire : Copie
 
@@ -2237,7 +2237,7 @@ Le réaffichage se fait sur le nouveau Coloriage. Vous pouvez alors
 modifier les Critères ou valider le Coloriage avec les critères tels quels.
 
 Pourquoi copier un Coloriage sans changer de Document ? Si vous voulez 
-créer un coloriage avec des Critères simplement analogues, au lieu
+créer un Coloriage avec des Critères simplement analogues, au lieu
 de Critères identiques.
 
 =head4 Formulaire : Critères
@@ -2256,7 +2256,7 @@ ni aucune suppression n'est possible. Et les valeurs saisies font toujours foi, 
 a pas de calcul automatique ni de bouton pour ignorer les valeurs saisies sur telle
 ou telle ligne.
 
-Pourquoi six S<critères ?> Parce qu'à l'origine, je n'avais pas prévu de donner le choix
+Pourquoi six S<Critères ?> Parce qu'à l'origine, je n'avais pas prévu de donner le choix
 des couleurs à l'utilisateur. Chaque Critère avait sa couleur, fixée une bonne fois pour
 toutes dans le programme. Et comme j'avais choisi une palette de six couleurs, cela imposait
 une liste de six Critères par Coloriage. Ultérieurement, j'ai décidé de permettre à l'utilisateur
@@ -2275,13 +2275,13 @@ Sur la page associée à une Cellule, on a le dessin en gros pixels de
 la Cellule et celui du ou des Glyphes associés à la Cellule.
 
 Adresse : L<http://localhost:3000/cellule/exemple1/0/3> pour la Cellule en ligne
-0 et en colonne 3 du document C>exemple1>.
+0 et en colonne 3 du Document C<exemple1>.
 
 =head4 Variante : top 10
 
 Cette page a une variante, S<« top10 »>, qui reprend la recherche du meilleur
 Glyphe, mais ne s'arrête pas au meilleur d'entre eux. Il prend les dix
-meilleurs et les affiche tous.
+meilleurs et les affiche tous les dix.
 
 Adresse : L<http://localhost:3000/top10/exemple1/0/3>
 
@@ -2300,14 +2300,14 @@ mais uniquement pour la Cellule en cours.
 
 =head1 Après la conversion
 
-Une fois tous les documents traités et convertis en fichiers textes, il ne reste plus S<qu'à :>
+Une fois tous les Documents traités et convertis en fichiers textes, il ne reste plus S<qu'à :>
 
 =over 4
 
 =item 1
 
 Reconstituer les trois fichiers sources complets, en fusionnant les fichiers textes.
-Rappelez-vous qu'un listing a donné lieu à en moyenne S<8 documents>.
+Rappelez-vous qu'un listing a donné lieu à en moyenne S<8 Documents>.
 
 =item 2
 
@@ -2380,12 +2380,12 @@ j'ai quand même activé l'authentification pour la base
 de données MongoDB. D'autre part, influencé sans doute par
 L<xkcd|https://xkcd.com/327/> et
 L<Bobby Tables|http://bobby-tables.com/>,
-j'ai imposé des restrictions drastiques à la saisie des noms de document
+j'ai imposé des restrictions drastiques à la saisie des noms de Document
 et des noms de fichier. C'est plus une question de I<cross-site scripting>
 que de I<SQL injection> (ou plutôt I<no-SQL injection>).
 
 Troisième mouvement du S<balancier :> bien que j'utilise des expressions régulières
-pour vérifier ces noms de document et de fichier, je n'ai pas cherché à lancer
+pour vérifier ces noms de Document et de fichier, je n'ai pas cherché à lancer
 mon application en I<taint mode>. Je ne me fais pas d'illusion, cela plantera.
 Quant à l'authentification dans MongoDB, elle m'empêchait d'accéder à la base
 alors que je renseignais correctement le mot de passe. Je l'ai donc désactivée.
@@ -2486,7 +2486,7 @@ entre un nombre et une chaîne de caractères constituée de caractères tous nu
   { "foo" : 3 }
   { "foo" : "3" }
 
-Mes premières tentatives pour accéder à l'enregistrement d'une cellule en fonction de sa ligne
+Mes premières tentatives pour accéder à l'enregistrement d'une Cellule en fonction de sa ligne
 et de sa colonne ont échoué, car la ligne et la colonne étaient extraits de l'URL traité par Dancer,
 donc c'était des caractères. En d'autres termes, les critères de sélection étaient
 
