@@ -66,6 +66,12 @@ Git avec cette date de commit.
 
 =end HTML
 
+S<Remarque :> ultérieurement, j'ai retrouvé un quatrième listing, daté du 12 décembre 1983.
+Mais en raison du fait qu'il était abondamment raturé et que son contenu était un mélange
+du contenu du 8 décembre et du contenu du 10 janvier, j'ai décidé de ne pas le scanner
+mais de le reconstituer par copier-coller une fois les fichiers sources du 8 décembre et
+du 10 janvier reconstruits. Ce quatrième listing ne jouera donc aucun rôle dans la suite.
+
 =head2 Première méthode
 
 Première méthode, tout recopier
@@ -2118,7 +2124,7 @@ logique Grille de l'entité Document.
 
 =head4 Formulaire: grille
 
-Dans cette formulaire, on peut spécifier les paramètres
+Dans ce formulaire, on peut spécifier les paramètres
 permettant de découper le Document en Cellules. Cela genère un fichier
 graphique matérialisant ce découpage, mais sans
 pour autant créer les enregistrements dans la table
@@ -2311,10 +2317,8 @@ Rappelez-vous qu'un listing a donné lieu à en moyenne S<8 Documents>.
 
 =item 2
 
-Reconstituer un quatrième fichier source. Le troisième listing comporte des annotations
-manuscrites, que j'ai enlevées autant que possible dans les fichiers graphiques numérisés.
-Néanmoins, j'applique ces annotations pour constituer un quatrième listing. Faute de disposer
-de la date de ces annotations, j'adopte le lendemain de la date du troisième listing.
+Reconstituer le quatrième fichier source, celui que j'ai renoncé à numériser
+et à traiter par mon programme de reconnaissance de caractères.
 
 =item 3
 
@@ -2336,11 +2340,16 @@ commentaires requis par la GPL. Puis commiter avec la date du jour.
 
 =item 6
 
+Prendre en compte les annotations sur le listing the 19 janvier et corriger les éventuelles
+erreurs de compilation restantes, pour avoir un programme qui fonctionne.
+
+=item 7
+
 Passer un C<untabify> sur le fichier source et commiter, parce que j'ai grandi et mûri depuis 1984 et que
 je n'utilise plus de tabulations en dehors des fichiers F<makefile>. Et
 L<ça rapporte plus|https://arstechnica.com/information-technology/2017/06/according-to-statistics-programming-with-spaces-instead-of-tabs-makes-you-rich/>.
 
-=item 7
+=item 8
 
 Dans le dépôt Git, créer un sous-répertoire pour y mettre les fichiers graphiques issus de la numérisation.
 
@@ -2394,6 +2403,15 @@ Puis, dans un quatrième mouvement du balancier, j'ai compris comment faire fonc
 l'authentification dans le shell C<mongo> et dans les programmes Perl, donc
 je l'ai mise en place sur ma base de données et dans mon application.
 
+Et finalement, j'ai complété ces mesures de sécurité par une mesure radicale,
+j'ai travaillé en I<air gap>. La machine où j'ai développé mon programme de reconnaissance
+de caractères n'est pas ma machine principale, celle où notamment je traite mon
+courrier électronique. Donc un jour, lorsque je l'ai rallumée, je n'ai pas pris
+la peine de la rebrancher sur Internet. Et j'ai travaillé ainsi, en isolation
+du reste du monde cyber. De temps en temps, je transférais les fichiers textes
+reconstitués par clé USB, mais c'est tout. J'ai quand même fait quelques modifications
+dans le programme, mais le dépôt Git n'a pas été snchronisé avec Github.
+
 S<ORM ?> D'une part, c'est bon pour des bases SQL où le schéma est stocké
 dans la base et accessible par une API. Donc, inutile d'y songer pour 
 MongoDB (encore que certains pourraient essayer). D'autre part, de ce que j'ai
@@ -2432,6 +2450,21 @@ J'ai eu quelques mauvaises surprises lorsque j'ai voulu utiliser les différents
 dont j'ai besoin. Il s'agit peut-être de bugs, ou alors c'est du S<« PECEC »> (I<PEBKAC>
 en anglais). Je réétudierai chacun des problèmes lorsque j'aurai un peu plus de latitude
 dans mon emploi du temps.
+
+=head3 Formats graphiques
+
+J'ai dû m'y prendre à plusieurs fois pour numériser les listings. L'un des premiers
+écueils est que je n'ai pas pris garde aux réglages du scanner et un soir, j'ai 
+numérisé à 300 pixels par pouce, tandis que le soir suivant j'ai numérisé à 96 pixels par
+pouce. Inutile de dire que les deux séries de fichiers n'allaient pas ensemble.
+
+Une autre fois encore, j'ai cru numériser en noir et blanc, mais en fait pour une
+raison que j'ignore, les fichiers ont été stockés en niveaux de gris. Certes, c'était
+du I<1-bit grayscale>, mais c'était du gris très foncé avec du gris très clair et
+mon programme attendait du noir (RGB = 000000) et du blanc (RGB = FFFFFF), pas du 
+gris clair et du gris foncé. Heureusement, le programme C<conv-nb> que j'avais écrit pour le listing
+du 10 janvier avec un ruban encreur fatigué a été capable de convertir également
+ce listing  I<1-bit grayscale> en véritable noir et blanc.
 
 =head3 GD
 
