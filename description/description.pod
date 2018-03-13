@@ -967,12 +967,7 @@ Voici ce que cela donne S<avec :>
 
 =end HTML
 
-On remarquera que dans l'ancienne version, j'utilisais le bleu et le vert pour 
-faire comme sur un damier, ne pas avoir deux cases adjacentes de la même couleur.
-Avec la nouvelle version, je préfère utiliser le bleu pour mettre en évidence
-les limites des Grilles.
-
-On remarquera également qu'il reste des pixels rouges dans S<« gregorien »>. Ce n'est
+On remarquera qu'il reste des pixels rouges dans S<« gregorien »>. Ce n'est
 pas dû à la nouvelle Grille, celle qui chapeaute le caractère S<« g »>, mais à l'ancienne
 avec le recouvrement entre les deux Grilles sur quelques pixels de large. Donc, 
 ne pas se formaliser pour ces pixels rouges.
@@ -2340,7 +2335,7 @@ commentaires requis par la GPL. Puis commiter avec la date du jour.
 
 =item 6
 
-Prendre en compte les annotations sur le listing the 19 janvier et corriger les éventuelles
+Prendre en compte les annotations sur le listing du 19 janvier et corriger les éventuelles
 erreurs de compilation restantes, pour avoir un programme qui fonctionne.
 
 =item 7
@@ -2410,7 +2405,7 @@ courrier électronique. Donc un jour, lorsque je l'ai rallumée, je n'ai pas pri
 la peine de la rebrancher sur Internet. Et j'ai travaillé ainsi, en isolation
 du reste du monde cyber. De temps en temps, je transférais les fichiers textes
 reconstitués par clé USB, mais c'est tout. J'ai quand même fait quelques modifications
-dans le programme, mais le dépôt Git n'a pas été snchronisé avec Github.
+dans le programme, mais le dépôt Git n'a pas été synchronisé avec Github.
 
 S<ORM ?> D'une part, c'est bon pour des bases SQL où le schéma est stocké
 dans la base et accessible par une API. Donc, inutile d'y songer pour 
@@ -2459,8 +2454,8 @@ numérisé à 300 pixels par pouce, tandis que le soir suivant j'ai numérisé �
 pouce. Inutile de dire que les deux séries de fichiers n'allaient pas ensemble.
 
 Une autre fois encore, j'ai cru numériser en noir et blanc, mais en fait pour une
-raison que j'ignore, les fichiers ont été stockés en niveaux de gris. Certes, c'était
-du I<1-bit grayscale>, mais c'était du gris très foncé avec du gris très clair et
+raison que j'ignore, les fichiers ont été stockés en niveaux de gris, en I<1-bit grayscale>. Certes, c'était
+du I<1-bit>, mais c'était du I<grayscake>, avec du gris très foncé et du gris très clair, alors que
 mon programme attendait du noir (RGB = 000000) et du blanc (RGB = FFFFFF), pas du 
 gris clair et du gris foncé. Heureusement, le programme C<conv-nb> que j'avais écrit pour le listing
 du 10 janvier avec un ruban encreur fatigué a été capable de convertir également
@@ -2810,6 +2805,9 @@ programme F<appli/appli.pl>, voici les actions effectuées.
 
 Dans la fenêtre C<*Shell*> d'Emacs, je tape C<C-c C-c> (contrôle C deux fois) pour
 arrêter le serveur Dancer2.
+
+Remarque : il faut doubler le Contrôle C parce que l'on est sous Emacs. Pour un shell
+plus habituel comme un xterm, un seul Contrôle C suffit.
 
 =item 2
 
