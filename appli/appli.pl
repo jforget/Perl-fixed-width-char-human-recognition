@@ -683,12 +683,18 @@ sub val_grille {
   my ($appli, $mdp, $doc) = @_;
   my $info_doc = get_doc($appli, $mdp, $doc);
 
+  my $heure_debut = horodatage(); # Début de la construction de l'association Glyphes-Cellules
+                                  # en négligeant le temps de construction de la Grille.
+
   purge_cellule    ($appli, $mdp, $doc);
   my @cellule = construire_grille($appli, $mdp, $info_doc, $info_doc, 1);
 
   my $ref_param;
   $ref_param->{dh_valid}  = horodatage();
-  $ref_param->{etat}      = 3;
+  $ref_param->{etat}      = 4; # 4 parce que la construction de la grille s'accompagne
+                               # du calcul du score pour chaque cellule
+  $ref_param->{dh_assoc}  = horodatage();
+  $ref_param->{dh_debut}  = $heure_debut;
   maj_doc         ($appli, $mdp, $doc, $ref_param);
   purge_cellule   ($appli, $mdp, $doc);
   ins_many_cellule($appli, $mdp, [ @cellule ] );
@@ -991,6 +997,7 @@ sub association {
     $critere->{l} = 0 + $l;
     $critere->{c} = 0 + $c;
   }
+  my $heure_debut = horodatage(); # Pour déterminer combien de temps prendra l'association
   #say YAML::Dump($critere);
   my $iter = iter_cellule($appli, $mdp, $critere);
   while (my $info_cellule = $iter->next) {
@@ -1009,6 +1016,7 @@ sub association {
     # Lancement pour tout le document
     my $ref_param;
     $ref_param->{dh_assoc}  = horodatage();
+    $ref_param->{dh_debut}  = $heure_debut;
     $ref_param->{etat}      = 4;
     maj_doc($appli, $mdp, $doc, $ref_param);
   }
@@ -1357,7 +1365,11 @@ EOF
 EOF
   }
   if ($info->{etat} >= 4) {
-    $association .= "<p>Association lancée le $info->{dh_assoc} (UTC)</p>\n";
+    my $debut = '';
+    if ($info->{dh_debut}) {
+      $debut = "lancée le $info->{dh_debut} et";
+    }
+    $association .= "<p>Association $debut effectuée le $info->{dh_assoc} (UTC)</p>\n";
   }
   if ($info->{etat} >= 3) {
     my $stat = stat_cellule($appli, $mdp, $doc);

@@ -1434,13 +1434,16 @@ générées en fonction de cette grille.
 =item 4
 
 La procédure d'association a été lancée pour toutes les Cellules
-du Document
+du Document. Pour cet état, il y a deux horodatages, C<dh_debut> et C<dh_assoc>. Cela
+permet de calculer le temps que cette fonction a pris pour le document
+complet.
 
 =item 5
 
 Le fichier texte final a été généré.
 
 =back
+
 
 Taille approximative des Cellules
 
@@ -2537,6 +2540,23 @@ J'ai donc étendu la visualisation par digramme de l'espace à ces deux caractè
 point et C<AP> pour l'apostrophe. Et bien que mon programme Pascal n'utilise aucun dollar (ou peso),
 j'ai ajouté un digramme C<DL> pour ce caractère.
 
+=head3 Le programme lui-même
+
+La mauvaise surprise du programme, c'est la durée de la fonction associant les Cellules
+d'un Document aux Glyphes. Après la fin du projet, j'ai adapté le programme pour stocker
+à la fois l'heure de début et l'heure de fin lorsque l'on demande l'association des Glyphes
+et des Cellules pour un Document. À ce moment-là, la
+collection des Glyphes contenait 179 Glyphes. Le plus petit Document, avec 261 Cellules, 
+a nécessité 4 mn et 22 s de traitement.  Le plus gros Document, avec 1866 Cellules,
+a nécessité 16 mn et 19 s.
+
+D'un autre côté, j'avais envisagé bien pire. Par exemple, travailler sur la constitution
+de la Grille le soir, cliquer sur la validation de la Grille ou sur le lancement de l'association
+juste avant de me coucher, puis regarder le résultat le lendemain matin. Je n'en suis pas arrivé
+là et j'ai quand même pu travailler à peu près normalement, en traitant quatre Documents par
+soirée, donc en lançant 4 validations de Grille. Cela dit, heureusement que je travaillais sur
+une machine annexe, ce qui me permettait de faire mon courrier et de lire les dernières nouvelles
+sur ma machine principale pendant que l'association Cellules-Glyphes était en train de mouliner.
 
 =head2 Bonnes Surprises
 
