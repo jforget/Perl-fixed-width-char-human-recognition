@@ -2471,6 +2471,14 @@ gris clair et du gris foncé. Heureusement, le programme C<conv-nb> que j'avais 
 du 10 janvier avec un ruban encreur fatigué a été capable de convertir également
 ce listing  I<1-bit grayscale> en véritable noir et blanc.
 
+Un paradoxe toutefois. Pour le listing du 10 janvier, celui avec le ruban encreur fatigué,
+j'ai créé des fichiers PNG en 300 pixels par pouce et en couleurs. Puis je les ai convertis
+en noir et blanc avec C<conv_nb>. Le résultat a été des fichiers PNG noir et blanc en 72 pixels
+par pouce. Mais ce n'est pas un problème, parce que tous les pixels ont été conservés.
+En fait, en prenant le fichier F<b001-coul.png>, il fait 2550 x 3509 pixels, soit
+21 cm x 29,7 cm, tandis que le fichier converti F<b001_nb.png> a pour dimensions
+900 mm x 1238 mm (plus d'un mètre de hauteur) soit 2550 x 3509 pixels.
+
 =head3 GD
 
 J'ai déjà mentionné le fait que la conversion RGB -> HSV pouvait donner des valeurs négatives
