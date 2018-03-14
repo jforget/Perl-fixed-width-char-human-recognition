@@ -47,7 +47,7 @@ des feuilles A4 imprimés au laser
 que nous utilisons tous depuis
 la fin des années 1980, c'était
 des listings continus avec entraînement
-par bande Caroll et sortant d'une 
+par bande Caroll et sortant d'une
 imprimante à aiguilles.
 
 Au début de chacun de ces trois listings,
@@ -176,8 +176,8 @@ shell basé sur le schéma S<ci-dessous :>
   .                  ------   ------
   .                  |             |
   .                 ___           ___
-  .                (   )         (   )
-  .    exemple.txt (___)_        (___)_ exemple.png
+  .                (   )         (   )     exemple.ppm
+  .    exemple.txt (___)_        (___)_ ou exemple.png
   .                  |             |
   .                  |      ----------------
   .                  |      |    GOCR      | ou OCRAD, ou Tesseract, ou Cuneiform
@@ -419,8 +419,8 @@ Et peut-être PDL si cela permet des comparaisons faciles
 de matrices de booléens.
 
 Plan S<B :> pas de plan B pour C<GD.pm>, je sais que cela fonctionne et que je saurai
-me débrouiller avec. Si je n'arrive pas à m'en sortir avec MongoDB, tant pis, je
-ferai du SQL avec SQLite. Et pour Dancer2, je ferai du CGI à l'ancienne, comme lorsque
+me débrouiller avec. Si je n'étais pas arrivé à m'en sortir avec MongoDB, tant pis, j'aurais
+fait du SQL avec SQLite. Et pour Dancer2, j'aurais fait du CGI à l'ancienne, comme lorsque
 j'ai commencé à utiliser Perl il y a 19 ans.
 
 Et bien sûr, j'utilise Perl. S<Perl 5> ou S<Perl 6 ?> Bonne question.
@@ -484,7 +484,7 @@ des caractéristiques HSV. J'aurais pu fouiller la documentation, j'ai préfér�
 écrire un programme qui a l'autre avantage de me servir de modèle pour les suivants.
 Et à la réflexion, j'ai bien fait, car j'ai découvert que la fonction de conversion
 de RGB vers HSV produisait des nombres négatifs, ce qui est contraire à la documentation.
-J'ai donc patché C<GD::Simple> et j'ai soumis un ticket 
+J'ai donc patché C<GD::Simple> et j'ai soumis un ticket
 L<https://rt.cpan.org/Ticket/Display.html?id=120572>.
 
 J'ai complété ce premier programme pour calculer également la moyenne et le mode
@@ -930,7 +930,7 @@ Le programme réaffiche
 
   l   c  prio    x    y  lg  ht action
   0   0    0    42   27  30  49
-  3  58    1  1827  194  30  49 
+  3  58    1  1827  194  30  49
 
 Mais le fichier graphique montre qu'en colonne 58, il y a l'esperluette. L'utilisateur corrige alors 
 en supprimant la Grille qu'il vient de créer et en en créant une nouvelle avec les bonnes
@@ -1198,7 +1198,7 @@ de coordonnées. Cela se verra mieux avec l'exemple ci-dessous
 
   Cellule            Glyphe
      0  3  6  9      0  3  6  9
-    ------------    ------------ 
+    ------------    ------------
   0 |         *|    |          |
     |          |    |          |
     |    **    |    |    ***   |
@@ -1468,7 +1468,7 @@ Priorité, qui tient lieu de clé (numéro séquentiel)
 
 On pourrait considérer que ce champ est redondant avec la position
 de la Grille dans le tableau des Grilles. En effet, comme on renumérote
-les priorités après avoir trié les Grille en fonction de cette priorité,
+les priorités après avoir trié les Grilles en fonction de cette priorité,
 la Grille de priorité 0 est nécessairement en position 0 du tableau,
 la Grille de priorité 1 est nécessairement en position 1 du tableau,
 et ainsi de site. Mais j'ai utilisé la valeur de l'attribut C<prio>
@@ -1665,7 +1665,7 @@ UTC, ce qui évite les problèmes de changement d'heure.
         "dh_cre" : "2017-08-24 18:18:18",
         "dh_assoc" : "2017-09-07 20:11:27",
 
-Récapitulatf sur les coordonnées : 
+Récapitulatf sur les coordonnées :
 
 =for HTML
 <img src="Cellule-p.png" alt="Dessin de la Cellule p en gros pixels, pour mettre en valeur les différentes coordonnées" />
@@ -2240,7 +2240,7 @@ n'est pas validé, même si le Coloriage d'origine l'est.
 Le réaffichage se fait sur le nouveau Coloriage. Vous pouvez alors
 modifier les Critères ou valider le Coloriage avec les critères tels quels.
 
-Pourquoi copier un Coloriage sans changer de Document ? Si vous voulez 
+Pourquoi copier un Coloriage sans changer de Document ? Si vous voulez
 créer un Coloriage avec des Critères simplement analogues, au lieu
 de Critères identiques.
 
@@ -2326,7 +2326,7 @@ adepte de la solution de facilité consistant à utiliser des tabulations pour l
 
 =item 4
 
-Initialiser le dépôt Git du programme Pascal. Pour chacun des quatre fichiers sources, 
+Initialiser le dépôt Git du programme Pascal. Pour chacun des quatre fichiers sources,
 le copier dans ce dépôt, en écrasant l'ancienne version, puis lancer un C<commit>.
 Dans le message du C<commit>, mentionner le fait que le fichier est placé rétroactivement
 sous la licence GPL + Artistic.
@@ -2360,11 +2360,15 @@ programme...
 
 =head2 Ce que je n'ai pas fait
 
+=head3 Mises à jour concurrentes
+
 Je n'ai pas prêté attention aux problèmes de mises à jour concurrentes.
 Comme je suis l'unique utilisateur, je me contente d'une session
 unique. Ou alors, si c'est très facile avec Dancer2 de gérer
 les sessions simultanées, je gèrerai moi-même la synchronisation
 entre les quelques sessions que je m'autoriserai à ouvrir.
+
+=head3 Sécurité
 
 Le modèle de sécurité est très simple. C'est la même personne (moi)
 qui écrit les programmes, gère la base de données, utilise l'application
@@ -2401,17 +2405,20 @@ Puis, dans un quatrième mouvement du balancier, j'ai compris comment faire fonc
 l'authentification dans le shell C<mongo> et dans les programmes Perl, donc
 je l'ai mise en place sur ma base de données et dans mon application.
 
-Et finalement, j'ai complété ces mesures de sécurité par une mesure radicale,
+Et finalement, j'ai complété ces mesures de sécurité insuffisantes par une mesure radicale,
 j'ai travaillé en I<air gap>. La machine où j'ai développé mon programme de reconnaissance
 de caractères n'est pas ma machine principale, celle où notamment je traite mon
 courrier électronique. Donc un jour, lorsque je l'ai rallumée, je n'ai pas pris
 la peine de la rebrancher sur Internet. Et j'ai travaillé ainsi, en isolation
 du reste du monde cyber. De temps en temps, je transférais les fichiers textes
 reconstitués par clé USB, mais c'est tout. J'ai quand même fait quelques modifications
-dans le programme, mais le dépôt Git n'a pas été synchronisé avec Github.
+dans le programme, mais le dépôt Git n'a pas été synchronisé avec Github
+pendant deux mois.
+
+=head3 Méthodes de programmation à la mode
 
 S<ORM ?> D'une part, c'est bon pour des bases SQL où le schéma est stocké
-dans la base et accessible par une API. Donc, inutile d'y songer pour 
+dans la base et accessible par une API. Donc, inutile d'y songer pour
 MongoDB (encore que certains pourraient essayer). D'autre part, de ce que j'ai
 pu comprendre, c'est assez difficile de faire évoluer l'application basée
 sur un ORM si la structure de la base de données change. Finalement, masquer
@@ -2452,14 +2459,14 @@ dans mon emploi du temps.
 =head3 Formats graphiques
 
 J'ai dû m'y prendre à plusieurs fois pour numériser les listings. L'un des premiers
-écueils est que je n'ai pas pris garde aux réglages du scanner et un soir, j'ai 
+écueils est que je n'ai pas pris garde aux réglages du scanner et un soir, j'ai
 numérisé à 300 pixels par pouce, tandis que le soir suivant j'ai numérisé à 96 pixels par
 pouce. Inutile de dire que les deux séries de fichiers n'allaient pas ensemble.
 
 Une autre fois encore, j'ai cru numériser en noir et blanc, mais en fait pour une
 raison que j'ignore, les fichiers ont été stockés en niveaux de gris, en I<1-bit grayscale>. Certes, c'était
 du I<1-bit>, mais c'était du I<grayscake>, avec du gris très foncé et du gris très clair, alors que
-mon programme attendait du noir (RGB = 000000) et du blanc (RGB = FFFFFF), pas du 
+mon programme attendait du noir (RGB = 000000) et du blanc (RGB = FFFFFF), pas du
 gris clair et du gris foncé. Heureusement, le programme C<conv-nb> que j'avais écrit pour le listing
 du 10 janvier avec un ruban encreur fatigué a été capable de convertir également
 ce listing  I<1-bit grayscale> en véritable noir et blanc.
@@ -2467,7 +2474,7 @@ ce listing  I<1-bit grayscale> en véritable noir et blanc.
 =head3 GD
 
 J'ai déjà mentionné le fait que la conversion RGB -> HSV pouvait donner des valeurs négatives
-pour la teinte H. J'ai soumis un ticket sur RT et il a été accepté. Cela devrait être corrigé.
+pour la teinte H. J'ai soumis un ticket sur RT et le module a été corrigé.
 Mais j'ai constaté d'autres problèmes pour la conversion RGB -> HSV ou inverse. Quand j'aurai le
 temps, je soumettrai un nouveau ticket.
 
@@ -2478,7 +2485,7 @@ Lorsque j'ai voulu afficher un fichier graphique S<avec :>
   <img src='toto.png' alt='titi' />
 
 cela a déclenché un sous-programme de traitement de route et le fichier ne s'est pas affiché.
-Heureusment, avec la balise
+Heureusement, avec la balise
 
   <img src='data:image/png;base64,xxx' alt='titi' />
 
@@ -2495,7 +2502,7 @@ trouvé et lu, j'avais déjà écrit beaucoup de code, j'ai estimé inutile de r
 
 =head3 MongoDB
 
-Lorsque je lis le livre sur MongoDB chez O'Reilly, je lis que le shell MongoDB fournit
+Dans le livre sur MongoDB chez O'Reilly, je lis que le shell MongoDB fournit
 une méthode C<find()> qui renvoie une liste de documents vérifiant les critères
 en paramètres et une méthode C<findOne> qui en renvoie un seul.
 Lorsque je consulte le L<synopsis|https://metacpan.org/pod/MongoDB#SYNOPSIS>
@@ -2510,8 +2517,8 @@ pas encore lu cette documentation, donc il m'a fallu un peu de débugage
 (avec C<say> et C<YAML::Dump>) pour comprendre qu'il fallait utiliser C<next>
 ou mieux, C<all>.
 
-Un point qui aurait pu me faire perdre beaucoup de S<temps :> MongoDB fait une différence 
-entre un nombre et une chaîne de caractères constituée de caractères tous numériques. C'est marqué 
+Un point qui aurait pu me faire perdre beaucoup de S<temps :> MongoDB fait une différence
+entre un nombre et une chaîne de caractères constituée de caractères tous numériques. C'est marqué
 à la page 8 du livre chez O'Reilly. Les deux documents ci-dessous sont S<différents :>
 
   { "foo" : 3 }
@@ -2546,7 +2553,7 @@ La mauvaise surprise du programme, c'est la durée de la fonction associant les 
 d'un Document aux Glyphes. Après la fin du projet, j'ai adapté le programme pour stocker
 à la fois l'heure de début et l'heure de fin lorsque l'on demande l'association des Glyphes
 et des Cellules pour un Document. À ce moment-là, la
-collection des Glyphes contenait 179 Glyphes. Le plus petit Document, avec 261 Cellules, 
+collection des Glyphes contenait 179 Glyphes. Le plus petit Document, avec 261 Cellules,
 a nécessité 4 mn et 22 s de traitement.  Le plus gros Document, avec 1866 Cellules,
 a nécessité 16 mn et 19 s.
 
@@ -2554,7 +2561,8 @@ D'un autre côté, j'avais envisagé bien pire. Par exemple, travailler sur la c
 de la Grille le soir, cliquer sur la validation de la Grille ou sur le lancement de l'association
 juste avant de me coucher, puis regarder le résultat le lendemain matin. Je n'en suis pas arrivé
 là et j'ai quand même pu travailler à peu près normalement, en traitant quatre Documents par
-soirée, donc en lançant 4 validations de Grille. Cela dit, heureusement que je travaillais sur
+soirée, donc en lançant 4 validations de Grille. Cela dit, heureusement que
+mon programme de reconnaissance travaillait sur
 une machine annexe, ce qui me permettait de faire mon courrier et de lire les dernières nouvelles
 sur ma machine principale pendant que l'association Cellules-Glyphes était en train de mouliner.
 
@@ -2562,9 +2570,9 @@ sur ma machine principale pendant que l'association Cellules-Glyphes était en t
 
 Il y a eu quand même des bonnes surprises. Notamment, dans C<GD>, l'orientation par défaut
 des coordonnées. Les coordonnées X croissent de gauche à droite (comme habituellement), tandis
-que les coordonnées Y croissent du haut vers le bas, à l'inverse de l'habitude. Mais cela 
-coïncide avec le sens habituel de variation des coordonnées ligne-colonne dans un fichier texte en 
-police à espacement fixe. D'où une simplification significative des opérations de 
+que les coordonnées Y croissent du haut vers le bas, à l'inverse de l'habitude. Mais cela
+coïncide avec le sens habituel de variation des coordonnées ligne-colonne dans un fichier texte en
+police à espacement fixe. D'où une simplification significative des opérations de
 conversion LC -> XY.
 
 Une autre bonne surprise, c'est avec GitHub. J'ai écrit le présent texte en POD,
@@ -2575,10 +2583,11 @@ standard et de CPAN). Éh bien cela n'a pas été nécessaire. Rien que le fait 
 POD sur GitHub fait qu'il est automatiquement traduit en HTML. Il y a juste un petit
 problème avec les blancs insécables.
 
-Au moment où j'écris ces lignes, je n'ai pas encore mis en place le système des Requêtes.
-Il est trop tôt pour conclure sur le problème des S<« l »> (S<« L »> minuscules),
-des S<« I »> (S<« i »> majuscules) et des S<« 1 »> (chiffres S<« un »>). Je pense néanmoins
-que cela se résoudra sans mal. En revanche, entre les tirets et les blancs soulignés, compte tenu
+Il va de soi que pour écrire un programme de reconnaissance, il faut faire attention
+aux caractères semblables, tels que les S<« l »> (S<« L »> minuscules),
+les S<« I »> (S<« i »> majuscules) et les S<« 1 »> (chiffres S<« un »>).
+Les mécanismes que j'ai mis en place permettent de résoudre ce problème.
+En revanche, entre les tirets et les blancs soulignés, compte tenu
 de la réduction à l'enveloppe rectangulaire des pixels noirs, la similarité des Cellules est
 très problématique. Heureusement, à l'époque (1983--1984) je n'utilisais aucun blanc souligné. Donc le problème
 est éludé. Pour l'instant.
@@ -2591,6 +2600,43 @@ créer une nouvelle table avec, comme clé, la clé de la table d'origine plus l
 Cela dit, du côté de SQL, S<« ils »> sont en train de revenir à des pratiques plus... pratiques et
 à autoriser des colonnes de base de données de type C<JSON>, donc avec la possibilité de définir
 des tableaux et de les emboîter.
+
+=head2 Conseils d'utilisation
+
+Il existe en gros deux types de Coloriages et le choix des couleurs en dépend.
+Il y a d'abord les Coloriages qui montrent la justesse du résultat de l'association
+Cellules-Glyphes. Ces coloriages sont basés sur les scores, avec éventuellement l'affichage
+des Cellules associées à deux Glyphes ou plus. Pour ces Coloriages, il est préférable
+d'utiliser des couleurs organisées en dégradé, comme les arcs-en-ciel. Et il y a les Coloriages
+destinés à détecter les confusions entre Glyphes similaires, notamment S<« l »> (S<« L »> minuscules),
+S<« I »> (S<« i »> majuscules) et S<« 1 »> (chiffres S<« un »>). Pour ces Coloriages,
+il est préférable d'utiliser des couleurs qui tranchent et, par exemple, éviter de mettre
+à la fois un Critère orange et un Critère rose.
+
+Lorsque l'on travaille sur un nouveau Document, il est utile de créer les Coloriages
+par recopie des Coloriages d'un ancien Document. L'avantage est que le choix des couleurs
+sera cohérent d'un Document à l'autre. Pour ce faire, afficher l'ancien Document, en paginant
+jusqu'à la liste des Coloriages. Puis afficher les Coloriages en sélectionnant S<« ouvrir>
+dans un nouvel S<onglet »>, cela permet de revenir facilement et rapidement à la liste
+des Coloriages de l'ancien Document.
+
+Affichage d'une S<Cellule :> si cette Cellule est associée à un mauvais Glyphe, créer un
+nouveau Glyphe dépendant du Caractère correct. Ça, c'est le principe. Mais comme on enchaîne
+l'examen de plusieurs Cellules avec un mauvais score ou associées à des mauvais Glyphes,
+au bout d'un certain temps le Coloriage ne reflète plus la réalité. Donc, à chaque fois que
+l'on consulte une Cellule, il faut commencer par cliquer sur le bouton S<« association »>.
+Assez souvent, le rafraîchissement de cette association permet d'associer la Cellule
+à un Glyphe créé quelques minutes plus tôt et, ô bonheur, donnant un Caractère correct.
+
+Lorsque l'on a fini de traiter un Document, même s'il reste d'autres Documents associés au
+même listing, cela vaut le coup de concaténer les fichiers textes existants et de lancer la
+compilation. Il y aura une erreur de compilation parce que le programme n'est pas complet
+et que le compilateur n'a pas trouvé le C<end.> mais on peut trouver d'autres erreurs de
+compilation résultant d'une mauvaise association entre une Cellule et un Glyphe.
+C'est ainsi que j'ai eu une erreur parce que le compilateur était tombé sur un C<hegin>
+là où il attendait un C<begin>. J'ai donc corrigé cette Cellule en lui créant un Glyphe,
+mais également j'ai créé un Coloriage mettant en relief les S<« b »> et les S<« h »>
+avec des couleurs différentes pour détecter de nouvelles confusions.
 
 =head2 Bilan
 
