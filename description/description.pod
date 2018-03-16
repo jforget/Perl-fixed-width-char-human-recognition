@@ -2647,6 +2647,21 @@ là où il attendait un C<begin>. J'ai donc corrigé cette Cellule en lui créan
 mais également j'ai créé un Coloriage mettant en relief les S<« b »> et les S<« h »>
 avec des couleurs différentes pour détecter de nouvelles confusions.
 
+Ce n'est pas une panacée. Compte tenu de la police utilisée par l'imprimante, il y a
+de fortes probabilités de confusion entre le S<« j »> minuscule et le S<« J »> majuscule.
+Et le compilateur Pascal ne voit aucun problème à appeler la même donnée 
+C<date.jour> sur une ligne et C<date.Jour> sur une autre.
+
+Pour les annotations manuscrites qui obstruent les caractères imprimés, j'ai associé les
+Cellules correspondantes à un Glyphe donnant le Caractère adéquat, même si le dessin des
+pixels n'a rien à voir. Je pense que cela n'a pas produit de problème de mauvaise traduction
+Cellule -> Glyphe. Pour être sûr, il aurait fallu créer un affichage inverse à deux étages, listant les
+Glyphes pour un Caractères, puis listant les Cellules associées à chaque Glyphe.
+
+Quant aux annotations manuscrites au-delà de la fin d'une ligne imprimée, je ne m'y suis
+pas intéressé pendant la reconnaissance de caractères. Le problème a été traité par une
+suppression jusqu'à la fin de ligne (C<d$> pour vi et pour Emacs-Viper).
+
 =head2 Bilan
 
 Mes trois listings Pascal ont à peine plus de 500 lignes, soit un total de S<1 500>. Mon programme Dancer2 + MongoDB
