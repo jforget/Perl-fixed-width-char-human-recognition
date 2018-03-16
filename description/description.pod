@@ -920,7 +920,8 @@ S<« gregorien »>, l'utilisateur a déterminé que la Grille par défaut S<est 
   0   0    0    42   27  30  49
 
 L'utilisateur décide de créer une deuxième Grille pour le mot S<« gregorien »>. Le numéro de ligne
-est à coup sûr 3, mais combien vaut le numéro de S<colonne ?> Il essaie au S<pif :>
+est à coup sûr 3, mais combien vaut le numéro de S<colonne ?> Sans faire attention à la ligne verticale
+en vert foncé, l'utilisateur essaie au S<pif :>
 
   l   c  prio    x    y  lg  ht action
   0   0    0    42   27  30  49
