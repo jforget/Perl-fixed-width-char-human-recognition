@@ -310,7 +310,7 @@ I<Source : Portrait de Lena Söderberg, (c) Playboy, 1972, utilisé avec la perm
 Ensuite, vous relanciez une analyse
 et le résultat tenait compte
 des corrections que vous aviez données.
-Les associations glyphe -> caractère
+Les associations glyphe → caractère
 pouvaient même être stockées dans
 une base de données pour l'analyse
 d'un autre fichier.
@@ -1276,6 +1276,67 @@ S<Exception :> lors que l'on compare une Cellule avec le Glyphe-Espace, qui ne c
 pixel noir, les neuf façons de faire varier les arrondis donneront toutes le même S<score :>
 le nombre de pixels noirs de la Cellule. C'est inutile de faire varier les arrondis dans
 ce cas.
+
+=head2 Coloriage
+
+Comme je l'ai  déjà indiqué, le Coloriage sert à  afficher le résultat
+de  l'association entre  Cellules et  Glyphes, en  spécifiant puis  en
+exécutant des requêtes sur les cellules du Document courant.
+
+Il y a trois types de S<coloriage :>
+
+=over 4
+
+=item 1  Les coloriages servant  à détecter  le cas des  Cellules pour
+lesquelles l'association hésite entre deux Glyphes, voire plus.
+
+=item 2 Les coloriages servant à  mettre en évidence les Cellules avec
+un très mauvais score.
+
+=item  3 Les  coloriages servant  à faire  le tri  entre les  Cellules
+associées  à  des  caractères   similaires  ;  typiquement,  faire  la
+distinction entre  les S<« l  »> comme Lima,  les S<« I  »> majuscules
+comme India, et les chiffres S<« 1 »>.
+
+=back
+
+En fait,  le premier type n'a  pas d'utilité pratique, les  cas où une
+Cellule est associée à deux Glyphes différents sont extrêmement rares.
+Inutile de s'y intéresser.
+
+Pour les  coloriages par  score, on spécifie  des critères  par scrore
+décroissant et en utilisant des couleurs en dégradé.
+
+=for HTML
+<img src="criteres-par-score.png" alt="Exemple de jeu de critères pour avoir les scores" />
+
+Le résultat ressemble à S<ceci :>
+
+=for HTML
+<img src="resultats-score.png" alt="Affichage d'un texte, les cellules étant coloriées selon leur score" />
+
+On peut constater dans  cet exemple que le S<« e »> de  S<« begin »> a
+servi de modèle pour un Glyphe et que, par conséquent, son score est à
+zéro. On  peut constater également  que deux Cellules occupées  par un
+espace ont un  score, car elles contiennent des  pixels parasites. Les
+autres  espaces, en  revanche, ne  contiennent aucun  pixel, donc  ils
+n'ont pas donné lieu à extraction de Cellule.
+
+Pour   les  coloriages   destinés   à   différencier  les   caractères
+ressemblant, les  couleurs à utiliser doivent  être contrastées. Voici
+un exemple de  coloriage pour faire la distinction entre  les S<« l »>
+comme  Lima,  les  S<« I »>  majuscules  comme  India, et les chiffres
+S<« 1 »>.
+
+=for HTML
+<img src="criteres-par-ressemblance.png" alt="Exemple de jeu de critères pour montrer les caractères similaires" />
+
+Et voici le résultat
+
+=for HTML
+<img src="resultat-ressemblance.png" alt="Affichage d'un texte, les caractères similaires étant mis en relief" />
+
+Pour les coloriages permettant de 
 
 =head2 Modèle physique des données
 
@@ -2482,9 +2543,9 @@ En fait, en prenant le fichier F<b001-coul.png>, il fait 2550 x 3509 pixels, soi
 
 =head3 GD
 
-J'ai déjà mentionné le fait que la conversion RGB -> HSV pouvait donner des valeurs négatives
+J'ai déjà mentionné le fait que la conversion RGB → HSV pouvait donner des valeurs négatives
 pour la teinte H. J'ai soumis un ticket sur RT et le module a été corrigé.
-Mais j'ai constaté d'autres problèmes pour la conversion RGB -> HSV ou inverse. Quand j'aurai le
+Mais j'ai constaté d'autres problèmes pour la conversion RGB → HSV ou inverse. Quand j'aurai le
 temps, je soumettrai un nouveau ticket.
 
 =head2 Dancer2
@@ -2582,7 +2643,7 @@ des coordonnées. Les coordonnées X croissent de gauche à droite (comme habitu
 que les coordonnées Y croissent du haut vers le bas, à l'inverse de l'habitude. Mais cela
 coïncide avec le sens habituel de variation des coordonnées ligne-colonne dans un fichier texte en
 police à espacement fixe. D'où une simplification significative des opérations de
-conversion LC -> XY.
+conversion LC → XY.
 
 Une autre bonne surprise, c'est avec GitHub. J'ai écrit le présent texte en POD,
 parce que c'est le système le plus simple pour écrire des documents et parce qu'il existe
@@ -2655,7 +2716,7 @@ C<date.jour> sur une ligne et C<date.Jour> sur une autre.
 Pour les annotations manuscrites qui obstruent les caractères imprimés, j'ai associé les
 Cellules correspondantes à un Glyphe donnant le Caractère adéquat, même si le dessin des
 pixels n'a rien à voir. Je pense que cela n'a pas produit de problème de mauvaise traduction
-Cellule -> Glyphe. Pour être sûr, il aurait fallu créer un affichage inverse à deux étages, listant les
+Cellule → Glyphe. Pour être sûr, il aurait fallu créer un affichage inverse à deux étages, listant les
 Glyphes pour un Caractères, puis listant les Cellules associées à chaque Glyphe.
 
 Quant aux annotations manuscrites au-delà de la fin d'une ligne imprimée, je ne m'y suis
@@ -2666,7 +2727,7 @@ suppression jusqu'à la fin de ligne (C<d$> pour vi et pour Emacs-Viper).
 
 Mes trois listings Pascal ont à peine plus de 500 lignes, soit un total de S<1 500>. Mon programme Dancer2 + MongoDB
 fait plus de S<1 900 lignes>, auxquelles il faut ajouter une centaine de lignes pour le programme
-de conversion bleu -> noir + orange -> blanc. Et le programme Dancer2 + MongoDB n'est pas
+de conversion bleu → noir + orange → blanc. Et le programme Dancer2 + MongoDB n'est pas
 maintenable s'il n'est pas accompagné du présent document, qui dépasse les 2500 lignes
 (je ne compte pas les compléments ci-dessous). Écrire S<4 500 lignes> de Perl et de POD
 pour s'éviter la saisie de S<1 500 lignes> de Pascal, est-ce S<rentable ?>
