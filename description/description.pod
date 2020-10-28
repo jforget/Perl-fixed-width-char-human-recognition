@@ -1313,7 +1313,7 @@ décroissant et en utilisant des couleurs en dégradé.
 Le résultat ressemble à S<ceci :>
 
 =for HTML
-<img src="resultats-par-score.png" alt="Affichage d'un texte, les cellules étant coloriées selon leur score" />
+<img src="resultat-score.png" alt="Affichage d'un texte, les cellules étant coloriées selon leur score" />
 
 On peut constater dans  cet exemple que le S<« e »> de  S<« begin »> a
 servi de modèle pour un Glyphe et que, par conséquent, son score est à
