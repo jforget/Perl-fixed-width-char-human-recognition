@@ -2183,7 +2183,7 @@ logique Grille de l'entité Document.
 =head4 Formulaire: grille
 
 Dans ce formulaire, on peut spécifier les paramètres
-permettant de découper le Document en Cellules. Cela genère un fichier
+permettant de découper le Document en Cellules. Cela génère un fichier
 graphique matérialisant ce découpage, mais sans
 pour autant créer les enregistrements dans la table
 S<« Cellule ».>
@@ -2232,7 +2232,7 @@ Supression de la Grille. Ce choix n'est pas disponible sur la Grille de base, qu
 rester à demeure dans le Document. Il n'est pas disponible non plus pour la dernière ligne,
 car cette ligne est réservée pour la création d'une nouvelle Grille, donc il n'y a rien à supprimer.
 J'ai utilisé l'abréviation S<« suppr »> au lieu du mot entier S<« suppression »>
-parce que sinon, la largeur du champ aurait été très différente entre la première et dernière lignes,
+parce que sinon, la largeur du champ aurait été très différente entre la première et la dernière lignes,
 qui n'ont pas ce choix, et les lignes intermédiaires qui l'ont.
 
 =back
@@ -2822,7 +2822,7 @@ et ainsi de suite.
 =head2 Rotation et cisaillements
 
 Dans le formulaire définissant les cisaillements, les valeurs sont 
-données en S<« pixels> toutes les I<N> S<lignes »> (ou S<« colonnes »>.
+données en S<« pixels> toutes les I<N> S<lignes »> (ou S<« colonnes »>).
 Ici, on ignore le facteur d'échelle et on considère que les cisaillements
 sont spécifiés en S<« pixels> tous les I<n> S<pixels »>.
 
@@ -2935,7 +2935,7 @@ et copier-coller le résultat vers le fichier F<description/description.pod>.
 
 =head3 Firefox
 
-Je lance Firefox à partir des menus déroulants de ma machine.  J'aurais pu le faire depuis
+Je lance Firefox à partir des menus déroulants du gestionnaire de fenêtres de ma machine.  J'aurais pu le faire depuis
 la fenêtre xterm, mais j'ai l'habitude d'utiliser les menus déroulants.
 Et je demande L<http://localhost:3000> pour avoir la fenêtre de connexion.
 Une fois le code application et le mot de passe saisis, j'arrive sur la liste
