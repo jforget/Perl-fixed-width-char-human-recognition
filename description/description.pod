@@ -2649,8 +2649,14 @@ de nombreux outils de conversion en HTML, en LATEX, etc. J'avais prévu de consa
 de temps à écrire un tel convertisseur (en me basant bien sûr sur les modules de la distribution
 standard et de CPAN). Éh bien cela n'a pas été nécessaire. Rien que le fait d'envoyer un fichier
 POD sur GitHub fait qu'il est automatiquement traduit en HTML. Il y a juste un petit
-problème avec les blancs insécables.
-
+problème avec les blancs insécables, les balises C<< S< > >> de POD ne sont pas prises en compte.
+Un autre problème que j'ai découvert un an plus tard, lors de mon travail sur
+L<l'As des As|https://github.com/jforget/Perl6-Alpha-As-des-As-Zero/blob/master/Description/description-fr.pod>.
+À plusieurs endroits, j'ai mis deux images côte à côte, en prenant soin d'ajouter un attribut
+C<width="45%"> pour chacune. Malgré cette précaution, les images apparaissent l'une au-dessus de l'autre
+dans Github. J'ai dû reprendre ces images pour les fusionner deux par deux dans de nouveaux
+fichiers graphiques.
+ 
 Il va de soi que pour écrire un programme de reconnaissance, il faut faire attention
 aux caractères semblables, tels que les S<« l »> (S<« L »> minuscules),
 les S<« I »> (S<« i »> majuscules) et les S<« 1 »> (chiffres S<« un »>).
