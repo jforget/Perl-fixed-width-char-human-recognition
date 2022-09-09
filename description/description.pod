@@ -433,6 +433,11 @@ module GD et un module MongoDB. Hélas, je n'ai pas pu utiliser la méthode
 C<newFromPng> du module GD, la méthode cruciale qui me permet d'utiliser les
 listings numérisés. Donc, Perl 6, ce sera pour une autre fois.
 
+Post-scriptum de 2022. Pour 
+L<un autre projet|https://github.com/jforget/raku-Hamilton2/blob/master/doc/Hamilton.fr.md>,
+j'ai utilisé le module GD.pm de Perl 5 avec Raku et avec le module 
+L<Inline::Perl5|https://modules.raku.org/dist/Inline::Perl5:cpan:NINE> de Raku.
+Peut-être aurais-je pu faire de même en S<2017 ?>
 
 =head1 Numérisation des listings
 
@@ -2649,7 +2654,7 @@ de nombreux outils de conversion en HTML, en LATEX, etc. J'avais prévu de consa
 de temps à écrire un tel convertisseur (en me basant bien sûr sur les modules de la distribution
 standard et de CPAN). Éh bien cela n'a pas été nécessaire. Rien que le fait d'envoyer un fichier
 POD sur GitHub fait qu'il est automatiquement traduit en HTML. Il y a juste un petit
-problème avec les blancs insécables, les balises C<< S< > >> de POD ne sont pas prises en compte.
+problème avec les blancs insécables, les balises C<S> de POD ne sont pas prises en compte.
 Un autre problème que j'ai découvert un an plus tard, lors de mon travail sur
 L<l'As des As|https://github.com/jforget/Perl6-Alpha-As-des-As-Zero/blob/master/Description/description-fr.pod>.
 À plusieurs endroits, j'ai mis deux images côte à côte, en prenant soin d'ajouter un attribut
