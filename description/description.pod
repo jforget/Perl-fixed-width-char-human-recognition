@@ -9,9 +9,10 @@ L<version  Markdown|https://github.com/jforget/Perl-fixed-width-char-human-recog
 de ce  document. En  effet, au  printemps 2022,  j'ai remarqué  que le
 rendu  de la  version POD  par Github  posait des  problèmes dans  les
 paragraphes comportant  des caractères au-delà de  U+00FF. C'est ainsi
-que j'ai dû écrire S<« oeuvre »> sans lier  le S<« o »> et le S<« e »>
-et  que  j'ai dû  dessiner  des  flèches avec  un  tiret  et un  signe
-supérieur S<ainsi :> S<« -E<gt> »>.
+que dans la version POD, j'ai dû écrire S<« oeuvre »> sans lier le
+S<« o »>  et le S<« e »>  et que j'ai dû dessiner des  flèches avec un
+tiret  et un  signe supérieur  S<ainsi :>  S<« -E<gt>  »>. La  version
+Markdown ne présente pas ces anomalies.
 
 =head1 Introduction
 
