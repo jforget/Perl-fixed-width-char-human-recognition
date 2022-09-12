@@ -224,7 +224,7 @@ licence L<Creative Commons attribution, partage dans les mêmes conditions|http:
 =for HTML
 <img src="Liseuse.jpg" alt="La liseuse de Fragonard" />
 
-I<La Liseuse, par Fragonard (1732--1806), œuvre dans le domaine public, avec quelques adaptations personnelles mineures.>
+I<La Liseuse, par Fragonard (1732--1806), oeuvre dans le domaine public, avec quelques adaptations personnelles mineures.>
 
 Ce système admet plusieurs plug-ins, mais
 à chaque fois, cela nécessite un temps
@@ -233,7 +233,7 @@ de paramétrage assez long.
 =for HTML
 <img src="geoffroy_henri_jules_en_classe_le_travail_des_petits.jpg" alt="Scène dans une école" />
 
-I<Source : En classe, le travail des petits, par Henri Jules Geoffroy (1853--1924), œuvre dans le domaine public. Avec un marquage par le site web où j'ai trouvé cette reproduction (pourquoi marquer une œuvre dans le domaine S<public ?)>>
+I<Source : En classe, le travail des petits, par Henri Jules Geoffroy (1853--1924), oeuvre dans le domaine public. Avec un marquage par le site web où j'ai trouvé cette reproduction (pourquoi marquer une oeuvre dans le domaine S<public ?)>>
 
 En revanche, les résultats sont
 largement meilleurs que pour les
@@ -310,7 +310,7 @@ I<Source : Portrait de Lena Söderberg, (c) Playboy, 1972, utilisé avec la perm
 Ensuite, vous relanciez une analyse
 et le résultat tenait compte
 des corrections que vous aviez données.
-Les associations glyphe → caractère
+Les associations glyphe -E<gt> caractère
 pouvaient même être stockées dans
 une base de données pour l'analyse
 d'un autre fichier.
@@ -1019,19 +1019,19 @@ Les signes ne sont pas centrés de la même manière dans leur Cellule.
 
 La comparaison brute de ces deux Cellules donne de nombreuses différences.
 Les S<« C<=> »> montrent les pixels noirs communs (deux seulement), 
-les S<« C<≠> »> montrent les pixels différents (22).
+les S<« C<#> »> montrent les pixels différents (22).
 
   ----------------  ----------------
   |              |  |              |
-  |        ≠     |  |              |
-  |        ≠     |  |              |
-  |        ≠     |  |      ≠       |
-  |     ≠=≠≠≠≠≠  |  |      =       |
-  |        ≠     |  |      ≠       |
-  |        =     |  |   ≠≠≠≠≠=≠    |
-  |        ≠     |  |      ≠       |
-  |              |  |      ≠       |
-  |              |  |      ≠       |
+  |        #     |  |              |
+  |        #     |  |              |
+  |        #     |  |      #       |
+  |     #=#####  |  |      =       |
+  |        #     |  |      #       |
+  |        =     |  |   #####=#    |
+  |        #     |  |      #       |
+  |              |  |      #       |
+  |              |  |      #       |
   |              |  |              |
   ----------------  ----------------
 
@@ -1105,13 +1105,13 @@ la comparaison du Glyphe avec la Cellule 2 donne un résultat catastrophique :
   |    --------- |  |              |  |   *   |
   |    |   =   | |  |              |  |   *   |
   |    |   =   | |  | ----------   |  |   *   |
-  |    |   =   | |  | |    ≠   |   |  |*******|
-  |    |=======| |  | |    ≠   |   |  |   *   |
-  |    |   =   | |  | |    ≠   |   |  |   *   |
-  |    |   =   | |  | |=======≠|   |  |   *   |
-  |    |   =   | |  | |    ≠   |   |  ---------
-  |    --------- |  | |    ≠   |   |
-  |              |  | |    ≠   |   |
+  |    |   =   | |  | |    #   |   |  |*******|
+  |    |=======| |  | |    #   |   |  |   *   |
+  |    |   =   | |  | |    #   |   |  |   *   |
+  |    |   =   | |  | |=======#|   |  |   *   |
+  |    |   =   | |  | |    #   |   |  ---------
+  |    --------- |  | |    #   |   |
+  |              |  | |    #   |   |
   |              |  | ----------   |
   ----------------  ----------------
 
@@ -1730,7 +1730,7 @@ UTC, ce qui évite les problèmes de changement d'heure.
         "dh_cre" : "2017-08-24 18:18:18",
         "dh_assoc" : "2017-09-07 20:11:27",
 
-Récapitulatf sur les coordonnées :
+Récapitulatif sur les coordonnées :
 
 =for HTML
 <img src="Cellule-p.png" alt="Dessin de la Cellule p en gros pixels, pour mettre en valeur les différentes coordonnées" />
@@ -2185,7 +2185,7 @@ Ici le mot S<« grille »> est au singulier, car j'ai choisi ce schéma
 d'adresse avant la mauvaise surprise qui m'a conduit à isoler l'entité
 logique Grille de l'entité Document.
 
-=head4 Formulaire: grille
+=head4 Formulaire : grille
 
 Dans ce formulaire, on peut spécifier les paramètres
 permettant de découper le Document en Cellules. Cela génère un fichier
@@ -2449,7 +2449,7 @@ sauvegarder le source HTML, d'y modifier les champs cachés contenant les prix,
 puis de renvoyer le fichier modifié au site de la boutique en ligne.
 Mais ici, comme c'est la même personne du côté serveur et du côté client, moi,
 je ne vois aucun intérêt à m'escroquer. J'ai donc adopté la solution simple
-et rapide plutôt qu'une solution évoluée, mais longue à mettre en œuvre.
+et rapide plutôt qu'une solution évoluée, mais longue à mettre en oeuvre.
 
 Retour du S<balancier :>
 j'ai quand même activé l'authentification pour la base
@@ -2546,9 +2546,9 @@ En fait, en prenant le fichier F<b001-coul.png>, il fait 2550 x 3509 pixels, soi
 
 =head3 GD
 
-J'ai déjà mentionné le fait que la conversion RGB → HSV pouvait donner des valeurs négatives
+J'ai déjà mentionné le fait que la conversion RGB -E<gt> HSV pouvait donner des valeurs négatives
 pour la teinte H. J'ai soumis un ticket sur RT et le module a été corrigé.
-Mais j'ai constaté d'autres problèmes pour la conversion RGB → HSV ou inverse. Quand j'aurai le
+Mais j'ai constaté d'autres problèmes pour la conversion RGB -E<gt> HSV ou inverse. Quand j'aurai le
 temps, je soumettrai un nouveau ticket.
 
 =head2 Dancer2
@@ -2646,7 +2646,7 @@ des coordonnées. Les coordonnées X croissent de gauche à droite (comme habitu
 que les coordonnées Y croissent du haut vers le bas, à l'inverse de l'habitude. Mais cela
 coïncide avec le sens habituel de variation des coordonnées ligne-colonne dans un fichier texte en
 police à espacement fixe. D'où une simplification significative des opérations de
-conversion LC → XY.
+conversion LC -E<gt> XY.
 
 Une autre bonne surprise, c'est avec GitHub. J'ai écrit le présent texte en POD,
 parce que c'est le système le plus simple pour écrire des documents et parce qu'il existe
@@ -2725,7 +2725,7 @@ C<date.jour> sur une ligne et C<date.Jour> sur une autre.
 Pour les annotations manuscrites qui obstruent les caractères imprimés, j'ai associé les
 Cellules correspondantes à un Glyphe donnant le Caractère adéquat, même si le dessin des
 pixels n'a rien à voir. Je pense que cela n'a pas produit de problème de mauvaise traduction
-Cellule → Glyphe. Pour être sûr, il aurait fallu créer un affichage inverse à deux étages, listant les
+Cellule - Glyphe. Pour être sûr, il aurait fallu créer un affichage inverse à deux étages, listant les
 Glyphes pour un Caractères, puis listant les Cellules associées à chaque Glyphe.
 
 Quant aux annotations manuscrites au-delà de la fin d'une ligne imprimée, je ne m'y suis
@@ -2736,7 +2736,7 @@ suppression jusqu'à la fin de ligne (C<d$> pour vi et pour Emacs-Viper).
 
 Mes trois listings Pascal ont à peine plus de 500 lignes, soit un total de S<1 500>. Mon programme Dancer2 + MongoDB
 fait plus de S<1 900 lignes>, auxquelles il faut ajouter une centaine de lignes pour le programme
-de conversion bleu → noir + orange → blanc. Et le programme Dancer2 + MongoDB n'est pas
+de conversion bleu -E<gt> noir + orange -E<gt> blanc. Et le programme Dancer2 + MongoDB n'est pas
 maintenable s'il n'est pas accompagné du présent document, qui dépasse les 2500 lignes
 (je ne compte pas les compléments ci-dessous). Écrire S<4 500 lignes> de Perl et de POD
 pour s'éviter la saisie de S<1 500 lignes> de Pascal, est-ce S<rentable ?>
@@ -2847,8 +2847,8 @@ repère S<orthonormé :>
 
 Si l'angle a (en radians) est faible, on a :
 
-  sin a ≅ a
-  cos a ≅ 1
+  sin a # a
+  cos a # 1
 
 ce qui donne
 
