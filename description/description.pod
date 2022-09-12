@@ -2,6 +2,17 @@
 
 =encoding utf8
 
+=head1 Avertissement
+
+Vous devriez plutôt lire la
+L<version  Markdown|https://github.com/jforget/Perl-fixed-width-char-human-recognition/blob/master/description/description.md>
+de ce  document. En  effet, au  printemps 2022,  j'ai remarqué  que le
+rendu  de la  version POD  par Github  posait des  problèmes dans  les
+paragraphes comportant  des caractères au-delà de  U+00FF. C'est ainsi
+que j'ai dû écrire S<« oeuvre »> sans lier  le S<« o »> et le S<« e »>
+et  que  j'ai dû  dessiner  des  flèches avec  un  tiret  et un  signe
+supérieur S<ainsi :> S<« -E<gt> »>.
+
 =head1 Introduction
 
 Pendant l'hiver 2014-2015, j'ai décidé de

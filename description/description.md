@@ -245,6 +245,17 @@ certains détecterons un « W », d'autres un « M ». Idem
 
 Ou bien dans ce dessin abstrait, certains y voient des mots entiers, en l'occurrence des prénoms :
 
+![Dessin abstrait](EstPhil.gif)
+
+## Programmes hybrides
+
+En  2000 ou  2001,  j'avais installé  sur ma  machine  de l'époque  un
+programme original dont je ne trouve plus aucune trace quinze ans plus
+tard : Alice-OCR. Pour changer, c'était une application graphique, pas
+un utilitaire  en ligne de  commande. La  moitié gauche de  la fenêtre
+affichait le  fichier graphique à  analyser et la moitié  droite était
+prévue pour afficher le texte résultat.
+
 ![Première étape de la reconnaissance de caractères par Alice-OCR](Alice1.png)
 
 _Source : Portrait de Lena Söderberg, (c) Playboy, 1972, utilisé avec la permission tacite de Playboy, incorporé dans une copie d'écran personnelle_
