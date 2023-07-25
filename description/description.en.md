@@ -133,6 +133,13 @@ the diagram below.
     .                       |_/    /dev/stdout and /dev/stderr
 ```
 
+You install this script on a cloud-service computer, you add it to the
+`crontab` so  it will run  at 4 AM and  you close the  connection with
+this server.  When the script  runs at 4 AM,  how many light  rays are
+deflected  by a  lens  or  reflected by  a  mirror?  How many  photons
+activate a photo-sensor  (human retina or CCD)?  Answer: zero. Nothing
+in this experiment has any relations with optics.
+
 ## The Best Recognition Engine
 
 The best recongnition  engine is built around a neural  network and it
@@ -141,7 +148,7 @@ start-up, or rather a phoenician start-up, around 1200 BC.
 
 ![Unicode encoding of phoenician alphabet](U10900.png)
 
-Personal hard-copy of a
+_Personal hard-copy of a
 [Wikipedia page](https://fr.wikipedia.org/wiki/Alphabet_ph%C3%A9nicien)
 licence [Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)](https://creativecommons.org/licenses/by-sa/3.0/deed.en)_
 
@@ -178,6 +185,8 @@ there are none. For example, look at Cassiopea:
 
 ![Representation of Cassiopea constellation](Cassiopee.png)
 
+_Source : personal hard-copy from [Stellarium](http://www.stellarium.org/)_
+
 Some people will spot a "W", others will spot a "M". Same thing
 [while looking in the other direction](https://news.artnet.com/art-world/nasa-photos-alphabet-in-the-sky-400646),
 [from space to Earth](https://www.mapbox.com/blog/letter-hunt-from-space/).
@@ -197,7 +206,7 @@ the resulting text. Here is a pseudo-demo.
 
 ![First step of character recognition by Alice-OCR](Alice1.png)
 
-_Source : Portrait of Lena Söderberg, (c) Playboy, 1972, with tacit permission from Playboy, included in a personnal hard-copy_
+_Source : Portrait of Lena Söderberg, (c) Playboy, 1972, with tacit permission from Playboy, included in a personal hard-copy_
 
 You would run  a first analysis, which would produce  a candidate text
 in the  window right half. In  the left-half, the characters  would be
@@ -205,7 +214,7 @@ outlined by pale blue oval shapes.
 
 ![Second step of character recognition by Alice-OCR](Alice2.png)
 
-_Source : Portrait of Lena Söderberg, (c) Playboy, 1972, with tacit permission from Playboy, included in a personnal hard-copy_
+_Source : Portrait of Lena Söderberg, (c) Playboy, 1972, with tacit permission from Playboy, included in a personal hard-copy_
 
 If there were errors, you could click on a glyph in the graphical pane
 and type the proper transcription in a pop-up window. You did not need
@@ -213,7 +222,7 @@ to fix all errors, only a significant sample.
 
 ![Third step of character recognition by Alice-OCR: recognition by a human](Alice3.png)
 
-_Source : Portrait of Lena Söderberg, (c) Playboy, 1972, with tacit permission from Playboy, included in a personnal hard-copy_
+_Source : Portrait of Lena Söderberg, (c) Playboy, 1972, with tacit permission from Playboy, included in a personal hard-copy_
 
 Then, you  could run  a new  analysis and the  result would  take into
 account the  fixes you had just  given. The associations glyph  → char
@@ -321,7 +330,7 @@ I used Perl's `GD.pm` module with Raku, thanks to Raku's
 [Inline::Perl5](https://modules.raku.org/dist/Inline::Perl5:cpan:NINE).
 Maybe I could have done the same in 2017?
 
-# Listins Scanning
+# Listing Scanning
 
 As  you  can see  when  taking  a look  at  the  reproductions of  the
 listings, several elements hinder the scanning of the listings.
@@ -336,7 +345,7 @@ this very low number of exceptions.
 
 Then the Caroll strips, especially the left one. If I set up the paper
 on the scanner's glasspane correctly, the Caroll strip is avoided. And
-even if it still shows, a  simple operation under the Gimp with remove
+even if it still shows, a  simple operation under the Gimp will remove
 it.
 
 The third  problem is  more serious.  In the  second listing,  the ink
@@ -368,7 +377,7 @@ its mean  is not  significant. But  the mode  is significant.  And for
 RGB+SV, both the mean and the mode are significant.
 
 At first, I intended to write a second programme building an histogram
-of H and V values (I did not undeerstand Saturation at this time). But
+of H and V values (I did  not understand Saturation at this time). But
 I found some documentation on HSV and I understood that Saturation was
 important. Additionally, with the diagrammes shown at
 [https://en.wikipedia.org/wiki/HSL\_and\_HSV#HSV](https://en.wikipedia.org/wiki/HSL_and_HSV#HSV),
@@ -469,6 +478,10 @@ pixels is  very low:  4 in  the 4-neighbour variant,  about 20  in the
 8-neighbour variant. And as we  will see below, the difference between
 two variants of the same character can involve a hundred pixels or so.
 
+Or  I could  have used  this programme  to only  remove snow  and soot
+(white pixels  with 8 black  neighbours or  black pixels with  8 white
+neighbours). I did not think of it until very late. Too bad!
+
 # Character Recognition Proper
 
 Although  I use  a  no-SQL  database, in  this  text  I still  mention
@@ -558,8 +571,8 @@ A Glyph may be  linked to several Cells, or sometimes  a single one or
 even none.
 
 The first table  is `Document`. Each record stores a  scanned file and
-its next  evolutions. A listing has  been scanned as 8  files, more or
-less, so a listing will be stored in the database as 8 Documents.
+its next evolutions.  A listing has been scanned as  8 PNG files, more
+or less, so a listing will be stored in the database as 8 Documents.
 
 The second table is `Cellule` (Cell).  It stores the the various cells
 when splitting the graphical files. The  data stored in this table are
@@ -1176,8 +1189,8 @@ Here is the result:
 You can  notice that one "e"  has been the  model for a Glyph  and has
 therefore a  score equal to zero.  You can also notice  that two Cells
 containing a space have a  score, because they contain "thermal noise"
-pixels.  The other  spaces,  on  the other  hand,  contain no  pixels,
-therefore they were not stored as Cells in the database.
+pixels (or  soot). The  other spaces,  on the  other hand,  contain no
+pixels, therefore they were not stored as Cells in the database.
 
 For Colouring Schemes aiming at separating similar-looking Characters,
 you must  use contrasting colours.  Here is an example  for lower-case
@@ -2193,8 +2206,8 @@ Address: [http://localhost:3000/cellule/exemple1/0/3](http://localhost:3000/cell
 #### Variant: Top 10
 
 This page has a variant "Top  10" variant, which reexecutes the search
-for the best Glyph, but without stopping at the first. It fetch the 10
-best Glyphs and displays them.
+for the best Glyph, but without  stopping at the first. It fetches the
+10 best Glyphs and displays them.
 
 Address: [http://localhost:3000/top10/exemple1/0/3](http://localhost:3000/top10/exemple1/0/3)
 
@@ -2207,7 +2220,7 @@ the Character linked to the Glyph.
 #### Form: Linking to Glyphs
 
 Launches the search for the best  Glyph, just a form "Relation between
-Cells and Glyphs" in the webpage  "Document", but only fot the current
+Cells and Glyphs" in the webpage  "Document", but only for the current
 Cell.
 
 # After the Conversion
@@ -2574,7 +2587,7 @@ Document can be very convenient.  Thus, the colours will be consistent
 from one Document  to the other. You should display  the old Document,
 scroll until  the list of  Colouring Schemes  and click on  several of
 them by selecting "open in a new  tab" each time.  Then you can do the
-copy on each Colouring Scheme hab.
+copy on each Colouring Scheme tab.
 
 Webpage displaying a Cell: if the  Cell is linked to a Glyph depending
 on a wrong Character, you should create a new Glyph from this Cell and
@@ -2650,7 +2663,7 @@ expand. It  is easy  to see why.  Let us consider  a white  pixel just
 outside  the  bounding  box,  for   example  just  above  it.  In  the
 8-neighbour variant, this pixel has at  most 3 black neighbours, the 3
 pixels just below. In the 4-neighbour variant, the pixel may have only
-one black  neighbour, the  pixel below.   Therefore, the  pixer cannot
+one black  neighbour, the  pixel below.   Therefore, the  pixel cannot
 switch to black.  On the  other hand, with Conway's traditional rules,
 you have gliders, spaceships, glider guns, etc.
 
@@ -2782,7 +2795,7 @@ above, which gives the equation for a rotation.
 
 Here are the  various tools I use on my  Linux computer.  They reflect
 my  preferences  about ergonomy,  which  may  be different  from  your
-pceferences.
+preferences.
 
 ### xterm
 

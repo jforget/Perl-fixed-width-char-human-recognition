@@ -354,9 +354,10 @@ je mettrai à jour la présente description.
 
 ## Technologies utilisées
 
-Pour les fonctions graphiques, j'utilise `GD.pm`. Je n'ai pas réussi
-à installer l'interface entre Perl et the Gimp sur ma machine, donc je n'ai
-pas eu à choisir, j'ai pris `GD.pm`.
+Pour les fonctions graphiques, j'utilise
+[`GD.pm`](https://metacpan.org/pod/GD).
+Je n'ai pas réussi à installer  l'interface entre Perl et the Gimp sur
+ma machine, donc je n'ai pas eu à choisir, j'ai pris `GD.pm`.
 
 Pour les fonctions peu interactives, j'ai utilisé bien entendu une interface
 en ligne de commande.
@@ -373,7 +374,7 @@ seul utilisateur à la fois, c'est largement suffisant.
 MongoDB, parce que je connais déjà SQL et
 cette application ne m'aurait pas donné l'occasion
 d'apprendre des techniques avancées de SQL.
-Alors j'ai chaisi de faire mes premiers pas en MongoDB.
+Alors j'ai choisi de faire mes premiers pas en MongoDB.
 Et peut-être PDL si cela permet des comparaisons faciles
 de matrices de booléens.
 
@@ -484,11 +485,13 @@ deviendra blanc.
 
 ![Diagramme HSV pour le bleu et l'orange](diagramme-HSV.png)
 
+_Copie d'écran personnelle d'une page Wikipedia avec des modifications
+mineures.  Comme indiqué  dans la  page Wikipedia,  Text is  available
+under the Creative  Commons Attribution-ShareAlike License; additional
+terms may apply._
+
 Dans ce diagramme, j'ai représenté la frontière entre la
 zone de conversion vers le blanc et la zone de conversion vers le noir.
-
-_Copie d'écran personnelle d'une page Wikipedia avec des modifications mineures. Comme indiqué dans la page Wikipedia,
-Text is available under the Creative Commons Attribution-ShareAlike License; additional terms may apply._
 
 À noter un problème culturel.
 Né dans les années 1960, j'ai appris
@@ -508,7 +511,7 @@ Un dernier écueil, le plus important, les irrégularités des glyphes.
 
 L'imprimante faisait du 10 CPI et du 6 LPI. Mon scanner
 fait du 300 DPI. Cela veut dire que chaque glyphe
-correspond à un rectangle de 30x50 pixels.
+correspond à un rectangle de 30×50 pixels.
 Cela laisse le champ libre à une énorme variabilité
 dans les dessins bitmaps d'un caractère donné.
 Voir les exemples dans les copies d'écran.
@@ -576,6 +579,10 @@ sur l'exemple ci-dessus, cela permet de changer un nombre très réduit de pixel
 ci-dessus à 4 voisins, une vingtaine dans l'exemple du lissage à 8 voisins. Alors que comme on le
 verra ci-dessous, le nombre de pixels différents entre deux variantes du même caractère peut
 atteindre la centaine. Donc, _a posteriori_, le jeu n'en valait pas la chandelle.
+
+Ou alors, j'aurais pu utiliser  ce programme pour simplement supprimer
+la neige  et la  suie (pixels  blancs avec 8  voisins noirs  et pixels
+noirs avec 8 voisins blancs). J'y ai pensé très tard. Tant pis !
 
 # Reconnaissance à proprement parler
 
@@ -1057,7 +1064,7 @@ la comparaison du Glyphe avec la Cellule 2 donne un résultat catastrophique :
     |              |  | ----------   |
     ----------------  ----------------
 
-Le mauvais score provient du fait que l'exension vers la gauche de l'enveloppe des pixels
+Le mauvais score provient du fait que l'extension vers la gauche de l'enveloppe des pixels
 de la Cellule provoque au final un décalage de la barre verticale vers la droite, d'où
 un nombre important de pixels modifiés alors qu'il était naturel de considérer qu'ils n'étaient
 pas modifiés et qu'ils ne comptaient pas dans le score de la Cellule.
@@ -1135,8 +1142,8 @@ La première méthode consiste à dérouler toutes les coordonnées de l'envelop
 au Glyphe et à la Cellule. Chaque fois qu'un pixel est blanc dans l'un et noir dans l'autre,
 on ajoute +1 au score.
 
-La seconde méthode est moins évidente. On initialise le score avec le nombre de noirs
-de la Cellule, plus le nombre de noirs du Glyphe. Puis on déroule tous les pixels et
+La seconde méthode est moins évidente. On initialise le score avec le nombre de pixels noirs
+de la Cellule, plus le nombre de pixels noirs du Glyphe. Puis on déroule tous les pixels et
 on compte -2 chaque fois que l'on a un pixel noir à la fois dans la Cellule et dans le Glyphe.
 L'avantage de cette seconde méthode est que l'on boucle sur un intervalle plus réduit
 de coordonnées. Cela se verra mieux avec l'exemple ci-dessous
@@ -1165,7 +1172,7 @@ se feront avec x dans l'intervalle 3..6 (au lieu de 0..9) et avec y dans l'inter
 Dans les deux dessins, il y a 6 pixels en commun, plus 2 pixels à effacer et 3 à noircir.
 Le score est donc 2 + 3 = 5. Avec la seconde méthode, la Cellule a 8 pixels noirs et le Glyphe
 en a 9. Le calcul commence donc avec un score de 17. Comme il y a 6 pixels noirs en
-commun, on calculera 17 - 2 x 6 = 17 - 12 = 5.
+commun, on calculera 17 - 2 × 6 = 17 - 12 = 5.
 
 La seconde méthode permet donc un calcul plus rapide. De plus, elle permet de ne pas se
 préoccuper du cas où un pixel se trouve en dehors du dessin du Glyphe (pixel 0,9 dans l'exemple
@@ -1228,11 +1235,11 @@ exécutant des requêtes sur les cellules du Document courant.
 
 Il y a trois types de coloriage :
 
-- 1  Les coloriages servant  à détecter  le cas des  Cellules pour
+1.  Les coloriages servant  à détecter  le cas des  Cellules pour
 lesquelles l'association hésite entre deux Glyphes, voire plus.
-- 2 Les coloriages servant à  mettre en évidence les Cellules avec
+2. Les coloriages servant à  mettre en évidence les Cellules avec
 un très mauvais score.
-- 3 Les  coloriages servant  à faire  le tri  entre les  Cellules
+3. Les  coloriages servant  à faire  le tri  entre les  Cellules
 associées  à  des  caractères   similaires  ;  typiquement,  faire  la
 distinction entre  les « l  » comme Lima,  les « I  » majuscules
 comme India, et les chiffres « 1 ».
@@ -1292,6 +1299,7 @@ Rappel : le modèle logique des données est :
 Aucune des relations hiérarchiques (c'est-à-dire avec un `(1,1)` d'un côté)
 n'est porteuse de données. Elles sont donc matérialisées par le fait que la clé
 de l'entité fille contient la clé de l'entité mère, ou par le fait que les documents
+(au sens « document MongoDB »)
 implémentant les entités filles sont inclus dans le document implémentant l'entité
 mère.
 
@@ -1407,7 +1415,7 @@ où l'on est arrivé aux différents états.
         "dh_grille" : "2017-09-27 05:27:49",
         "dh_valid" : "2017-09-27 05:29:03"
 
-Les différents états possible sont :
+Les différents états possibles sont :
 
 1. Le Document est créé.
 2. Les informations de grille sont saisies et le fichier généré.
@@ -1445,7 +1453,7 @@ de la Grille dans le tableau des Grilles. En effet, comme on renumérote
 les priorités après avoir trié les Grilles en fonction de cette priorité,
 la Grille de priorité 0 est nécessairement en position 0 du tableau,
 la Grille de priorité 1 est nécessairement en position 1 du tableau,
-et ainsi de site. Mais j'ai utilisé la valeur de l'attribut `prio`
+et ainsi de suite. Mais j'ai utilisé la valeur de l'attribut `prio`
 pour une recherche, donc je conserve cet attribut dans la Grille.
 
 Coordonnées ligne-colonne de la Cellule en haut à gauche de la Grille
@@ -1656,12 +1664,14 @@ Les coordonnées du centre de gravité sont relatives au coin en haut à
 gauche de l'enveloppe, pas à celui de la Cellule. Et les boucles sur
 les pixels se font de `0` à `lge - 1` et de `0` à `hte - 1`.
 
-Relation Cellule-Glyphe. Ici, la Cellule est reliée à un seul Glyphe.
+### Relation Cellule-Glyphe.
+
+Ici, la Cellule est reliée à un seul Glyphe.
 Mais on devine ce qui se passe lorsque la Cellule est associée à plusieurs
-Glyphes. Le champ `glyphes` contient les clés pour tous les Glyphes
+Glyphes. Le tableau `glyphes` contient les clés pour tous les Glyphes
 sélectionnés, ainsi que les valeurs utilisées pour faire coïncider les centres de gravité.
 Le champ `cpt_car` contient l'histogramme par caractère
-de `glyphes` et le champ `cpt_car` contient le nombre de paires stockées
+de `glyphes` et le champ `nb_car` contient le nombre de paires stockées
 dans le champ `glyphes`.
 
         "nb_car" : 1,
@@ -1692,7 +1702,7 @@ affichable `"SP"`.
         "glyphes" : [
                 {
                         "car" : " ",
-                        "num" : 1
+                        "num" : 1,
                         "xg_Gly" : 8,
                         "yg_Gly" : 9,
                         "xg_Cel" : 8,
@@ -1957,7 +1967,7 @@ Les valeurs possibles de `select` sont :
     Critère précédent de type `multiple`.
 
 Relation Glyphes-Critère. C'est inclus directement dans le Coloriage,
-pas dans le sous-document Critère. Du coup, on stocke le numéro de critère
+pas dans le sous-document Critère. Du coup, on stocke le numéro de critère `crit`
 pour pouvoir reconstituer la clé complète du Critère.
 
         "cellules" : [
@@ -2219,7 +2229,7 @@ Elle ne déroule pas la collection des Cellules pour savoir lesquelles correspon
 à tel ou tel Critère.
 
 Ce formulaire est nettement plus simple que le formulaire des Grilles d'un Document.
-Quoiqu'il arrive, il y a toujours six Critères pour un Coloriage. Aucune création
+Quoi qu'il arrive, il y a toujours six Critères pour un Coloriage. Aucune création
 ni aucune suppression n'est possible. Et les valeurs saisies font toujours foi, il n'y
 a pas de calcul automatique ni de bouton pour ignorer les valeurs saisies sur telle
 ou telle ligne.
@@ -2345,8 +2355,8 @@ je l'ai mise en place sur ma base de données et dans mon application.
 Et finalement, j'ai complété ces mesures de sécurité insuffisantes par une mesure radicale,
 j'ai travaillé en _air gap_. La machine où j'ai développé mon programme de reconnaissance
 de caractères n'est pas ma machine principale, celle où notamment je traite mon
-courrier électronique. Donc un jour, lorsque je l'ai rallumée, je n'ai pas pris
-la peine de la rebrancher sur Internet. Et j'ai travaillé ainsi, en isolation
+courrier électronique. Donc un jour, lorsque je l'ai allumée, je n'ai pas pris
+la peine de la brancher sur Internet. Et j'ai travaillé ainsi, en isolation
 du reste du monde cyber. De temps en temps, je transférais les fichiers textes
 reconstitués par clé USB, mais c'est tout. J'ai quand même fait quelques modifications
 dans le programme, mais le dépôt Git n'a pas été synchronisé avec Github
@@ -2380,11 +2390,34 @@ pas. Il souhaitait des pages pour apprendre quelque chose, pas pour s'en prendre
 les mirettes. Dans cet esprit, j'ai adopté un style minimaliste pour les pages web
 de cette application, ce qui m'évite d'avoir à apprendre un système de _templating_.
 De même, pour les explications que vous êtes en train de lire, je les écris en POD
+(puis en Markdown)
 et elles sont traduites en HTML par un convertisseur sans fioritures superflues.
 
 Donc, j'ai utilisé du HTML 1 ou du HTML 2. Enfin, presque, parce qu'il semblerait
 que la méthode pour insérer les fichiers graphiques dans le source HTML (voir ci-dessous)
 ait été introduite dans une version postérieure de HTML.
+
+#### Post-scriptum sur MVC et les _templates_
+
+Dans quelques
+[projets](https://github.com/jforget/Perl6-Alpha-As-des-As-Zero/blob/master/Description/description-fr.md#bailador)
+[ultérieurs[(https://github.com/jforget/raku-Hamilton2/blob/master/doc/Hamilton.fr.md#affichage-du-r%C3%A9sultat),
+j'ai décidé de  ne plus  écrire de
+programme monolithiques basés sur
+[Dancer2](https://metacpan.org/dist/Dancer2/view/script/dancer2)
+ou sur son équivalent Raku
+[Bailador](https://modules.raku.org/dist/Bailador:cpan:UFOBAT),
+j'ai découpé en fonction d'un simili-MVC.
+
+À l'occasion de ces
+[mêmes](https://github.com/jforget/Perl6-Alpha-As-des-As-Zero/blob/master/Description/description-fr.md#templateanti)
+[projets](https://github.com/jforget/raku-Hamilton2/blob/master/doc/Hamilton.fr.md#affichage-du-r%C3%A9sultat),
+j'ai défini le site web comme étant bilingue, ce qui a entraîné l'adoption d'un
+[module de _templating_](https://github.com/jforget/Perl6-Alpha-As-des-As-Zero/blob/master/Description/description-fr.md#templateanti).
+Comme ce module Raku est basé sur des idées déjà mises en œuvre dans des
+[modules](https://metacpan.org/pod/HTML::Zoom)
+[Perl 5](https://metacpan.org/pod/Template::Semantic),
+j'aurais pu faire de même dans ce projet. Un jour, peut-être...
 
 ## Mauvaises surprises
 
@@ -2402,7 +2435,7 @@ pouce. Inutile de dire que les deux séries de fichiers n'allaient pas ensemble.
 
 Une autre fois encore, j'ai cru numériser en noir et blanc, mais en fait pour une
 raison que j'ignore, les fichiers ont été stockés en niveaux de gris, en _1-bit grayscale_. Certes, c'était
-du _1-bit_, mais c'était du _grayscake_, avec du gris très foncé et du gris très clair, alors que
+du _1-bit_, mais c'était du _grayscale_, avec du gris très foncé et du gris très clair, alors que
 mon programme attendait du noir (RGB = 000000) et du blanc (RGB = FFFFFF), pas du
 gris clair et du gris foncé. Heureusement, le programme `conv-nb` que j'avais écrit pour le listing
 du 10 janvier avec un ruban encreur fatigué a été capable de convertir également
@@ -2412,14 +2445,16 @@ Un paradoxe toutefois. Pour le listing du 10 janvier, celui avec le ruban encreu
 j'ai créé des fichiers PNG en 300 pixels par pouce et en couleurs. Puis je les ai convertis
 en noir et blanc avec `conv_nb`. Le résultat a été des fichiers PNG noir et blanc en 72 pixels
 par pouce. Mais ce n'est pas un problème, parce que tous les pixels ont été conservés.
-En fait, en prenant le fichier `b001-coul.png`, il fait 2550 x 3509 pixels, soit
-21 cm x 29,7 cm, tandis que le fichier converti `b001_nb.png` a pour dimensions
-900 mm x 1238 mm (plus d'un mètre de hauteur) soit 2550 x 3509 pixels.
+En fait, en prenant le fichier `b001-coul.png`, il fait 2550 × 3509 pixels, soit
+21 cm × 29,7 cm, tandis que le fichier converti `b001_nb.png` a pour dimensions
+900 mm × 1238 mm (plus d'un mètre de hauteur) soit 2550 × 3509 pixels.
 
 ### GD
 
-J'ai déjà mentionné le fait que la conversion RGB → HSV pouvait donner des valeurs négatives
-pour la teinte H. J'ai soumis un ticket sur RT et le module a été corrigé.
+J'ai déjà mentionné le fait que la conversion RGB → HSV pouvait donner
+des valeurs négatives pour la teinte H. J'ai soumis un
+[ticket sur RT](https://rt.cpan.org/Ticket/Display.html?id=120572)
+et le module a été corrigé.
 Mais j'ai constaté d'autres problèmes pour la conversion RGB → HSV ou inverse. Quand j'aurai le
 temps, je soumettrai un nouveau ticket.
 
@@ -2499,8 +2534,8 @@ d'un Document aux Glyphes. Après la fin du projet, j'ai adapté le programme po
 à la fois l'heure de début et l'heure de fin lorsque l'on demande l'association des Glyphes
 et des Cellules pour un Document. À ce moment-là, la
 collection des Glyphes contenait 179 Glyphes. Le plus petit Document, avec 261 Cellules,
-a nécessité 4 mn et 22 s de traitement.  Le plus gros Document, avec 1866 Cellules,
-a nécessité 16 mn et 19 s.
+a nécessité 4 min et 22 s de traitement.  Le plus gros Document, avec 1866 Cellules,
+a nécessité 16 min et 19 s.
 
 D'un autre côté, j'avais envisagé bien pire. Par exemple, travailler sur la constitution
 de la Grille le soir, cliquer sur la validation de la Grille ou sur le lancement de l'association
@@ -2526,7 +2561,7 @@ de nombreux outils de conversion en HTML, en L<sup>A</sup>T<sub>E</sub>X, etc. J
 de temps à écrire un tel convertisseur (en me basant bien sûr sur les modules de la distribution
 standard et de CPAN). Éh bien cela n'a pas été nécessaire. Rien que le fait d'envoyer un fichier
 POD sur GitHub fait qu'il est automatiquement traduit en HTML. Il y a juste un petit
-problème avec les blancs insécables, les balises `S` de POD ne sont pas prises en compte.
+problème avec les blancs insécables, les balises `S<>` de POD ne sont pas prises en compte.
 Un autre problème que j'ai découvert un an plus tard, lors de mon travail sur
 [l'As des As](https://github.com/jforget/Perl6-Alpha-As-des-As-Zero/blob/master/Description/description-fr.pod).
 À plusieurs endroits, j'ai mis deux images côte à côte, en prenant soin d'ajouter un attribut
@@ -2540,9 +2575,10 @@ La version POD du présent document était donc impossible à visualiser.
 Ensuite, à  l'été 2022, le  convertisseur a recommencé  à fonctionner,
 mais avec quelques problèmes d'encodage pour les paragraphes contenant
 des _codepoints_ au-delà  de 255, comme « œ »  (`U+0153`, _LATIN SMALL
-LIGATURE  OE_)  « → »  ou  (`U+2192`,  _RIGHTWARDS  ARROW_).  D'où  la
+LIGATURE  OE_)  ou  « → »  (`U+2192`,  _RIGHTWARDS  ARROW_).  D'où  la
 conversion en Markdown.
 
+Une bonne surprise avec mes habitudes de codage en Pascal.
 Il va de soi que pour écrire un programme de reconnaissance, il faut faire attention
 aux caractères semblables, tels que les « l » (« L » minuscules),
 les « I » (« i » majuscules) et les « 1 » (chiffres « un »).
@@ -2607,7 +2643,7 @@ Pour les annotations manuscrites qui obstruent les caractères imprimés, j'ai a
 Cellules correspondantes à un Glyphe donnant le Caractère adéquat, même si le dessin des
 pixels n'a rien à voir. Je pense que cela n'a pas produit de problème de mauvaise traduction
 Cellule - Glyphe. Pour être sûr, il aurait fallu créer un affichage inverse à deux étages, listant les
-Glyphes pour un Caractères, puis listant les Cellules associées à chaque Glyphe.
+Glyphes pour un Caractère, puis listant les Cellules associées à chacun de ces Glyphes.
 
 Quant aux annotations manuscrites au-delà de la fin d'une ligne imprimée, je ne m'y suis
 pas intéressé pendant la reconnaissance de caractères. Le problème a été traité par une
@@ -2619,7 +2655,7 @@ Mes trois listings Pascal ont à peine plus de 500 lignes, soit un total de 1 5
 fait plus de 1 900 lignes, auxquelles il faut ajouter une centaine de lignes pour le programme
 de conversion bleu → noir + orange → blanc. Et le programme Dancer2 + MongoDB n'est pas
 maintenable s'il n'est pas accompagné du présent document, qui dépasse les 2500 lignes
-(je ne compte pas les compléments ci-dessous). Écrire 4 500 lignes de Perl et de POD
+(je ne compte pas les compléments ci-dessous). Écrire 4 500 lignes de Perl et de POD/Markdown
 pour s'éviter la saisie de 1 500 lignes de Pascal, est-ce rentable ?
 
 Oui c'est rentable, parce qu'en même temps, j'ai pu avoir un aperçu de Dancer2,
@@ -2654,7 +2690,7 @@ pour aborder la partie périodique et le nombre d'itérations dans une période
 sont majorés par 2\*\*N, mais dans la pratique je pense que cela sera beaucoup plus faible,
 à taille humaine. Notamment, je pense que la situation finale sera une
 situation statique, c'est-à-dire avec une période 1. Pas de clignotants de
-période 2 comme avec le jeu de la vie.
+période 2 comme avec le jeu de la vie. Mais ce n'est qu'une supposition.
 
 Si l'on admet une extension infinie dans les deux dimensions, il
 existe des clignotants. L'un des deux motifs ci-dessous est un clignotant
@@ -2766,8 +2802,9 @@ d'emblée le terme en a².
 
 ## Mon environnement de développement
 
-Voici les outils que j'utilise. Évidemment, ils reflètent mes préférences
-ergonomiques, qui ne sont pas forcément les vôtres.
+Voici les outils  que j'utilise sur ma machine  Linux. Évidemment, ils
+reflètent mes préférences ergonomiques, qui  ne sont pas forcément les
+vôtres.
 
 ### xterm
 
@@ -2816,7 +2853,7 @@ J'ouvre une deuxième fenêtre shell avec `C-u M-x shell`, que je nomme « mong
 Compte tenu de la façon dont fonctionne `C-u` en mode viper, il faut être en mode
 vi-insertion plutôt qu'en mode vi-commande lorsque l'on tape `C-u M-x shell`.
 Cela ne vous concerne pas si vous être en mode Emacs standard.
-Et dans cette fenêtre, je tape  :
+Et dans cette fenêtre, je tape :
 
     mongo
     use exemple
@@ -2854,8 +2891,10 @@ arrêter le serveur Dancer2.
 
 3. Dans le premier onglet de Firefox, qui donne la liste des documents,
 j'utilise l'action « retour » (Alt-flèche gauche) pour revenir à l'écran de connexion.
+
 4. Je retape le code appli et le mot de passe pour me connecter à la nouvelle
 instance du serveur Dancer2.
+
 5. Dans les autres onglets de Firefox, je fais `F5` pour réafficher la page
 avec la nouvelle instance du serveur et continuer là où je m'étais arrêté.
 
