@@ -1,15 +1,16 @@
 # Introduction
 
-In winter 2016--20178, I decided to upodate a French Republican programme
+In winter 2016--2017, I decided to update a French Republican programme
 written in Pascal several decades ago. This is not a talk about Pascal
 programming, this is a talk about how I initialised a Git repository
-with commits dated back from 1983--1984.
+with commits dating back from 1983--1984.
 
 # Background
 
 In 2012, I found three listings back from my student years. Instead of
-the laser-printed A4 pages we are now used for since the end of the 1980's,
-these were accordion-folded sheets, with Caroll strips, out from dot-matrix printers.
+the laser-printed  A4 pages we  are now used to  since the end  of the
+1980's,  these  were  accordion-folded  sheets,  with  Caroll  strips,
+printed from a dot-matrix printer.
 
 At the beginning of each one of these three listings, I had written a
 comment giving the date. This precise comment was the starting point
@@ -25,13 +26,13 @@ them to Git with this commit date.
 Actually, later on, I found a fourth listing, with the date of 12 december 1983.
 But it had several pencil annotations and its contents was a mix of the
 8 December and the 10 January listings. So I decided to forsake the
-scan and OCR steps and go on directly to the edit step by copy-pasting
+scan and OCR steps on this fourth listing and go on directly to the edit step by copy-pasting
 parts of the 8 December and 10 January files. This fourth listing will
 play no part in the rest of this text.
 
 ## First Method
 
-The first method would be hand-typing everything. The problem (is is a problem)
+The first method would be hand-typing everything. The problem (it is a problem in this case)
 is that I refined my programming style in the intervening years. Between 1984
 and 1990, I adopted a better indent style. Here is how I would set-up my code
 in 1984:
@@ -57,20 +58,21 @@ And here is the same excerpt, with the indent style I has adopted since at least
     end;
 ```
 
-As you see, I have added spaces around operators such as « `:=` » and « `+` »
+As you can see, I have added spaces around operators such as « `:=` » and « `+` »
 to improve readability and similar elements on successive lines are aligned
 vertically. This alignment in a right alignment for numeric elements.
 What you do not see in this example is that in 1984 I would use tab chars,
 while now I prefer using spaces (except for _makefile_'s).
 
-By retyping everything. I would not have been able to restrict myself
+By retyping everything, I would not have been able to restrict myself
 to use the vintage absence of style. So I did not even try this method.
 
 ## Second Method
 
 The second method would be scanning the listing and submitting them to
 an OCR programme. I have scanned  the first listing and I submitted it
-to a few OCR files. As I was expecting, the result was catastrophic.
+to  a  few  OCR  programmes.  As  I  was  expecting,  the  result  was
+catastrophic.
 
 ## Automatic Character Recognition Software
 
@@ -138,11 +140,12 @@ You install this script on a cloud-service computer, you add it to the
 this server.  When the script  runs at 4 AM,  how many light  rays are
 deflected  by a  lens  or  reflected by  a  mirror?  How many  photons
 activate a photo-sensor  (human retina or CCD)?  Answer: zero. Nothing
-in this experiment has any relations with optics.
+in this experiment  has any relations with optics.  The recognition is
+automatic, it is not optical.
 
 ## The Best Recognition Engine
 
-The best recongnition  engine is built around a neural  network and it
+The best  recognition engine is built  around a neural network  and it
 contains  optical  sensors.  It  has  been  perfected  by  a  Lebanese
 start-up, or rather a phoenician start-up, around 1200 BC.
 
@@ -164,7 +167,7 @@ lengthy set-up time.
 _Source: En classe, le travail des  petits (at school, the work of the
 small kids) by  Henri Jules Geoffroy (1853--1924),  public domain. The
 website  where I  have  found this  public-domain  picture includes  a
-watermak. Why?_
+watermark. Why?_
 
 Despite the lenghty set-up time, or thanks to it, the results are much
 better than with the programmes mentionned above.
@@ -177,7 +180,7 @@ _Source [http://www.popscreen.com/p/MTU3MDkzMDU5/Soviet-CCCP-Astronaut-Space-Pat
 
 Most  systems  would  give  "see-see-see-pea"  (U+0043  U+0043  U+0043
 U+0050), while  the answer if "ess-ess-ess-ar"  (UU+0421 U+0421 U+0421
-+0420). But  the programmes mentionned  in the previous  chapter would
+U+0420). But the  programmes mentionned in the  previous chapter would
 not give a better answer.
 
 On  an other  hand, the  wetware systems  can detect  characters where
@@ -244,7 +247,7 @@ examples  the computation  of factorials  and Fibonacci  numbers, that
 each  syntax   analysis  generator  uses  as   example  a  4-operation
 calculator with parentheses, that  each 3-D image generation programme
 displays  a teapot  and that  each image-analysis  programme and  each
-image-transformation programme uses Lena's protrait as an example.
+image-transformation programme uses Lena's portrait as an example.
 
 By the  way, I analysed  the Lena + Hello  World file with  `gocr` and
 `cuneiform`. They succeeded.  Which shows that they  are quite correct
@@ -255,7 +258,7 @@ purposes, I needed to pretend that it would make mistakes.
 Please note that  the exclamation point is  incorrectly extracted, the
 programme does not  include the dot. In the  real Alice-OCR programme,
 that was the case with "i". I do not remember experimenting with files
-containing "j", "!", letters wit accents, colons, semi-colons or other
+containing "j", "!", letters with accents, colons, semi-colons or other
 split characters.  Just because of  what I  saw with "i",  I concluded
 that  the human  must  be in  the  loop as  soon  as extracting  glyph
 bounding boxes, not just when  converting glyphs to characters. So, to
@@ -275,7 +278,7 @@ character recognition, while managing their own back-end processing:
 The method  I adopted is  based on  Alice-OCR. The programme  runs the
 back-end  processing,  including  the   database,  and  the  character
 recognition  is executed  by the  human user.  Contrary to  Alice-OCR,
-there is no  initial recognition attempt with  a automatic recognition
+there is no  initial recognition attempt with an automatic recognition
 engine.  Another difference  is that  the  human user  is active  when
 splitting the graphical file into cells containing glyphs.
 
@@ -299,21 +302,21 @@ Damien, Sawyer and others. In  addition, the module includes a working
 web  server. This  web server  would  not serve  several requests  per
 second, but  for a  single user  it is  sufficient. MongoDB  because I
 already know  SQL and this project  would not improve my  knowledge of
-SQL. So I chose to explore MongDB's functionalities. And may be also
+SQL. So I chose to explore MongoDB's functionalities. I also thought of
 [PDL](https://metacpan.org/pod/PDL)
-if it allows me to compare boolean matrices.
+but in the end I did not use it.
 
-Plan B: no  plan B for `GD.pm`, I  know it works and I  am confident I
-will  manage.  If  I  cannot  use  MongoDB, I  will  go  back  to  SQL
+Plan B: no plan  B for `GD.pm`, I know it works and  I was confident I
+would  manage. If  I could  not use  MongoDB, I  would go back to  SQL
 programming with
 [SQLite](https://www.sqlite.org/index.html).
-And if I  cannot work with Dancer2,  I would do old-school  CGI like I
-used to do back in 1998 or 1999.
+And if I could not work with  Dancer2, I would do old-school CGI like
+I used to do back in 1998 or 1999.
 
 What  about  Raku?  Good  question.  I received  my  first  Raku  book
 (actually  Perl  6, as  it  was  named at  this  time)  just before  I
 initialised  my Github  repo and  before I  wrote the  first programme
-line. I knew there is a Raku port of Dancer,
+line. I learnt there is a Raku port of Dancer,
 [Bailador](https://modules.raku.org/dist/Bailador:cpan:UFOBAT).
 Then, reading the list of modules in
 [https://modules.raku.org/](https://modules.raku.org/),
@@ -340,7 +343,7 @@ First, the paper width.
 Actually, no. Although the width of  the listing sheets exceeds the A4
 format, only  a very  small number  of code lines  are long  enough to
 extend past the scanner's width:  half-a-dozen, including the lines in
-which the  final semi-colon is stripped.  So I can deal  manually with
+which only the final semi-colon is stripped. So I can deal manually with
 this very low number of exceptions.
 
 Then the Caroll strips, especially the left one. If I set up the paper
@@ -419,7 +422,7 @@ hard-copies.
 ![Five examples of 'r' from the listing](r.png)
 
 You  may skip  the following  paragraphes, because  they do  not bring
-interessant facts to the documentation.
+interesting facts to the documentation.
 
 In an unsuccessful attempt to reduce the glyph irregularities, I wrote
 another  programme.  This  programme  looks  at  every  pixel  in  the
@@ -478,8 +481,8 @@ pixels is  very low:  4 in  the 4-neighbour variant,  about 20  in the
 8-neighbour variant. And as we  will see below, the difference between
 two variants of the same character can involve a hundred pixels or so.
 
-Or  I could  have used  this programme  to only  remove snow  and soot
-(white pixels  with 8 black  neighbours or  black pixels with  8 white
+Or I could have used this programme to only remove snow and ash (white
+pixels  with  8  black  neighbours   or  black  pixels  with  8  white
 neighbours). I did not think of it until very late. Too bad!
 
 # Character Recognition Proper
@@ -616,7 +619,7 @@ Coloriage              |                    |           Colour Scheme          |
                     Cellule (1,n)---(0,n) Glyphe                             Cell (1,n)---(0,n) Glyph
 ```
 
-The user  enters the Citeria and  save them with the  Colouring Scheme
+The user enters the Criteria and saves them with the  Colouring Scheme
 into the database.  Then he clicks on a  "Search" (_Recherche_) button
 and the programme  applies the criteria to all Cells  in the Document.
 When a Criterion  applies, the programme adds the Cell  to the list of
@@ -748,7 +751,8 @@ and width  of the Cells, shear.  In addition, we have  the line-column
 coordinates of the  top-left Cell, since this is no  longer line 0 and
 column 0. And there is a priority number to deal with the case where a
 given Cell could  belong to more than one Grid.  The graphical file of
-the Document will emphasize the limits between Grids.
+the Document will  emphasize the limits between Grids  by drawing blue
+borders instead of green.
 
 Special case: the  Grid containing the top-left Cell  `l=0, c=0`. This
 Grid always have the lowest priority. It is automatically created with
@@ -761,10 +765,10 @@ coordinates and  the priority in an  HTML form. Then, either  the user
 enters  all other  parameters,  or  he chooses  to  let the  programme
 compute  them  automatically.  With  the  automatic  computation,  the
 parameters  are computed  from the  underlying Grid.  Of course,  that
-means that the new grid is  useless, since its parameters are the same
+means that the new grid is useless at first, since its parameters are the same
 as the  underlying Grid. But in  a second step, the  user tweaks these
 parameters  until   he  finds   the  correct  values.   The  automatic
-computation  allows  the user  to  find  earlier the  correct  values,
+computation  allows  the user  to  find  faster the  correct  values,
 without much tinkering.
 
 Let us  use the  example in  the hard-copy  above, without  shears for
@@ -823,8 +827,8 @@ final result is:
 
 The red pixels show the places where  a Grid limit contains a ink dot,
 which should  not happen. In this  case, the red pixels  are generated
-because of the vertical line of the `l=3, c=59` Cell, while the "g" is
-completely inside the `l=3, c=60` Cell.
+because of  the vertical  line of  the `l=3, c=59`  Cell from  Grid 0,
+while the "g" is completely inside the `l=3, c=60` Cell from Grid 1.
 
 ## Relation Between Cells and Glyphs
 
@@ -1189,7 +1193,7 @@ Here is the result:
 You can  notice that one "e"  has been the  model for a Glyph  and has
 therefore a  score equal to zero.  You can also notice  that two Cells
 containing a space have a  score, because they contain "thermal noise"
-pixels (or  soot). The  other spaces,  on the  other hand,  contain no
+pixels  (or ash).  The other  spaces, on  the other  hand, contain  no
 pixels, therefore they were not stored as Cells in the database.
 
 For Colouring Schemes aiming at separating similar-looking Characters,
@@ -1357,9 +1361,9 @@ generated (timestamp `dh_grille`).
 3.  The grid  is valid  and the  Cells are  generated in  the database
 (timestamp `dh_valid`).
 
-4.   The Cell-to-Glyph  link procedure  has  run.  This  step has  two
-timestamps,  `dh_debut`  and  `dh_assoc`.  Thus  we  can  compute  the
-duration of the link procedure.
+4.  The  Cell-to-Glyph link  procedure  has  run.  This step  has  two
+timestamps, `dh_debut`  and `dh_assoc` (not appearing  above). Thus we
+can compute the duration of the link procedure.
 
 5. The final text file is generated.
 
@@ -1576,7 +1580,6 @@ for the French word _enveloppe_, meaning "bounding box".
         "hte" : 22,
         "data" : "iVBORw0KGgoAAAANSUhEUgAAABcAAAAWAQMAAAARuJVGAAAABlBMVEX///8AAABVwtN+AAAACXBI\nWXMAAA7EAAAOxAGVKw4bAAAAN0lEQVQImWNgYGNgqH/fgMANDAw1DHJAbMdQAcQWDDYMMgw/GOTq\nH8BxDQMDGP8B4h9YcAEDAwAWcBYVXE6mZQAAAABJRU5ErkJggg==\n",
         "nb_noir" : 184,
-.
 
 How  we must  interpret the  values returned  by `GD:getPixel`:  which
 value is associated with white  pixels, which value is associated with
@@ -1624,7 +1627,7 @@ loops on the pixels use the ranges `0`  to `lge - 1` and `0` to `hte - 1`.
 
 In the following  example, the Cell is linked to  a single Glyph.  But
 you  can  guess how  it  looks  when the  Cell  is  linked to  several
-Glyphs. The  `glyphes` array  contains the keys  of the  Glyph record,
+Glyphs. The  `glyphes` array  contains the keys of the  Glyph records,
 plus the values used to align the  centers of mass of the Glyph and of
 the Cell.  The `cpt_car` field contains the histogram of the number of
 Glyphs for each  Character and the `nb_car` field  contains the number
@@ -1833,7 +1836,7 @@ The record key.
         "doc" : "ex1bis",
         "n" : 3,
 
-Various data: a plain language descrpition,  the name of the file that
+Various data: a plain language description,  the name of the file that
 will contain the colourised document  and the timestamps for creation,
 last update and validation.
 

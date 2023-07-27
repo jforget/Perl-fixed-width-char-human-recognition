@@ -375,8 +375,10 @@ MongoDB, parce que je connais déjà SQL et
 cette application ne m'aurait pas donné l'occasion
 d'apprendre des techniques avancées de SQL.
 Alors j'ai choisi de faire mes premiers pas en MongoDB.
-Et peut-être PDL si cela permet des comparaisons faciles
-de matrices de booléens.
+J'ai envisagé d'utiliser
+[PDL](https://metacpan.org/pod/PDL)
+pour effectuer  facilement des  comparaisons de matrices  de booléens,
+mais finalement je ne l'ai pas utilisé.
 
 Plan B : pas de plan B pour `GD.pm`, je sais que cela fonctionne et que je saurai
 me débrouiller avec. Si je n'étais pas arrivé à m'en sortir avec MongoDB, tant pis, j'aurais
@@ -854,7 +856,8 @@ en haut à gauche, puisque la Grille ne couvre plus la totalité du Document.
 Et il y a un facteur de priorité, pour régler le cas où une Cellule pourrait
 être obtenue avec les paramètres de deux Grilles différentes.
 Le fichier graphique obtenu par la mise à jour du Document et de ses Grilles
-mettra en valeur les coins en haut à gauche de chaque Grille.
+mettra en valeur les coins en haut à gauche de chaque Grille en dessinant
+des frontières bleues au lieu de frontières vertes.
 
 Il y a un cas particulier, la Grille avec la Cellule `l = 0, c = 0` en haut à gauche.
 Cette Grille a automatiquement le coefficient de priorité le plus faible. Cette Grille
@@ -1421,10 +1424,10 @@ Les différents états possibles sont :
 2. Les informations de grille sont saisies et le fichier généré.
 3. La grille est validée, c'est-à-dire que les Cellules ont été
 générées en fonction de cette grille.
-4. La procédure d'association a été lancée pour toutes les Cellules
-du Document. Pour cet état, il y a deux horodatages, `dh_debut` et `dh_assoc`. Cela
-permet de calculer le temps que cette fonction a pris pour le document
-complet.
+4. La procédure d'association a été lancée pour toutes les Cellules du
+Document.  Pour cet  état,  il  y a  deux  horodatages, `dh_debut`  et
+`dh_assoc` (qui n'apparaissent pas ci-dessus). Cela permet de calculer
+le temps que cette fonction a pris pour le document complet.
 5. Le fichier texte final a été généré.
 
 Taille approximative des Cellules
