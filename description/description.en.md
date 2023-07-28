@@ -639,8 +639,8 @@ verify the  Criteria and  some unselected  Cells verify  Criteria. The
 `imagemap` of  the Colouring Scheme  still allows linking to  the Cell
 webpage. The  user can  click a  second time on  the search  button to
 refresh the  list of selected Cells.  The user has to  decide when the
-long refresh of the Colouring Scheme  is necessary and when he can use
-a slightly obsolete Colouring Scheme.
+(lengthy) refresh of the Colouring Scheme is necessary and when he can
+use a slightly obsolete Colouring Scheme.
 
 ## Cell Grid
 
@@ -660,7 +660,7 @@ neighbours Cells.
 There  is a  problem  I have  not  talked about.  When  I scanned  the
 listings, the  paper was  not always properly  aligned on  the scanner
 glasspane. Even  if I stack  a big heavy book  on top of  the listing,
-when I  lower the scanner cover,  the listing sheets rotates  a little
+when I  lower the scanner cover,  the listing sheet  rotates  a little
 and I must take care of this when splitting the Document into Cells.
 
 Since the rotation angle is a small one, I can replace the rotation by
@@ -688,8 +688,8 @@ The shear operation  applies only to the upper-left corner  of a Cell.
 The sides of the Cell are still vertical lines or horizontal lines.
 
 Here is an  example of horizontal shear, greatly  exaggerated. You can
-notice that the vertical sides of the Cells are vertical, even if each
-Cell is not aligned with the Cell above and the Cell below.
+notice that the vertical sides of the Cells are vertical, even for
+Cells not aligned with the Cell above and the Cell below.
 
 ![Exaggerated example of horizontal shear](ex-cisaillement-horizontal.png)
 
@@ -825,7 +825,7 @@ final result is:
 
 ![Cell syncing at end of line](recalage-grille.png)
 
-The red pixels show the places where  a Grid limit contains a ink dot,
+The red pixels show the places where  a Cell limit contains a ink dot,
 which should  not happen. In this  case, the red pixels  are generated
 because of  the vertical  line of  the `l=3, c=59`  Cell from  Grid 0,
 while the "g" is completely inside the `l=3, c=60` Cell from Grid 1.
@@ -2011,7 +2011,7 @@ rebuild the full Criterion key.
 
 The functions  appear as  webpages, which display  the content  of the
 database. On  each webpage,  there is  one or  more HTML  forms, which
-allows the user  to update the database. Some  webpages have variants,
+enable the user  to update the database. Some  webpages have variants,
 which  display the  database in  a slightly  different way,  but which
 contain the same HTML forms.
 
@@ -2137,8 +2137,8 @@ file according to the Cells and to the Glyphs they are linked to.
 ### Webpage: Colouring Scheme
 
 The  parameter  for this  page  is  either  a  number or  the  keyword
-`nouveau`. In the first case, this is to work on an existing Colouring
-Scheme  and in  the latter  case  this is  to create  a new  Colouring
+`nouveau`. In the first case, the user  works on an existing Colouring
+Scheme  and in  the latter  case  he creates  a new  Colouring
 Scheme.
 
 If  the  Colouring  Scheme  is validated,  the  webpage  displays  the
@@ -2158,7 +2158,7 @@ programme redisplays the "Document Grid" webpage.
 
 This  form allows  copying  the current  Colouring  Scheme to  another
 Document or even to the same Document. The new Colouring Scheme is not
-validated, even if the copied one is.
+validated, even if the old one is.
 
 The programme  displays the new  Colouring Scheme. You can  update the
 Criteria or you can validate the new Colouring Scheme as is.
@@ -2492,7 +2492,7 @@ store  a   hash  key  consisting  in   a  single  quote  and   it  was
 rejected. Maybe it was possible, but the way my programme was written,
 it was forbidden.  I extended  the digram-encoding `SP` for "space" to
 the digrams `PT` (_point_ = "period") and `AP` (_apostrophe_ = "single
-quate") and,  preventively `DL` for  "dollar", even if  this character
+quote") and,  preventively `DL` for  "dollar", even if  this character
 never appears in my Pascal programmes.
 
 ### The Programme Itself
@@ -2526,7 +2526,7 @@ variation  of line  numbers and  column  numbers in  texts printed  in
 constant-width  fonts.  This  gave  a  simple  L,C  →  X,Y  conversion
 function, simpler than if I had to introduce negative factors.
 
-Another  good   surprise  lies  wihh   Github.  I  wrote   the  French
+Another  good   surprise  lies  with   Github.  I  wrote   the  French
 documentation in  POD, because it  is the simplest markup  language to
 write documentation, and because we  can find many converters to HTML,
 L<sup>A</sup>T<sub>E</sub>X and  the like. I  had planned to  write my
@@ -2654,6 +2654,12 @@ processing through
 I cannot pretend that I  know everything about the Dancer2 tool-suite,
 but at  least what little  I know is  better than an  abstract opinion
 based on no practical experience.
+
+Since the  Pascal source  files have  been generated  (February 2018),
+since  the documentation  has  been converted  to Markdown  (September
+2022) and translated to English (July  2023), this project will now be
+on the back-burner. Maybe fixing some  typos from time to time, but no
+big updates.
 
 # Annexes
 
@@ -2876,15 +2882,15 @@ to check the update.
 1. In the `*shell*` buffer, I type `C-c C-c` (control-c twice) to stop
 the Dancer2 server.
 
-  Note:  doubling  control-c is  required  because  of the  way  Emacs
-  interacts with  its embedded  shell interpreter. If  you use  a more
-  mundane shell such as `xterm`, you need to type control-c only once.
+   Note:  doubling  control-c is  required  because  of the  way  Emacs
+   interacts with  its embedded  shell interpreter. If  you use  a more
+   mundane shell such as `xterm`, you need to type control-c only once.
 
 2. In the same buffer, I look for a line
 
         perl ../appli/appli.pl
 
-  and I execute it again.
+   and I execute it again.
 
 3. In  Firefox, I display the  first tab and I  press `back` (alt-left
 arrow) to redisplay the connection page.

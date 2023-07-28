@@ -356,8 +356,9 @@ je mettrai à jour la présente description.
 
 Pour les fonctions graphiques, j'utilise
 [`GD.pm`](https://metacpan.org/pod/GD).
-Je n'ai pas réussi à installer  l'interface entre Perl et the Gimp sur
-ma machine, donc je n'ai pas eu à choisir, j'ai pris `GD.pm`.
+Je n'ai pas réussi à installer
+l'[interface entre Perl et the Gimp](https://metacpan.org/pod/Gimp)
+sur ma machine, donc je n'ai pas eu à choisir, j'ai pris `GD.pm`.
 
 Pour les fonctions peu interactives, j'ai utilisé bien entendu une interface
 en ligne de commande.
@@ -382,16 +383,23 @@ mais finalement je ne l'ai pas utilisé.
 
 Plan B : pas de plan B pour `GD.pm`, je sais que cela fonctionne et que je saurai
 me débrouiller avec. Si je n'étais pas arrivé à m'en sortir avec MongoDB, tant pis, j'aurais
-fait du SQL avec SQLite. Et pour Dancer2, j'aurais fait du CGI à l'ancienne, comme lorsque
-j'ai commencé à utiliser Perl il y a 19 ans.
+fait du SQL avec 
+[SQLite](https://www.sqlite.org/index.html).
+Et pour Dancer2, j'aurais fait du CGI à l'ancienne, comme lorsque
+j'ai commencé à utiliser Perl en 1998 ou 1999.
 
 Et bien sûr, j'utilise Perl. Perl 5 ou Perl 6 ? Bonne question.
-Comme j'ai reçu mon premier livre sur Perl 6 juste avant d'initialiser
+Comme j'ai reçu mon premier livre sur Perl 6 (ou maintenant Raku) juste avant d'initialiser
 mon dépôt Git et d'écrire la première ligne de code exécutable,
 j'ai eu le temps de constater qu'il existait une variante de Dancer
-pour Perl 6, Bailador. Ensuite, en consultant la liste des modules Perl 6
+pour Perl 6,
+[Bailador](https://modules.raku.org/dist/Bailador:cpan:UFOBAT).
+Ensuite, en consultant la liste des modules Perl 6
 sur [http://modules.perl6.org/](http://modules.perl6.org/), j'ai vu qu'il existait aussi un
-module GD et un module MongoDB. Hélas, je n'ai pas pu utiliser la méthode
+[module GD](https://github.com/raku-community-modules/GD)
+et un
+[module MongoDB](https://modules.raku.org/dist/MongoDB:cpan:MARTIMM).
+Hélas, je n'ai pas pu utiliser la méthode
 `newFromPng` du module GD, la méthode cruciale qui me permet d'utiliser les
 listings numérisés. Donc, Perl 6, ce sera pour une autre fois.
 
@@ -413,7 +421,7 @@ Tout d'abord, la largeur.
 En fait non, en pratique le problème
 est minime. Sur les trois listings,
 il y a un nombre très faible de lignes trop
-longues pour le format A4, une demi-douzaine en comptant celles où
+longues pour le format A4, une demi-douzaine en comptant celles où seul
 le dernier point-virgule ou la dernière accolade manque. Donc, je peux me
 permettre une reprise manuelle de ces
 lignes une fois le processus terminé.
@@ -451,7 +459,9 @@ des caractéristiques HSV. J'aurais pu fouiller la documentation, j'ai préfér�
 écrire un programme qui a l'autre avantage de me servir de modèle pour les suivants.
 Et à la réflexion, j'ai bien fait, car j'ai découvert que la fonction de conversion
 de RGB vers HSV produisait des nombres négatifs, ce qui est contraire à la documentation.
-J'ai donc patché `GD::Simple` et j'ai soumis un ticket
+J'ai donc patché
+[`GD::Simple`](https://metacpan.org/pod/GD::Simple)
+et j'ai soumis un ticket
 [https://rt.cpan.org/Ticket/Display.html?id=120572](https://rt.cpan.org/Ticket/Display.html?id=120572).
 
 J'ai complété ce premier programme pour calculer également la moyenne et le mode
@@ -497,7 +507,7 @@ zone de conversion vers le blanc et la zone de conversion vers le noir.
 
 À noter un problème culturel.
 Né dans les années 1960, j'ai appris
-le dessin avec des crayons de couleurs,
+le dessin avec des crayons de couleurs
 et du papier,
 pas avec the Gimp ou assimilé. Donc, pour
 moi, « rien », c'est une feuille blanche,
@@ -681,15 +691,15 @@ en MIME/base64.
 La troisième table est la table « Caractère ».
 Elle comporte environ 96 enregistrements,
 pour les caractères espace à « } ». Je rappelle
-que j'ai utilisé de l'ASCII 7 bits.
+qu'en 1983--1984, j'utilisais l'ASCII 7 bits pour écrire mes programmes.
 Comme il n'y a pas d'information à stocker, peut-être que
 cette table ne sera pas implémentée.
 
 La quatrième table est la table « Glyphe ».
 Chaque enregistrement correspond à un tableau à deux dimensions
 de bits, représentant le dessin du caractère en pixels noirs et blancs.
-Un Caractère est associé à 1 à n Glyphes,
-un Glyphe est associé à un caractère et un seul.
+Un Caractère est associé à 0 à n Glyphes,
+un Glyphe est associé à un Caractère et un seul.
 
 Et une cinquième table un peu inattendue, la table « Requête ».
 Au début, je pensais faire des requêtes « au fil de l'eau » :
@@ -927,10 +937,12 @@ Voici ce que cela donne avec :
 
 ![Recalage des Cellules en fin de ligne](recalage-grille.png)
 
+Les pixels  rouges mettent  en relief  les endroits  où une  limite de
+Cellule contient un pixel noir, ce qu'il faut éviter.
 On remarquera qu'il reste des pixels rouges dans « gregorien ». Ce n'est
 pas dû à la nouvelle Grille, celle qui chapeaute le caractère « g », mais à l'ancienne
 avec le recouvrement entre les deux Grilles sur quelques pixels de large. Donc,
-ne pas se formaliser pour ces pixels rouges.
+ne pas se formaliser pour ces pixels rouges dans ce cas.
 
 ## Relation entre Cellules et Glyphes
 
@@ -990,7 +1002,7 @@ les « `≠` » montrent les pixels différents (22).
     ----------------  ----------------
 
 Il y a fort à parier
-que le Glyphe qui sera associé à la première donnera un mauvais score pour la seconde.
+que le Glyphe qui sera associé à la première Cellule donnera un mauvais score pour la seconde.
 C'est pour cela que l'on calcule l'enveloppe rectangulaire englobant les pixels noirs, pour obtenir des comparaisons
 plus significatives.
 
@@ -1446,6 +1458,8 @@ Liste des Grilles et numéro de la dernière
 
 Les Grilles sont numérotées à partir de zéro, donc
 dans ce cas il y a trois grilles. Voici l'une d'elles
+
+### Grille
 
 Priorité, qui tient lieu de clé (numéro séquentiel)
 
@@ -2291,7 +2305,7 @@ et à traiter par mon programme de reconnaissance de caractères.
 d'espaces par des tabulations là où cela vaut le coup. En effet, en 1983 et 1984, j'étais
 adepte de la solution de facilité consistant à utiliser des tabulations pour l'indentation.
 4. Initialiser le dépôt Git du programme Pascal. Pour chacun des quatre fichiers sources,
-le copier dans ce dépôt, en écrasant l'ancienne version, puis lancer un `commit`.
+le copier dans ce dépôt, en écrasant l'ancienne version, puis lancer un `commit` à la date indiquée dans le commentaire.
 Dans le message du `commit`, mentionner le fait que le fichier est placé rétroactivement
 sous la licence GPL + Artistic.
 5. Ajouter des fichiers `LICENSE`, `README` et `LISEZMOI` et mettre dans le fichier source les
@@ -2404,7 +2418,7 @@ ait été introduite dans une version postérieure de HTML.
 
 Dans quelques
 [projets](https://github.com/jforget/Perl6-Alpha-As-des-As-Zero/blob/master/Description/description-fr.md#bailador)
-[ultérieurs[(https://github.com/jforget/raku-Hamilton2/blob/master/doc/Hamilton.fr.md#affichage-du-r%C3%A9sultat),
+[ultérieurs](https://github.com/jforget/raku-Hamilton2/blob/master/doc/Hamilton.fr.md#affichage-du-r%C3%A9sultat),
 j'ai décidé de  ne plus  écrire de
 programme monolithiques basés sur
 [Dancer2](https://metacpan.org/dist/Dancer2/view/script/dancer2)
@@ -2667,6 +2681,12 @@ des formulaires HTML et des manipulations de pixels dans [GD](https://metacpan.o
 pas prétendre connaître Dancer2, loin de là, très loin de là. Mais j'ai au moins un
 aperçu, c'est toujours mieux qu'une opinion basée sur aucune expérience concrète.
 
+Vu  que j'ai  généré les  sources Pascal  (février 2018),  converti la
+documentation en Markdown (septembre 2022)  et que je l'ai traduite en
+anglais  (juillet  2023),  ce  projet  va  être  mis  en  hibernation.
+Éventuellement quelques  corrections de  fautes de  frappe de  temps à
+autre, mais aucune évolution importante.
+
 # Compléments
 
 ## Lissage des fichiers graphiques
@@ -2823,7 +2843,7 @@ taper des commandes du genre :
     git status
     git diff --no-color
     git add appli/appli.pl
-    git add description/description.pod
+    git add description/description.md
     git commit
     git push -u --tags origin master
 
@@ -2863,7 +2883,7 @@ Et dans cette fenêtre, je tape :
     db.auth('exemple','s3kr3t')
 
 De la sorte, je suis en prise directe avec la base MongoDB, je peux lancer des requêtes
-et copier-coller le résultat vers le fichier `description/description.pod`.
+et copier-coller le résultat vers le fichier `description/description.md`.
 
 ### Firefox
 
