@@ -1,10 +1,10 @@
 -*- encoding: utf-8; indent-tabs-mode: nil -*-
 
-=encoding utf8
+FIXED-WIDTH CHAR HUMAN RECOGNITION
+==================================
 
-=head1 FIXED-WIDTH CHAR HUMAN RECOGNITION
-
-=head2 PURPOSE
+PURPOSE
+-------
 
 This repository gives you the tools to manage the conversion of some
 printed text into electronic form, provided the used font is a
@@ -16,10 +16,13 @@ is there to recognize the printed characters.
 
 I use it to analyse a source code printed by a dot-matrix printer.
 
-See a French-language detailed version in the F<description> directory,
-read L<description/description.pod>.
+See a French-language detailed version in the `description` directory, read
+[this file](description/description.md).
+If you prefer English, read
+[that file](description/description.en.md).
 
-=head2 LICENSE
+LICENSE
+-------
 
 The programs in this repository are licensed under the same terms
 as Perl 5: GPL and Artistic License. For more details, please
