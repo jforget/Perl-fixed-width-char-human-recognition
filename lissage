@@ -137,7 +137,7 @@ sub ecr_fic {
   my $image   = GD::Image->new($larg, $haut);
 
   my $blanc = $image->colorAllocate(255,255,255);
-  my $noir  = $image->colorAllocate(0,0,0); 
+  my $noir  = $image->colorAllocate(0,0,0);
   my @coul = ($blanc, $noir);
   if ($nb_coul > 2) {
     $coul[2] = $image->colorAllocate(255,127,0); # orange : pixels noir -> blancs
@@ -192,7 +192,7 @@ paramètres. Par exemple,
 
   lissage -v 4 -g 2 toto.png
 
-produira le fichier F<toto-v4-g2.png> en noir et blanc et le fichier 
+produira le fichier F<toto-v4-g2.png> en noir et blanc et le fichier
 F<toto-v4-g2-diff.png> pour visualiser les pixels touchés.
 
 =head1 COPYRIGHT et LICENCE
@@ -200,7 +200,7 @@ F<toto-v4-g2-diff.png> pour visualiser les pixels touchés.
 Copyright 2017, Jean Forget
 
 Ce programme est diffusé avec les mêmes conditions que Perl 5.16.3 :
-la licence publique GPL version 1 ou ultérieure, ou bien la 
+la licence publique GPL version 1 ou ultérieure, ou bien la
 licence artistique Perl.
 
 Vous pouvez trouver le texte en anglais de ces licences dans le

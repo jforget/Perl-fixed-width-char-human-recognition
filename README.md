@@ -26,7 +26,7 @@ LICENSE
 
 The programs in this repository are licensed under the same terms
 as Perl 5: GPL and Artistic License. For more details, please
-read the F<LICENSE> file in this repository.
+read the `LICENSE` file in this repository.
 
 The various texts of this repository are licensed under the terms of
 Creative Commons, with attribution and share-alike (CC-BY-SA).

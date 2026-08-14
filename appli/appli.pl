@@ -787,19 +787,19 @@ sub construire_grille {
 
       # Déborde-t-on de la feuille ?
 
-      # on arrête de traiter la ligne si la Cellule 
+      # on arrête de traiter la ligne si la Cellule
       # empiète sur le bord droit de la feuille
       # et on passe à la ligne suivante
       if ($x + $dx > $info_doc->{taille_x}) {
-	#say "fin de la ligne, l=$l, c=$c / $c_max, x=$x, y=$y";
-	last;
+        #say "fin de la ligne, l=$l, c=$c / $c_max, x=$x, y=$y";
+        last;
       }
 
       # Si la Cellule est entièrement en dehors de la feuille,
       # au-delà du bord inférieur, on arrête l'extraction.
       if ($y > $info_doc->{taille_y}) {
         #say "Sortie par le bas, l=$l / $l_max, c=$c, x=$x, y=$y";
-	last EXT_GR;
+        last EXT_GR;
       }
 
       # Si la Cellule empiète sur le bord inférieur de la feuille,
@@ -808,8 +808,8 @@ sub construire_grille {
       # ou avec un cisaillement vers le haut, la Cellule suivante
       # peut se retrouver complètement dans la feuille.
       if ($y + $dy > $info_doc->{taille_y}) {
-	#say "cellule suivante, l=$l / $l_max, c=$c, x=$x, y=$y";
-	next;
+        #say "cellule suivante, l=$l / $l_max, c=$c, x=$x, y=$y";
+        next;
       }
 
       my $couleur;
@@ -892,7 +892,7 @@ sub construire_grille {
       if ($flag == 1) {
         # Compter les pixels noirs et repérer le plus haut, le plus bas,
         # le plus à gauche et le plus à droite
-        my $nb_noir = 0;  
+        my $nb_noir = 0;
         my ($xmin, $xmax, $ymin, $ymax) = ($dx, 0, $dy, 0);
         my ($xx, $yy) = (0,0);
         for my $x1 (0 .. $dx - 1) {
@@ -938,8 +938,8 @@ sub construire_grille {
           elsif ($y_dep > $info_doc->{taille_y}) {
             $y_dep = $info_doc->{taille_y};
           }
-          my $voisinage = GD::Image->new(5 * $dx, 5 * $dy); 
-          $voisinage->copy($image, $x_arr, $y_arr, $x_dep, $y_dep, 5 * $dx, 5 * $dy); 
+          my $voisinage = GD::Image->new(5 * $dx, 5 * $dy);
+          $voisinage->copy($image, $x_arr, $y_arr, $x_dep, $y_dep, 5 * $dx, 5 * $dy);
 
           my $info_cellule = { doc     => $info_doc->{doc},
                                dh_cre  => horodatage(),
@@ -972,7 +972,7 @@ sub construire_grille {
           $info_cellule->{dh_assoc} = horodatage();
           push @cellule, $info_cellule;
         }
-                
+
       }
     }
   }
@@ -1004,7 +1004,7 @@ sub association {
     # calcul du score
     #say "calcul du score l = $info_cellule->{l}, c = $info_cellule->{c}";
     my ($score, $liste_glyphes, $cpt_car) = score_cel($appli, $mdp, $info_doc->{doc}, $info_cellule);
-    my $val = { score    => $score, 
+    my $val = { score    => $score,
                 nb_car   => 0 + keys %$cpt_car,
                 glyphes  => $liste_glyphes,
                 cpt_car  => $cpt_car,
@@ -1401,7 +1401,7 @@ EOF
   if ($info->{etat} >= 5) {
     $generation .= "<p>Génération du texte le $info->{dh_gener} (UTC)</p>\n";
   }
-  
+
 
   return <<"EOF";
 <html>
@@ -1981,7 +1981,7 @@ sub img_cel_gly {
       else {
         $pix_g = 0;
       }
-        
+
       #if ($y == 21) { say "x = $x, pix_c = $pix_c, pix_g = $pix_g" }
       if ($pix_c != 0 || $pix_g != 0) {
         my @couleur = (0, $cyan, $orange, $noir);
@@ -1991,7 +1991,7 @@ sub img_cel_gly {
       }
     }
   }
-             
+
   return $image;
 }
 
@@ -2029,12 +2029,12 @@ sub calcul_xy {
 sub palette {
   my ($variante) = @_;
   my @palette = (
-          [ 'violet', 192, 192, 255, ],   
+          [ 'violet', 192, 192, 255, ],
           [ 'rose'  , 255, 192, 255, ],
           [ 'orange', 255, 192, 192, ],
           [ 'jaune' , 255, 255, 192, ],
-          [ 'vert'  , 192, 255, 192, ],   
-          [ 'cyan'  , 192, 255, 255, ],   
+          [ 'vert'  , 192, 255, 192, ],
+          [ 'cyan'  , 192, 255, 255, ],
       );
   given ($variante) {
     when ('liste') {

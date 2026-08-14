@@ -229,7 +229,7 @@ phénicienne aux alentours de 1200 ans avant J-C.
 =for HTML
 <img src="U10900.png" alt="Codage Unicode de l'alphabet phénicien" />
 
-I<Copie d'écran personnelle d'une page 
+I<Copie d'écran personnelle d'une page
 L<Wikipedia|https://fr.wikipedia.org/wiki/Alphabet_ph%C3%A9nicien>
 licence L<Creative Commons attribution, partage dans les mêmes conditions|http://creativecommons.org/licenses/by-sa/3.0/deed.fr>>
 
@@ -262,7 +262,7 @@ la plupart des systèmes donnent comme résultat S<« cécécépé »> (U+0043 U
 alors qu'il faut lire en fait S<« essessessère »> (U+0421 U+0421 U+0421 U+0420).
 Mais reconnaissons que les programmes mentionnés dans le chapitre précédent ne feraient pas mieux.
 
-D'un autre côté, les systèmes de ce type peuvent détecter des caractères là où il 
+D'un autre côté, les systèmes de ce type peuvent détecter des caractères là où il
 n'y en a pas. Par exemple, vous les pointez vers S<Cassiopée :>
 
 =for HTML
@@ -270,7 +270,7 @@ n'y en a pas. Par exemple, vous les pointez vers S<Cassiopée :>
 
 I<S<Source :> copie d'écran personnelle du logiciel L<Stellarium|http://www.stellarium.org/>>
 
-certains détecterons un S<« W »>, d'autres un S<« M »>. Idem 
+certains détecterons un S<« W »>, d'autres un S<« M »>. Idem
 L<en regardant dans l'autre sens|https://news.artnet.com/art-world/nasa-photos-alphabet-in-the-sky-400646>,
 L<de l'espace vers la Terre|https://www.mapbox.com/blog/letter-hunt-from-space/>.
 
@@ -283,7 +283,7 @@ I<S<Source :> dessin créé par L<GEF|http://www.gef.free.fr/ambigallery.html> u
 
 =head2 Programmes hybrides
 
-En 2000 ou 2001, j'avais installé 
+En 2000 ou 2001, j'avais installé
 sur ma machine de l'époque un
 programme original dont je ne trouve
 plus aucune trace quinze ans
@@ -349,7 +349,7 @@ portrait de Lena.
 =back
 
 J'ai essayé de soumettre le portrait de Lena (avec la bulle S<« Hello World ! »>) à C<gocr>
-et à C<cuneiform>. Ils s'en sont tirés correctement. Comme quoi, ce sont quand même de bons programmes 
+et à C<cuneiform>. Ils s'en sont tirés correctement. Comme quoi, ce sont quand même de bons programmes
 lorsqu'ils sont confrontés à une impression de qualité. Et je pense que le vrai programme
 Alice-OCR aurait obtenu un résultat correct également. Mais c'est plus pédagogique en simulant
 une erreur.
@@ -408,7 +408,7 @@ je mettrai à jour la présente description.
 =head2 Technologies utilisées
 
 Pour les fonctions graphiques, j'utilise C<GD.pm>. Je n'ai pas réussi
-à installer l'interface entre Perl et the Gimp sur ma machine, donc je n'ai 
+à installer l'interface entre Perl et the Gimp sur ma machine, donc je n'ai
 pas eu à choisir, j'ai pris C<GD.pm>.
 
 Pour les fonctions peu interactives, j'ai utilisé bien entendu une interface
@@ -445,9 +445,9 @@ module GD et un module MongoDB. Hélas, je n'ai pas pu utiliser la méthode
 C<newFromPng> du module GD, la méthode cruciale qui me permet d'utiliser les
 listings numérisés. Donc, Perl 6, ce sera pour une autre fois.
 
-Post-scriptum de 2022. Pour 
+Post-scriptum de 2022. Pour
 L<un autre projet|https://github.com/jforget/raku-Hamilton2/blob/master/doc/Hamilton.fr.md>,
-j'ai utilisé le module GD.pm de Perl 5 avec Raku et avec le module 
+j'ai utilisé le module GD.pm de Perl 5 avec Raku et avec le module
 L<Inline::Perl5|https://modules.raku.org/dist/Inline::Perl5:cpan:NINE> de Raku.
 Peut-être aurais-je pu faire de même en S<2017 ?>
 
@@ -507,7 +507,7 @@ L<https://rt.cpan.org/Ticket/Display.html?id=120572>.
 J'ai complété ce premier programme pour calculer également la moyenne et le mode
 (la valeur qui apparaît le plus souvent) de chacune des caractéristiques RGB et HSV.
 Certes, comme la teinte H est de nature cyclique, le calcul de la moyenne n'a pas
-de signification réelle. Mais le mode, si. Et pour les cinq autres caractéristiques, 
+de signification réelle. Mais le mode, si. Et pour les cinq autres caractéristiques,
 la moyenne et le mode ont une signification réelle.
 
 À l'origine, j'avais l'intention d'écrire
@@ -631,7 +631,7 @@ La variabilité des glyphes est réduite, mais elle existe encore.
 Après coup, je me rends compte que le lissage des glyphes ne sert à rien. Comme vous pouvez le voir
 sur l'exemple ci-dessus, cela permet de changer un nombre très réduit de S<pixels :> 4 dans l'exemple
 ci-dessus à 4 voisins, une vingtaine dans l'exemple du lissage à 8 voisins. Alors que comme on le
-verra ci-dessous, le nombre de pixels différents entre deux variantes du même caractère peut 
+verra ci-dessous, le nombre de pixels différents entre deux variantes du même caractère peut
 atteindre la centaine. Donc, I<a posteriori>, le jeu n'en valait pas la chandelle.
 
 =head1 Reconnaissance à proprement parler
@@ -685,9 +685,9 @@ Maintenant, pour se connecter à la base de données sous le shell C<mongo>, il 
   1
 
 Il est possible d'utiliser plusieurs bases de données séparées pour plusieurs séries
-de fichiers S<graphiques :> une base de données pour les listings sortant d'une 
+de fichiers S<graphiques :> une base de données pour les listings sortant d'une
 imprimante à aiguilles, une autre base de données pour les listings produits
-par une imprimante HP-41, une base de données pour les tickets de supermarché (ça 
+par une imprimante HP-41, une base de données pour les tickets de supermarché (ça
 m'étonnerait que je le fasse, mais je n'exclus pas que d'autres puissent trouver
 cela intéressant), etc. Le nom de la base de données est saisi dans l'écran de connexion.
 J'ai utilisé le terme S<« appli »>. J'aurais peut-être dû appeler cela S<« projet »>
@@ -709,7 +709,7 @@ Un Document se découpe en plusieurs Cellules,
 Un Caractère se décline en plusieurs Glyphes (mais un caractère peut ne pas apparaître
 dans les Documents de la base de données et ne donner lieu à aucun Glyphe).
 
-Une Cellule peut être associée à un ou parfois plusieurs Glyphes. 
+Une Cellule peut être associée à un ou parfois plusieurs Glyphes.
 
 Un Glyphe peut être associé à plusieurs Cellules, mais parfois une seule, voire aucune.
 
@@ -745,8 +745,8 @@ Au début, je pensais faire des requêtes S<« au> fil de S<l'eau » :>
 saisir les critères, cliquer sur un bouton et lire le résultat.
 Je pense qu'il est préférable d'en faire une entité permanente.
 Mais comme la notion de requête est plus associée à la notion de processus éphémère
-qu'à la notion de S<« quelque-chose> qui peut se stocker dans une base de 
-S<données »>, j'ai préféré adopter un autre nom pour cette table. Le 
+qu'à la notion de S<« quelque-chose> qui peut se stocker dans une base de
+S<données »>, j'ai préféré adopter un autre nom pour cette table. Le
 nom adopté est S<« Coloriage »>, parce que le résultat de la requête comporte un fichier
 graphique où toutes les Cellules sélectionnées sont représentées sur
 un fond coloré.
@@ -776,7 +776,7 @@ ce Coloriage (le fichier graphique déjà constitué) et enchaîner vers les
 Cellules sélectionnées grâce à une I<imagemap>.
 
 Un Critère est une entité logique distincte du Coloriage, mais dans le schéma
-physique, tous les Critères dépendant d'un Coloriage seront stockés dans un 
+physique, tous les Critères dépendant d'un Coloriage seront stockés dans un
 tableau de l'enregistrement Coloriage.
 
 Certes, avec la création de nouveaux Glyphes, le résultat du Coloriage devient
@@ -916,10 +916,10 @@ mettra en valeur les coins en haut à gauche de chaque Grille.
 Il y a un cas particulier, la Grille avec la Cellule C<l = 0, c = 0> en haut à gauche.
 Cette Grille a automatiquement le coefficient de priorité le plus faible. Cette Grille
 est créée automatiquement avec le Document et il n'y a pas moyen de la supprimer.
-Il y a néanmoins la possibilité de modifier ses paramètres (coordonnées pixels, 
+Il y a néanmoins la possibilité de modifier ses paramètres (coordonnées pixels,
 largeur, hauteur, cisaillement).
 
-Pour les autres Grilles, la création se fait en saisissant les coordonnées C<l, c> du 
+Pour les autres Grilles, la création se fait en saisissant les coordonnées C<l, c> du
 coin en haut à gauche et la priorité. Puis l'utilisateur choisit entre saisir tous les
 autres paramètres manuellement, ou laisser le programme les calculer. Avec le calcul automatique,
 les paramètres sont recopiés à partir de la Grille de priorité inférieure qui aurait permis
@@ -950,7 +950,7 @@ Le programme réaffiche
   0   0    0    42   27  30  49
   3  58    1  1827  194  30  49
 
-Mais le fichier graphique montre qu'en colonne 58, il y a l'esperluette. L'utilisateur corrige alors 
+Mais le fichier graphique montre qu'en colonne 58, il y a l'esperluette. L'utilisateur corrige alors
 en supprimant la Grille qu'il vient de créer et en en créant une nouvelle avec les bonnes
 S<coordonnées :>
 
@@ -965,7 +965,7 @@ Le programme réaffiche S<alors :>
   0   0    0    42   27  30  49
   3  60    1  1889  195  30  49 saisie manuelle
 
-L'utilisateur constate qu'il n'y a pas de problème dans le découpage vertical, mais qu'il faut 
+L'utilisateur constate qu'il n'y a pas de problème dans le découpage vertical, mais qu'il faut
 décaler le découpage horizontal de quatre pixels vers la gauche, tout en réduisant la largeur
 des Cellules. Il saisit S<donc :>
 
@@ -987,7 +987,7 @@ Voici ce que cela donne S<avec :>
 
 On remarquera qu'il reste des pixels rouges dans S<« gregorien »>. Ce n'est
 pas dû à la nouvelle Grille, celle qui chapeaute le caractère S<« g »>, mais à l'ancienne
-avec le recouvrement entre les deux Grilles sur quelques pixels de large. Donc, 
+avec le recouvrement entre les deux Grilles sur quelques pixels de large. Donc,
 ne pas se formaliser pour ces pixels rouges.
 
 =head2 Relation entre Cellules et Glyphes
@@ -1010,7 +1010,7 @@ données (le Glyphe Espace), chaque Cellule aura, dès sa création, un score
 et sera associée à au moins un Glyphe. Cela permet de simplifier d'autres
 portion des traitements du programme.
 
-Une fois le découpage effectué, on rogne la Cellule en calculant 
+Une fois le découpage effectué, on rogne la Cellule en calculant
 S<l'« enveloppe »> des pixels (I<bounding box> en anglais).
 Prenons l'exemple de deux Cellules contenant un signe plus.
 Les signes ne sont pas centrés de la même manière dans leur Cellule.
@@ -1030,7 +1030,7 @@ Les signes ne sont pas centrés de la même manière dans leur Cellule.
   ----------------  ----------------
 
 La comparaison brute de ces deux Cellules donne de nombreuses différences.
-Les S<« C<=> »> montrent les pixels noirs communs (deux seulement), 
+Les S<« C<=> »> montrent les pixels noirs communs (deux seulement),
 les S<« C<#> »> montrent les pixels différents (22).
 
   ----------------  ----------------
@@ -1076,7 +1076,7 @@ la représentation en orange des pixels effacés et la représentation en cyan d
 =for HTML
 <img src="comparaison-cellule-glyphe.png" alt="Représentation de la comparaison entre une Cellule et un Glyphe" />
 
-Il y a un problème, toutefois. Imaginons que les Cellules soient 
+Il y a un problème, toutefois. Imaginons que les Cellules soient
 
   ----------------  ----------------
   |              |  |              |
@@ -1198,7 +1198,7 @@ Avec un exemple, c'est plus clair.
   essai 8         17      19 *       7      17 *
 
 En gardant le score le plus faible parmi
-les neuf scores calculés, on réduit encore un peu plus le problème de la 
+les neuf scores calculés, on réduit encore un peu plus le problème de la
 colonne bleue et de la colonne orange présenté ci-dessus.
 
 Une fois que l'on a choisi une méthode d'arrondi, comment compte-t-on le nombre
@@ -1229,15 +1229,15 @@ de coordonnées. Cela se verra mieux avec l'exemple ci-dessous
 La Cellule et le Glyphe ont été alignés pour faire coïncider (à peu près) leurs centres
 de gravité. Avec la première méthode, le calcul du score se fera avec deux boucles
 emboîtées, l'une avec les coordonnées x dans l'intervalle 0..9, l'autre avec les coordonnées
-y dans l'intervalle 0..6. Avec la seconde méthode, on commence par remarquer que la Cellule 
+y dans l'intervalle 0..6. Avec la seconde méthode, on commence par remarquer que la Cellule
 n'a aucun pixel noir avec S<< x < 3 >> ni avec S<< y > 4 >>.  De même, le Glyphe n'a aucun
 pixel noir avec S<< x > 6 >> ni avec S<< y < 2 >>. Donc, les deux boucles emboîtées
 se feront avec x dans l'intervalle 3..6 (au lieu de 0..9) et avec y dans l'intervalle 2..4
 (au lieu de 0..6).
 
 Dans les deux dessins, il y a 6 pixels en commun, plus 2 pixels à effacer et 3 à noircir.
-Le score est donc S<2 + 3 = 5>. Avec la seconde méthode, la Cellule a 8 pixels noirs et le Glyphe 
-en a 9. Le calcul commence donc avec un score de 17. Comme il y a 6 pixels noirs en 
+Le score est donc S<2 + 3 = 5>. Avec la seconde méthode, la Cellule a 8 pixels noirs et le Glyphe
+en a 9. Le calcul commence donc avec un score de 17. Comme il y a 6 pixels noirs en
 commun, on calculera S<17 - 2 x 6 = 17 - 12 = 5>.
 
 La seconde méthode permet donc un calcul plus rapide. De plus, elle permet de ne pas se
@@ -1609,7 +1609,7 @@ Clé alternative. Elle coïncide avec la clé C<car>, sauf pour les Glyphes asso
 caractères S<spéciaux :> espace, point, dollar et apostrophe.
 Pour les espaces, on a la valeur C<"SP"> dans C<car1>, pour une meilleure lisibilité dans
 les pages HTML. Quant aux trois autres caractères, c'est parce que la valeur
-peut être utilisée comme clé d'un hachage stocké dans MongoDB et la valeur 
+peut être utilisée comme clé d'un hachage stocké dans MongoDB et la valeur
 brute est refusée par MongoDB.
 Évidemment, la clé (pour identifier le Glyphe) comporte aussi le champ C<num>,
 mais c'est la même valeur que pour la clé normale.
@@ -1641,12 +1641,12 @@ c'est un peu excessif. Mais c'est plus simple de laisser faire Perl et MongoDB.
         "xg" : 8.201086956521738,
         "yg" : 8.793478260869566,
 
-Date-heure de création, pour d'éventuels besoins techniques, on ne sait jamais. Fuseau 
+Date-heure de création, pour d'éventuels besoins techniques, on ne sait jamais. Fuseau
 horaire UTC pour éviter les problèmes avec l'heure d'été.
 
         "dh_cre" : "2017-07-26 19:55:47",
 
-Dans la table des Glyphes, le tout premier enregistrement est généré 
+Dans la table des Glyphes, le tout premier enregistrement est généré
 automatiquement. Il s'agit du Glyphe Espace. Lorsque l'utilisateur
 saisit le paramètre C<appli> et le mot de passe, le programme vérifie que le
 Glyphe Espace existe et, si nécessaire, le crée.
@@ -1786,9 +1786,9 @@ dans le champ C<glyphes>.
 
 Voici la relation Cellule-Glyphe pour une Cellule associée
 à trois Glyphes correspondant à deux Caractères différents,
-un S<« r »> et un espace. Vous pouvez constater que dans le 
-tableau C<glyphes> on utilise la clé normale de l'espace, 
-tandis que dans le hachage C<cpt_car> on prend la clé 
+un S<« r »> et un espace. Vous pouvez constater que dans le
+tableau C<glyphes> on utilise la clé normale de l'espace,
+tandis que dans le hachage C<cpt_car> on prend la clé
 affichable C<"SP">.
 
         "nb_car" : 2,
@@ -2188,7 +2188,7 @@ Adresse pour un Document C<exemple1> : L<http://localhost:3000/doc/exemple1>.
 =head4 Variante : Grille
 
 La page de base affiche le fichier PNG d'où est tiré le Document,
-tandis que la variante S<« grille »> affiche un dessin où les 
+tandis que la variante S<« grille »> affiche un dessin où les
 bords des Cellules sont matérialisés.
 
 Adresse pour un Document C<exemple1> : L<http://localhost:3000/grille/exemple1>.
@@ -2210,7 +2210,7 @@ S<« Cellule ».>
 
 S<Fonctionnement :> le formulaire est constitué des I<S<n - 1>> premières
 lignes pour les Grilles déjà existantes et de la dernière ligne pour
-la création d'une éventuelle nouvelle Grille. 
+la création d'une éventuelle nouvelle Grille.
 
 Les coordonnées ligne et colonne ne sont saisissables que pour la Grille
 en cours de création sur la dernière ligne. Tous les autres champs sont saisissables,
@@ -2236,8 +2236,8 @@ Cela signifie que la Grille est mise à jour avec les valeurs saisies.
 Il faut ignorer les valeurs saisies dans les champs de la ligne (sauf encore une fois
 la priorité) et les remplacer par des valeurs calculées à partir de la Grille englobante.
 Les valeurs de C<dx>, C<dy> et des cisaillements sont simplement reprises telles quelles
-de la Grille englobante, sans modification. Quant aux valeurs de C<x0> et C<y0>, elles sont calculées 
-à partir des valeurs de la Grille englobante, avec les mêmes calculs que lors de la 
+de la Grille englobante, sans modification. Quant aux valeurs de C<x0> et C<y0>, elles sont calculées
+à partir des valeurs de la Grille englobante, avec les mêmes calculs que lors de la
 validation des grilles.
 
 Ce choix n'est pas disponible pour la Grille de base, car il n'y a pas de Grille englobante
@@ -2296,7 +2296,7 @@ C<"nouveau">. Dans le premier cas, c'est pour travailler sur un Coloriage
 existant, dans le second cas c'est pour en créer un nouveau.
 
 Si le Coloriage est validé, la page affiche l'imagemap du Coloriage permettant
-de choisir une Cellule répondant à un critère et d'enchaîner 
+de choisir une Cellule répondant à un critère et d'enchaîner
 vers sa page.
 
 Adresse : L<http://localhost:3000/coloriage/exemple1/2> pour le deuxième
@@ -2740,7 +2740,7 @@ avec des couleurs différentes pour détecter de nouvelles confusions.
 
 Ce n'est pas une panacée. Compte tenu de la police utilisée par l'imprimante, il y a
 de fortes probabilités de confusion entre le S<« j »> minuscule et le S<« J »> majuscule.
-Et le compilateur Pascal ne voit aucun problème à appeler la même donnée 
+Et le compilateur Pascal ne voit aucun problème à appeler la même donnée
 C<date.jour> sur une ligne et C<date.Jour> sur une autre.
 
 Pour les annotations manuscrites qui obstruent les caractères imprimés, j'ai associé les
@@ -2853,7 +2853,7 @@ et ainsi de suite.
 
 =head2 Rotation et cisaillements
 
-Dans le formulaire définissant les cisaillements, les valeurs sont 
+Dans le formulaire définissant les cisaillements, les valeurs sont
 données en S<« pixels> toutes les I<N> S<lignes »> (ou S<« colonnes »>).
 Ici, on ignore le facteur d'échelle et on considère que les cisaillements
 sont spécifiés en S<« pixels> tous les I<n> S<pixels »>.
@@ -2922,8 +2922,8 @@ taper des commandes du S<genre :>
 
   git status
   git diff --no-color
-  git add appli/appli.pl 
-  git add description/description.pod 
+  git add appli/appli.pl
+  git add description/description.pod
   git commit
   git push -u --tags origin master
 
@@ -2972,7 +2972,7 @@ la fenêtre xterm, mais j'ai l'habitude d'utiliser les menus déroulants.
 Et je demande L<http://localhost:3000> pour avoir la fenêtre de connexion.
 Une fois le code application et le mot de passe saisis, j'arrive sur la liste
 des Documents. Sur cette page, j'accède aux documents avec un clic droit, puis
-S<« ouvrir> dans un nouvel S<onglet »>. La raison sera expliquée dans le paragraphe 
+S<« ouvrir> dans un nouvel S<onglet »>. La raison sera expliquée dans le paragraphe
 suivant.
 
 =head3 Modification du programme
@@ -3000,7 +3000,7 @@ et je la réexécute.
 
 =item 3
 
-Dans le premier onglet de Firefox, qui donne la liste des documents, 
+Dans le premier onglet de Firefox, qui donne la liste des documents,
 j'utilise l'action S<« retour »> (Alt-flèche gauche) pour revenir à l'écran de connexion.
 
 =item 4
@@ -3010,7 +3010,7 @@ instance du serveur Dancer2.
 
 =item 5
 
-Dans les autres onglets de Firefox, je fais C<F5> pour réafficher la page 
+Dans les autres onglets de Firefox, je fais C<F5> pour réafficher la page
 avec la nouvelle instance du serveur et continuer là où je m'étais arrêté.
 
 =back
@@ -3033,6 +3033,6 @@ dans le programme Perl au lieu de le faire dans la ligne de commande.
 
 =head1 LICENCE
 
-Texte diffusé sous la licence CC-BY-NC-ND : Creative Commons avec clause de paternité, excluant l'utilisation commerciale et excluant la modification. 
+Texte diffusé sous la licence CC-BY-NC-ND : Creative Commons avec clause de paternité, excluant l'utilisation commerciale et excluant la modification.
 
 Certaines illustrations sont diffusées avec une licence libre différente. Celle-ci est mentionnée à la suite de l'illustration.

@@ -2366,7 +2366,7 @@ or its Raku equivalent
 [Bailador](https://modules.raku.org/dist/Bailador:cpan:UFOBAT),
 I wrote several programmes split according to a loose simili-MVC idea.
 
-When dealing with 
+When dealing with
 [these](https://github.com/jforget/Perl6-Alpha-As-des-As-Zero/blob/master/Description/description-en.md#templateanti)
 [projects](https://github.com/jforget/raku-Hamilton2/blob/master/doc/Hamilton.en.md#displaying-the-results),
 I decided to write a bilingual English + French website, which required the use of a

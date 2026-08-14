@@ -105,7 +105,7 @@ avec des ovales de couleur.
 Copyright 2017, Jean Forget
 
 Ce programme est diffusé avec les mêmes conditions que Perl 5.16.3 :
-la licence publique GPL version 1 ou ultérieure, ou bien la 
+la licence publique GPL version 1 ou ultérieure, ou bien la
 licence artistique Perl.
 
 Vous pouvez trouver le texte en anglais de ces licences dans le

@@ -383,7 +383,7 @@ mais finalement je ne l'ai pas utilisé.
 
 Plan B : pas de plan B pour `GD.pm`, je sais que cela fonctionne et que je saurai
 me débrouiller avec. Si je n'étais pas arrivé à m'en sortir avec MongoDB, tant pis, j'aurais
-fait du SQL avec 
+fait du SQL avec
 [SQLite](https://www.sqlite.org/index.html).
 Et pour Dancer2, j'aurais fait du CGI à l'ancienne, comme lorsque
 j'ai commencé à utiliser Perl en 1998 ou 1999.
